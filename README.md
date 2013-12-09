@@ -12,12 +12,11 @@ Installation
   * OSX users should just need to open the DMG and run the installer.
 
 # Node 0.10.22
-* OSX with Homebrew:
-```
-brew update
-brew tap homebrew/versions
-brew versions node
-```
+* OSX with Homebrew
+  * brew update
+  * brew tap homebrew/versions
+  * brew versions node
+
   * If the latest version is newer, check out 0.10.22: `git checkout 72f61d1 /usr/local/Library/Formula/node.rb`
   * `brew install node --upgrade`
 
