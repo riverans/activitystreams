@@ -17,6 +17,7 @@ Installation
 brew update
 brew tap homebrew/versions
 brew versions node
+```
   * If the latest version is newer, check out 0.10.22: `git checkout 72f61d1 /usr/local/Library/Formula/node.rb`
   * `brew install node --upgrade`
 
@@ -29,11 +30,10 @@ brew versions node
 * OSX:
   * Create an /opt directory if you do not already have one `mkdir /opt`
   * Extract Neo4j to /opt directory `sudo tar -xf neo4j-community-2.0.0-RC1-unix.tar.gx -C /opt
-  * Add Neo4j's bin directory to your path.
-  *  * First, edit your profile `vi ~/.profile`
-  *  * Next, add this somewhere in your profile: export PATH=/opt/neo4j-community-2.0.0-RC1/bin:$PATH`
-  *  * Save your profile `:wq`
-  *  * Reload your settings `source ~/.profile`
+  * Add Neo4j's bin directory to your path.  First, edit your profile `vi ~/.profile`
+  * Next, add this somewhere in your profile: export PATH=/opt/neo4j-community-2.0.0-RC1/bin:$PATH`
+  * Save your profile `:wq`
+  * Reload your settings `source ~/.profile`
   * Install Neo4j as a service with launchctl `sudo neo4j-installer install`
   * Start that service `sudo launchctl start org.neo4j.server`
   * If you want to confirm the serivce is running `neo4j status`
