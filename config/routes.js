@@ -35,7 +35,13 @@ module.exports.routes = {
   '/': {
     controller: 'ActivityController',
     action: 'index'
-  }
+  },
+
+  'get /:actor': 'ActivityController.getAllActorsOfType',
+  'get /:actor/:actor_id': 'ActivityController.getSpecificActor',
+  'get /:actor/:actor_id/:verb': 'ActivityController.getAllObjectsVerbedByActor',
+  'get /:actor/:actor_id/:verb/:object': 'ActivityController.getSpecificObjectTypeVerbedByActor',
+  'get /:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.route5'
 
   /*
   // But what if you want your home page to display
@@ -91,7 +97,7 @@ module.exports.routes = {
   // You'll still want to allow requests through to the static assets,
   // so we need to set up this route to ignore URLs that have a trailing ".":
   // (e.g. your javascript, CSS, and image files)
-  'get /*(^.*)': 'UserController.profile'
+  get /*(^.*)': 'UserController.profile
 
   */
 };
