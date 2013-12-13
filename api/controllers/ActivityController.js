@@ -140,5 +140,23 @@ module.exports = {
 				res.json(results);
 			}
 		);
+	},
+
+	deleteSpecificActivity: function(req, res) {
+		var q,
+			actor_key = req.param('actor') + '_id',
+			actor_id = req.param('actor_id'),
+			object_key = req.param('object') + '_id',
+			object_id = req.param('object_id');
+		q = [
+			'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
+			'WHERE actor.' + actor_key + '="' + actor_id +'" AND object.' + object_key + '="' + object_id + '"',
+			'DELETE verb'
+		];
+		Actor.adapter.query(q, {}, function(err, results) {
+				if (err) { return res.json(err); }
+				res.json(results);
+			}
+		);
 	}
 };

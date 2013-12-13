@@ -47,7 +47,8 @@ module.exports.routes = {
 
   // Activity streams POST
   
-  'post /activity': 'ActivityController.postSpecificActivity'
+  'post /activity': 'ActivityController.postSpecificActivity',
+  'delete /:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.deleteSpecificActivity'
 
   /*
   // But what if you want your home page to display
