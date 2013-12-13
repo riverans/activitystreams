@@ -32,6 +32,7 @@ module.exports = {
 				'MATCH (n)',
 				'RETURN n'
 			],{}, function(err, results) {
+				if (err) { return res.json(err); }
 				res.json(results);
 			}
 		);
@@ -43,6 +44,7 @@ module.exports = {
 				'RETURN actor'
 			];
 		Actor.adapter.query(q,{}, function(err, results) {
+				if (err) { return res.json(err); }
 				res.json(results);
 			}
 		);
@@ -57,6 +59,7 @@ module.exports = {
 			'RETURN actor'
 		];
 		Actor.adapter.query(q, {}, function(err, results) {
+				if (err) { return res.json(err); }
 				res.json(results);
 			}
 		);
@@ -71,6 +74,7 @@ module.exports = {
 				'RETURN object'
 			];
 		Actor.adapter.query(q, {}, function(err, results) {
+				if (err) { return res.json(err); }
 				res.json(results);
 			}
 		);
@@ -85,27 +89,56 @@ module.exports = {
 				'RETURN object'
 			];
 		Actor.adapter.query(q, {}, function(err, results) {
+				if (err) { return res.json(err); }
 				res.json(results);
 			}
 		);
 	},
 	getSpecificActivity: function(req, res) {
-		var obj = {}, q, key;
-		key = req.param('actor') + '_id';
-		obj[key] = req.param('actor_id');
+		var q,
+			actor_key = req.param('actor') + '_id',
+			actor_id = req.param('actor_id'),
+			object_key = req.param('object') + '_id',
+			object_id = req.param('object_id');
 		q = [
 				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
-				'WHERE actor.' + key + '="' + obj[key] +'"',
+				'WHERE actor.' + actor_key + '="' + actor_id +'" AND object.' + object_key + '="' + object_id + '"',
 				'RETURN actor,verb,object'
 			];
 		Actor.adapter.query(q, {}, function(err, results) {
+				if (err) { return res.json(err); }
+				res.json(results);
+			}
+		);
+	},
+
+	postSpecificActivity: function(req, res) {
+		var q,
+			actor = req.body.actor,
+			actor_key = actor.type + '_id',
+			actor_id = actor[actor_key],
+			verb = req.body.verb,
+			object = req.body.object,
+			object_key = object.type + '_id',
+			object_id = object[object_key];
+		q = [
+			'MERGE (actor:' + actor.type + ' { ' + actor_key + ':"' + actor_id + '" })',
+			'ON CREATE SET actor.created = timestamp()',
+			'ON MATCH SET actor.updated = timestamp()',
+			'WITH actor',
+			'MERGE (object:' + object.type + ' { ' + object_key + ':"' + object_id + '" })',
+			'ON CREATE SET object.created = timestamp()',
+			'ON MATCH SET object.updated = timestamp()',
+			'WITH object, actor',
+			'MERGE (actor)-[verb:' + verb.type + ']->(object)',
+			'ON CREATE SET verb.created = timestamp()',
+			'ON MATCH SET verb.updated = timestamp()',
+			'RETURN actor, verb, object'
+		];
+		Actor.adapter.query(q, {}, function(err, results) {
+				if (err) { return res.json(err); }
 				res.json(results);
 			}
 		);
 	}
-
-
-	// createActor: function(req, res) {
-	// 	Actor.adapter.create()
-	// }
 };

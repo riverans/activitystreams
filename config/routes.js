@@ -37,11 +37,17 @@ module.exports.routes = {
     action: 'index'
   },
 
+  // Activity streams GET
+
   'get /:actor': 'ActivityController.getAllActorsOfType',
   'get /:actor/:actor_id': 'ActivityController.getSpecificActor',
   'get /:actor/:actor_id/:verb': 'ActivityController.getAllObjectsVerbedByActor',
   'get /:actor/:actor_id/:verb/:object': 'ActivityController.getSpecificObjectTypeVerbedByActor',
-  'get /:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.GetSpecificActivity'
+  'get /:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.GetSpecificActivity',
+
+  // Activity streams POST
+  
+  'post /activity': 'ActivityController.postSpecificActivity'
 
   /*
   // But what if you want your home page to display
