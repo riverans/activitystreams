@@ -24,18 +24,13 @@ Installation
 * OSX with Homebrew:
   * NPM was recently removed from Homebrew, so manually install `curl https://npmjs.org/install.sh | sh`
 
-# Neo4j 2.0 RC1
-* Download the [Neo4j 2.0 RC1 install files] (http://www.neo4j.org/download)
+# Neo4j 2.0!
+* Download the [Neo4j 2.0] (http://www.neo4j.org/download)
 * OSX:
-  * Create an /opt directory if you do not already have one `mkdir /opt`
-  * Extract Neo4j to /opt directory `sudo tar -xf neo4j-community-2.0.0-RC1-unix.tar.gx -C /opt
-  * Add Neo4j's bin directory to your path.  First, edit your profile `vi ~/.profile`
-  * Next, add this somewhere in your profile: export PATH=/opt/neo4j-community-2.0.0-RC1/bin:$PATH`
-  * Save your profile `:wq`
-  * Reload your settings `source ~/.profile`
-  * Install Neo4j as a service with launchctl `sudo neo4j-installer install`
-  * Start that service `sudo launchctl start org.neo4j.server`
-  * If you want to confirm the serivce is running `neo4j status`
+  * `brew update`
+  * `brew install neo4j`
+  * `neo4j install`
+  * `neo4j start`
 
 # Neo4j-JS
 * `npm install -g neo4j-js`
@@ -49,6 +44,10 @@ Installation
 # Sails.JS
 * `sudo npm install -g sails`
 
+# Sails-Neo4j
+* `git clone git@github.com:natgeo/sails-neo4j.git`
+* `cd sails-neo4j`
+* `npm link`
 
 Environment Setup
 =================
@@ -61,6 +60,7 @@ workon activitystreams
 echo 'cd ~/code/activitystreams' >> $WORKON_HOME/activitystreams/bin/postactivate
 deactivate
 workon activitystreams
+npm link sails-neo4j
 ```
 
 To run your server: `sails lift`
