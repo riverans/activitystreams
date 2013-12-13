@@ -41,7 +41,7 @@ module.exports.routes = {
   'get /:actor/:actor_id': 'ActivityController.getSpecificActor',
   'get /:actor/:actor_id/:verb': 'ActivityController.getAllObjectsVerbedByActor',
   'get /:actor/:actor_id/:verb/:object': 'ActivityController.getSpecificObjectTypeVerbedByActor',
-  'get /:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.route5'
+  'get /:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.GetSpecificActivity'
 
   /*
   // But what if you want your home page to display

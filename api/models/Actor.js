@@ -9,22 +9,22 @@
 module.exports = {
 
   attributes: {
-        //object type could be mmdb-user
-        //object type could ys-photo
-        objectType: {
-            type: 'string',
-            required: true,
-            max: 25
-        },
-        appId: {
-            type: 'integer',
-            required: true, 
-        },
-        id: {
-            type: 'integer',
-            required: true
-        },
-        url: 'string'
+  //       //object type could be mmdb-user
+  //       //object type could ys-photo
+  //       objectType: {
+  //           type: 'string',
+  //           required: true,
+  //           max: 25
+  //       },
+  //       appId: {
+  //           type: 'integer',
+  //           required: true, 
+  //       },
+  //       id: {
+  //           type: 'integer',
+  //           required: true
+  //       },
+  //       url: 'string'
     }
 
 

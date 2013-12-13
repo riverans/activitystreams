@@ -39,8 +39,8 @@ module.exports = {
 
 	getAllActorsOfType: function(req, res) {
 		var q = [
-				'MATCH(n:' + req.param('actor') + ')',
-				'RETURN n'
+				'MATCH(actor:' + req.param('actor') + ')',
+				'RETURN actor'
 			];
 		Actor.adapter.query(q,{}, function(err, results) {
 				res.json(results);
@@ -48,9 +48,15 @@ module.exports = {
 		);
 	},
 	getSpecificActor: function(req, res) {
-		var obj = {};
-		obj[req.param('actor') + '_id'] = req.param('actor_id');
-		Actor.adapter.find(req.param('actor'), obj, function(err, results) {
+		var obj = {}, q, key;
+		key = req.param('actor') + '_id';
+		obj[key] = req.param('actor_id');
+		q = [
+			'MATCH(actor:' + req.param('actor') + ')',
+			'WHERE actor.' + key + '="' + req.param('actor_id') + '"',
+			'RETURN actor'
+		];
+		Actor.adapter.query(q, {}, function(err, results) {
 				res.json(results);
 			}
 		);
@@ -60,9 +66,9 @@ module.exports = {
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-				'MATCH (n:' + req.param('actor') +')-[r:' + req.param('verb') + ']-(x)',
-				'WHERE n.' + key + '="' + obj[key] +'"',
-				'RETURN x'
+				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object)',
+				'WHERE actor.' + key + '="' + obj[key] +'"',
+				'RETURN object'
 			];
 		Actor.adapter.query(q, {}, function(err, results) {
 				res.json(results);
@@ -74,18 +80,28 @@ module.exports = {
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-				'MATCH (n:' + req.param('actor') +')-[r:' + req.param('verb') + ']-(x:' + req.param('object') +')',
-				'WHERE n.' + key + '="' + obj[key] +'"',
-				'RETURN x'
+				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
+				'WHERE actor.' + key + '="' + obj[key] +'"',
+				'RETURN object'
 			];
 		Actor.adapter.query(q, {}, function(err, results) {
 				res.json(results);
 			}
 		);
 	},
-	route5: function(req, res) {
-		var tmp = ['route5',req.param('actor'), req.param('actor_id'), req.param('verb'), req.param('object'), req.param('object_id')];
-		res.json(tmp);
+	getSpecificActivity: function(req, res) {
+		var obj = {}, q, key;
+		key = req.param('actor') + '_id';
+		obj[key] = req.param('actor_id');
+		q = [
+				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
+				'WHERE actor.' + key + '="' + obj[key] +'"',
+				'RETURN actor,verb,object'
+			];
+		Actor.adapter.query(q, {}, function(err, results) {
+				res.json(results);
+			}
+		);
 	}
 
 
