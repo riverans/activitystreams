@@ -37,6 +37,10 @@ module.exports.routes = {
     action: 'index'
   },
 
+  '/loadtest': {
+    view: 'home/index'
+  },
+
   // Activity streams GET
 
   'get /:actor': 'ActivityController.getAllActorsOfType',

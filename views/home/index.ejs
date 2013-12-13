@@ -89,5 +89,30 @@
                 <a target="_blank" href="http://sailsjs.org">Build an API</a>
             </li>
         </ul>
+
+        <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script>
+            $(function() {
+                console.log('starting this crazy thing');
+                var rand_user, rand_photo, i;
+                for (i=0; i<100; i++) {
+                    rand_user = Math.round(Math.random()*100);
+                    rand_photo = Math.round(Math.random()*100);
+                    var data = {
+                        actor: { type:"mmdb_user", mmdb_user_id: rand_user }, 
+                        verb: { type:"FAVORITED" }, 
+                        object: { type:"yourshot_photo", yourshot_photo_id: rand_photo }
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: 'http://localhost:9365/activity',
+                        data: data,
+                        dataType: 'json'
+                    }).done(function(input) { 
+                        console.log(input);
+                    });
+                }
+            });
+        </script>
     </div>
 </div>

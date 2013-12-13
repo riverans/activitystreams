@@ -113,6 +113,7 @@ module.exports = {
 	},
 
 	postSpecificActivity: function(req, res) {
+		console.log(req.body);
 		var q,
 			actor = req.body.actor,
 			actor_key = actor.type + '_id',
