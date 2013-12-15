@@ -6,8 +6,8 @@ A simple demo page for the NatGeo Activity Streams project
 
 Usage
 =====
-This file is meant to be served by a web server, not Sails.js.  Use a program like MAMP/XAMP, move
-the file to the htdocs directory and start that server.  The server should be able to serve pages
+This file is meant to be served by a web server, not Sails.js.  Use a program like MAMP/XAMP, and
+symlink the html file to the htdocs directory and start that server.  The server should be able to serve pages
 at http://localhost.nationalgeographic.com.  Use whatever available port you want.
 
 A local instance of MMDB is also required for signing in and favoriting an image.  Clone the MMDB
@@ -30,8 +30,9 @@ Sample Demo Script
 KNOWN ISSUES
 ==================
 - Logging in does not refresh the page.  Not sure if this is a bug or if we need to listen to a signed in event. (added to TODO list)
-- Logout throws errors.
-- Sails.js acts VERY inconsistently when attempting to connect via socket.io from an outside client. It either falls over, connects but tells you no socket is available, or connects but doesn't allow any access methods to your controllers (get, post, etc.)
+- Logout throws 403 Forbidden errors.
+- Sails.js may act inconsistently when connecting with socket.io.  Running sudo npm install in the base of the app may resolve this.
+- When accessing a view in the ActivityController, you get an error:  Uncaught TypeError: Object #<c> has no method 'get' 
 
 TODO
 ====
