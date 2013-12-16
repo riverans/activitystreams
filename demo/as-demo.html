@@ -124,10 +124,10 @@
             </div>
 
     </section>
-    <section id="activity" class="container">
+    <!--<section id="activity" class="container">
         Now stop, collaborate, and listen in on the favorites activity:<br>
         <div id="latest"></div>
-    </section>
+    </section>-->
 </body>
 <script type="text/javascript">
     // Global Vars
@@ -138,18 +138,21 @@
         activity_type = 'FAVORITED';
 
     // Update photos already liked
-    if (typeof user_id !== 'undefined' && user_id !== null) {
-        $.get(servicehost + '/' + user_type + '/' + user_id + '/' + activity_type + '/' + photo_type, function(data) {
-            $.each(data, function(i,k) {
-                $.each(k.object.data, function(l,m) {
-                    if (l === (photo_type + '_id')) {
-                        var hearts = $('#' + m + ' i');
-                        $('a').find(hearts).addClass('chosen');
-                    }
-                })
+    function favUpdate() {
+        if (typeof user_id !== 'undefined' && user_id !== null) {
+            $.get(servicehost + '/' + user_type + '/' + user_id + '/' + activity_type + '/' + photo_type, function(data) {
+                $.each(data, function(i,k) {
+                    $.each(k.object.data, function(l,m) {
+                        if (l === (photo_type + '_id')) {
+                            var hearts = $('#' + m + ' i');
+                            $('a').find(hearts).addClass('chosen');
+                        }
+                    })
+                });
             });
-        });
+        }
     }
+    favUpdate();
     
     // Event Handlers
     $('a[type="fav"]').click(function(e) {
