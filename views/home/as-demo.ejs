@@ -165,10 +165,9 @@
         }
     }
 
-    
     // Event Handlers
     $('a[type="fav"]').click(function(e) {
-        if (typeof user_id !== 'undefined' && user_id !== null) {
+        if (user_id !== '') {
             var heart, photo_id, favObj = {};
 
             heart = $('i', this);
