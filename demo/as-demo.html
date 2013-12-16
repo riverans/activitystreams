@@ -135,7 +135,13 @@
         user_id = localStorage.getItem('memFrag/User/id'),
         user_type = 'mmdb_user',
         photo_type = 'yourshot_photo',
-        activity_type = 'FAVORITED';
+        activity_type = 'FAVORITED',
+        headerObj;
+
+    // Set up access to the header internals
+    _M.ready(function(core) { 
+        headerObj = core; 
+    });
 
     // Update photos already liked
     function favUpdate() {
@@ -188,7 +194,7 @@
             
             return false;
         } else {
-            alert('You must be signed in to vote'); // Replace this with displaying the login modal
+            headerObj.context.requestLogin();
         }
     });
 
