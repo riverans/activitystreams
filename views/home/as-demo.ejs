@@ -1,92 +1,81 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.3/normalize.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-    <style type="text/css">
-        header.identity_bar {
-            background-color: black;
-            height: 52px;
-            margin: 0 auto;
-            max-width: 100%;
-            position: relative;
-            width: 100%;
-        }
-        header.identity_bar .logo {
-            background: transparent url('https://media-mmdb.nationalgeographic.com/static-media/images/modules/landing/ngs-logo-white.png') no-repeat center center;
-            display: block;
-            float: left;
-            height: 50px;
-            margin-left: 25px;
-            width: 120px;
-        }
-        .identity_bar a.logo_link {
-            border: none;
-            float: left;
-            margin: .5em 0 0 .9375em;
-            outline: none;
-        }
-        .identity_bar .mem_menu { right: 25px;}
-        .identity_bar a.logo_link img {border: none;}
-        section {margin-bottom: 2em;}
-        .titles {text-align: center;}
-        .container {width: 720px; margin-left: auto; margin-right: auto;}
-        .item {display: inline-block;}
-        .spacer {display: inline-block; margin-left: auto; margin-right: auto; padding: 50px; position: relative; width: 20px;}
-        .vs {height: 25em; margin-top: -8em; position: absolute;  top: 50%;}
-        #latest {border: 1px solid black; height: 20em; width: 100%;}
-        i {color: black;}
-        i.chosen {color: pink;}
-        .fav_btn {float: left;}
-    </style>
-
-    <!-- Javascript -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
-    
-    <!-- Header -->
-    <script src="http://cdn.gigya.com/JS/socialize.js?apikey=3_6eHDfFWWieawfL6ijN5g6UmSU1EuR5kd7CfctJQsI_YhxE1b7W7jZgGEIMmbMxpz">
-    {   //siteName: 'Membership', // Gigya assigns names to API keys
-        enabledProviders: 'facebook, twitter',
-        autoLogin: true
+<!-- CSS -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.3/normalize.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+<style type="text/css">
+    header.identity_bar {
+        background-color: black;
+        height: 52px;
+        margin: 0 auto;
+        max-width: 100%;
+        position: relative;
+        width: 100%;
     }
-    </script>
-    <script type="text/javascript">
-        var memFragConfig = {
-            mmdbHost: 'https://mmdb.nationalgeographic.com', // MMDB Hostname
-            memcenHost: 'https://members.nationalgeographic.com', // Member Center Hostname
-            noSSL: true, // Do we want to use SSL or not? Default: True
-            staticMedia: 'http://assets-qa.nationalgeographic.com/ngs-header/', // SAM Header Static Assets
-            crossDomain: false, // ... not used right now
-            debug: true, // Load the header in debug mode?
-            debug_lvl: 3, // 1-5: Different output levels for errors
-            header_container: 'mem_menu', // Div ID for signin/join/logged in menu container
-            whitelist: {
-                origins: [ // Valid origins for header requests
-                    'http://mmdb.nationalgeographic.com',
-                    'http://members.nationalgeographic.com',
-                    'http://www.nationalgeographic.com',
-                    'http://ngm.nationalgeographic.com',
-                    'http://as.nationalgeographic.com'
-                ],
-                targets: [ // Valid targets for header requests
-                    'mc', // Member Center
-                    'mmdb', // MMDB
-                    'geodata'
-                ]
-            },
-            alertContainerSelector: '#alerts' // Div ID for alert container
-        };
-    </script>
-    <script type="text/javascript" src="http://assets-qa.nationalgeographic.com/ngs-header/bootstrap.js"></script>
-    <title>NGS Activity Streams Demo</title>
-</head>
+    header.identity_bar .logo {
+        background: transparent url('https://media-mmdb.nationalgeographic.com/static-media/images/modules/landing/ngs-logo-white.png') no-repeat center center;
+        display: block;
+        float: left;
+        height: 50px;
+        margin-left: 25px;
+        width: 120px;
+    }
+    .identity_bar a.logo_link {
+        border: none;
+        float: left;
+        margin: .5em 0 0 .9375em;
+        outline: none;
+    }
+    .identity_bar .mem_menu { right: 25px;}
+    .identity_bar a.logo_link img {border: none;}
+    section {margin-bottom: 2em;}
+    .titles {text-align: center;}
+    .container {width: 720px; margin-left: auto; margin-right: auto;}
+    .item {display: inline-block;}
+    .spacer {display: inline-block; margin-left: auto; margin-right: auto; padding: 50px; position: relative; width: 20px;}
+    .vs {height: 25em; margin-top: -8em; position: absolute;  top: 50%;}
+    #latest {border: 1px solid black; height: 20em; width: 100%;}
+    i {color: black;}
+    i.chosen {color: pink;}
+    .fav_btn {float: left;}
+</style>
 
+<!-- Javascript -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+
+<!-- Header -->
+<script src="http://cdn.gigya.com/JS/socialize.js?apikey=3_6eHDfFWWieawfL6ijN5g6UmSU1EuR5kd7CfctJQsI_YhxE1b7W7jZgGEIMmbMxpz">
+{   //siteName: 'Membership', // Gigya assigns names to API keys
+    enabledProviders: 'facebook, twitter',
+    autoLogin: true
+}
+</script>
+<script type="text/javascript">
+    var memFragConfig = {
+        mmdbHost: 'http://mmdb.dev.nationalgeographic.com:8000', // MMDB Hostname
+        memcenHost: 'http://mc.dev.nationalgeographic.com:8000/_membercenter', // Member Center Hostname
+        noSSL: true, // Do we want to use SSL or not? Default: True
+        staticMedia: 'http://assets-qa.nationalgeographic.com/ngs-header/', // SAM Header Static Assets
+        crossDomain: false, // ... not used right now
+        debug: true, // Load the header in debug mode?
+        debug_lvl: 3, // 1-5: Different output levels for errors
+        header_container: 'mem_menu', // Div ID for signin/join/logged in menu container
+        whitelist: {
+            origins: [ // Valid origins for header requests
+                'http://mmdb.nationalgeographic.com',
+                'http://members.nationalgeographic.com',
+                'http://www.nationalgeographic.com',
+                'http://ngm.nationalgeographic.com',
+                'http://as.nationalgeographic.com'
+            ],
+            targets: [ // Valid targets for header requests
+                'mc', // Member Center
+                'mmdb', // MMDB
+                'geodata'
+            ]
+        },
+        alertContainerSelector: '#alerts' // Div ID for alert container
+    };
+</script>
+<script type="text/javascript" src="http://assets-qa.nationalgeographic.com/ngs-header/bootstrap.js"></script>
 <body>
     <header class="identity_bar clearfix">
         <div class="lessWide">
@@ -132,6 +121,7 @@
 <script type="text/javascript">
     // Global Vars
     var servicehost = 'http://as.nationalgeographic.com:9365',
+        apiHost = servicehost + '/api/v1',
         user_id = '',
         user_type = 'mmdb_user',
         photo_type = 'yourshot_photo',
@@ -152,7 +142,7 @@
     // Update photos already liked
     function favUpdate() {
         if (typeof user_id !== 'undefined' && user_id !== null) {
-            $.get(servicehost + '/' + user_type + '/' + user_id + '/' + activity_type + '/' + photo_type, function(data) {
+            $.get(apiHost + '/' + user_type + '/' + user_id + '/' + activity_type + '/' + photo_type, function(data) {
                 $.each(data, function(i,k) {
                     $.each(k.object.data, function(l,m) {
                         if (l === (photo_type + '_id')) {
@@ -181,7 +171,7 @@
                 $.ajax({
                     type: 'POST',
                     contentType: 'application/json',
-                    url: servicehost + '/activity',
+                    url: apiHost + '/activity',
                     data: JSON.stringify(favObj)
                 }).done(function() {
                     heart.addClass('chosen');
@@ -191,7 +181,7 @@
                 $.ajax({
                     type: 'DELETE',
                     contentType: 'application/json',
-                    url: servicehost + delUrl,
+                    url: apiHost + delUrl,
                 }).done(function() {
                     heart.removeClass('chosen');
                 });
@@ -199,7 +189,7 @@
             
             return false;
         } else {
-            headerObj.context.requestLogin();
+            headerObj.flow.processFlow('signin');
         }
     });
 
@@ -213,4 +203,3 @@
     // });
 
 </script>
-</html>

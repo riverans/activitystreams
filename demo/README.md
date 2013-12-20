@@ -27,11 +27,9 @@ Sample Demo Script
 
 KNOWN ISSUES
 ==================
-- Logout throws 403 Forbidden errors.
 - Sails.js may act inconsistently when connecting with socket.io.  Running sudo npm install in the base of the app may resolve this.
-- When accessing a view in the ActivityController, you get an error:  Uncaught TypeError: Object #<c> has no method 'get' 
+
 
 TODO
 ====
-- Refresh the page on logout
 - Use socket.io to display the activity stream in the large box

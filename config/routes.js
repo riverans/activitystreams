@@ -32,31 +32,31 @@ module.exports.routes = {
   // located at `views/home/index.ejs`
   // 
   // (This would also work if you had a file at: `/views/home.ejs`)
-  '/': {
-    controller: 'ActivityController',
-    action: 'index'
-  },
 
   '/loadtest': {
-    view: 'home/index'
+    view: 'home/loadtest'
   },
 
   '/as-demo': {
     view: 'home/as-demo'
   },
 
+  '/index': {
+    view: 'home/index'
+  },
+
   // Activity streams GET
 
-  'get /:actor': 'ActivityController.getAllActorsOfType',
-  'get /:actor/:actor_id': 'ActivityController.getSpecificActor',
-  'get /:actor/:actor_id/:verb': 'ActivityController.getAllObjectsVerbedByActor',
-  'get /:actor/:actor_id/:verb/:object': 'ActivityController.getSpecificObjectTypeVerbedByActor',
-  'get /:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.GetSpecificActivity',
+  'get /api/v1/:actor': 'ActivityController.getAllActorsOfType',
+  'get /api/v1/:actor/:actor_id': 'ActivityController.getSpecificActor',
+  'get /api/v1/:actor/:actor_id/:verb': 'ActivityController.getAllObjectsVerbedByActor',
+  'get /api/v1/:actor/:actor_id/:verb/:object': 'ActivityController.getSpecificObjectTypeVerbedByActor',
+  'get /api/v1/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.GetSpecificActivity',
 
   // Activity streams POST
   
-  'post /activity': 'ActivityController.postSpecificActivity',
-  'delete /:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.deleteSpecificActivity'
+  'post /api/v1/activity': 'ActivityController.postSpecificActivity',
+  'delete /api/v1/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.deleteSpecificActivity'
 
   /*
   // But what if you want your home page to display
