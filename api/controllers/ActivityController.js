@@ -113,7 +113,6 @@ module.exports = {
 	},
 
 	postSpecificActivity: function(req, res) {
-		console.log(req.body);
 		var q,
 			actor = req.body.actor,
 			actor_key = actor.type + '_id',
@@ -138,6 +137,7 @@ module.exports = {
 		];
 		Actor.adapter.query(q, {}, function(err, results) {
 				if (err) { return res.json(err); }
+				Actor.publishUpdate(actor_id, results[0]);
 				res.json(results);
 			}
 		);
@@ -152,12 +152,22 @@ module.exports = {
 		q = [
 			'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
 			'WHERE actor.' + actor_key + '="' + actor_id +'" AND object.' + object_key + '="' + object_id + '"',
-			'DELETE verb'
+			'DELETE verb',
+			'RETURN actor, object'
 		];
 		Actor.adapter.query(q, {}, function(err, results) {
 				if (err) { return res.json(err); }
+				Actor.publishUpdate(actor_id, results[0]);
 				res.json(results);
 			}
 		);
+	},
+
+	subscribe: function(req, res) {
+		var id = [];
+		id.push(req.param('user'));
+		Actor.subscribe(req.socket);
+		Actor.subscribe(req.socket, id);
+		res.send(200);
 	}
 };

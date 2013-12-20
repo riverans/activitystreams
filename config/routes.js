@@ -45,6 +45,9 @@ module.exports.routes = {
     view: 'home/index'
   },
 
+  // Socket session subscribe
+  'post /api/v1/subscribe': 'ActivityController.subscribe',
+
   // Activity streams GET
 
   'get /api/v1/:actor': 'ActivityController.getAllActorsOfType',

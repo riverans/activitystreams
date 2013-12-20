@@ -28,6 +28,14 @@
       ///////////////////////////////////////////////////////////
       log('New comet message received :: ', message);
       //////////////////////////////////////////////////////
+      ///
+        $.each(message.data.object.data, function(l,m) {
+          console.log(l,m);
+            if (l === ('yourshot_photo_id')) {
+                var hearts = $('#' + m + ' i');
+                $('a').find(hearts).toggleClass('chosen');
+            }
+        });
 
     });
 
@@ -38,10 +46,7 @@
     // the Sails.js server.
     ///////////////////////////////////////////////////////////
     log(
-        'Socket is now connected and globally accessible as `socket`.\n' + 
-        'e.g. to send a GET request to Sails, try \n' + 
-        '`socket.get("/", function (response) ' +
-        '{ console.log(response); })`'
+        'Socket is now connected and globally accessible as `socket`'
     );
     ///////////////////////////////////////////////////////////
 

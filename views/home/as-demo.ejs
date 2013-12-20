@@ -135,6 +135,7 @@
         user.loggedIn(function() { 
             console.log('fired');
             user_id = localStorage.getItem('memFrag/User/id');
+            socket.post('/api/v1/subscribe', { user: user_id });
             favUpdate();
         });
     });
@@ -192,14 +193,5 @@
             headerObj.flow.processFlow('signin');
         }
     });
-
-    // $.get(servicehost, function() {
-    //     // Sending blank request to establish Express cookie
-    // }).done(function() {
-    //     var socket = io.connect(servicehost);
-    //     socket.on('connect', function socketConnected() {
-    //         console.log("Socket.io sessionid: ", this.socket.sessionid);
-    //     });
-    // });
 
 </script>
