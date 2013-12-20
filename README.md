@@ -20,6 +20,31 @@ Installation
   * If the latest version is newer, check out 0.10.22: `git checkout 72f61d1 /usr/local/Library/Formula/node.rb`
   * `brew install node --upgrade`
 
+* Debian/Ubuntu (Build from source) - recommended with debian
+  ```
+  sudo apt-get install python g++ make checkinstall
+  mkdir ~/src && cd ~/src
+  wget -N http://nodejs.org/dist/node-latest.tar.gz
+  tar xzvf node-latest.tar.gz && node-v* #(remove the "v" in front of the version number in the dialog)
+  ./configure
+  checkinstall
+  sudo dpkg -i node_*
+  ```
+
+  Note: when you call checkinstall, make sure you edit the version when presented with:
+
+  ```
+  "This package will be built according to these values:
+
+  0 - Maintainer: [ root@debian ] 1 - Summary: [ Node.js v0.10.22 ] 2 - Name: [ node ] 3 - Version: [ v0.10.22 ]"
+  ```
+  Version should be 0.10.22 NOT v0.10.22 otherwise your build will fail.
+
+  From https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
+
+*Ubuntu (apt-get) More friendly with ubuntu
+  * sudo apt-get install node
+
 # NOM 1.3.14
 * OSX with Homebrew:
   * NPM was recently removed from Homebrew, so manually install `curl https://npmjs.org/install.sh | sh`
