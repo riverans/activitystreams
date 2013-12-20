@@ -10,6 +10,39 @@ Installation
 # Java JDK 1.7
 * Download the [latest 1.7 JDK] (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
   * OSX users should just need to open the DMG and run the installer.
+  * Debian
+    * Download the [linux jdk 7] (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+    * `tar -xvf jdk-7u2-linux-x64.tar.gz` (64 bit) or `tar -xvf jdk-7u2-linux-i586.tar.gz` (32 bit)
+    * `sudo mkdir -p /usr/lib/jvm`
+    * `sudo mv ./jdk1.7.0_02 /usr/lib/jvm/jdk1.7.0
+    * `sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0/bin/java" 1`
+    * `sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0/bin/javac" 1`
+    * `sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.7.0/bin/javaws" 1`
+    * ```
+      sudo chmod a+x /usr/bin/java 
+      sudo chmod a+x /usr/bin/javac 
+      sudo chmod a+x /usr/bin/javaws
+      sudo chown -R root:root /usr/lib/jvm/jdk1.7.0
+      ```
+    * `sudo update-alternatives --config java`
+    * You will see output similar one below - choose the number of jdk1.7.0 - for example 3 in this list:
+      ```
+        $sudo update-alternatives --config java
+        There are 3 choices for the alternative java (providing /usr/bin/java).
+
+        Selection Path Priority Status
+        ————————————————————
+        * 0 /usr/lib/jvm/java-6-openjdk/jre/bin/java 1061 auto mode
+        1 /usr/lib/jvm/java-6-openjdk/jre/bin/java 1061 manual mode
+        2 /usr/lib/jvm/java-6-sun/jre/bin/java 63 manual mode
+        3 /usr/lib/jvm/jdk1.7.0/jre/bin/java 3 manual mode
+
+        Press enter to keep the current choice[*], or type selection number: 3
+        update-alternatives: using /usr/lib/jvm/jdk1.7.0/jre/bin/java to provide /usr/bin/java (java) in manual mode.
+      ```
+    * `java --version` to chech if you are using the correct version
+    * Repeat for `sudo update-alternatives --config javac` and `sudo update-alternatives --config javaws`
+
 
 # Node 0.10.22
 * OSX with Homebrew
@@ -45,7 +78,7 @@ Installation
 * Ubuntu (apt-get) More friendly with ubuntu
   * `sudo apt-get install nodejs`
 
-# NOM 1.3.14
+# NPM 1.3.14
 * OSX with Homebrew:
   * NPM was recently removed from Homebrew, so manually install `curl https://npmjs.org/install.sh | sh`
 
@@ -59,7 +92,7 @@ Installation
 * Debian/Linux
   * `tar xzvf neo4j-communtity.2.0.0-unix.tar.gz`
   * `mv neo4j-communtity.2.0.0-unix /etc/neo4j && cd /etc/neo4j`
-  * `bin/neo4j neo4j-installer`
+  * `bin/neo4j-installer`
   * `sudo service neo4j start`
   * Note had to uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
 
