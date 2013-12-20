@@ -56,6 +56,12 @@ Installation
   * `brew install neo4j`
   * `neo4j install`
   * `neo4j start`
+* Debian/Linux
+  * `tar xzvf neo4j-communtity.2.0.0-unix.tar.gz`
+  * `mv neo4j-communtity.2.0.0-unix /etc/neo4j && cd /etc/neo4j`
+  * `bin/neo4j neo4j-installer`
+  * `sudo service neo4j start`
+  * Note had to uncomment `neo4j-communtity.2.0.0-unix` in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
 
 # Neo4j-JS
 * `npm install -g neo4j-js`
