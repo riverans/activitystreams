@@ -43,7 +43,7 @@ Installation
   From https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 
 * Ubuntu (apt-get) More friendly with ubuntu
-  * `sudo apt-get install node`
+  * `sudo apt-get install nodejs`
 
 # NOM 1.3.14
 * OSX with Homebrew:
