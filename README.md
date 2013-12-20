@@ -14,7 +14,7 @@ Installation
     * Download the [linux jdk 7] (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
     * `tar -xvf jdk-7u2-linux-x64.tar.gz` (64 bit) or `tar -xvf jdk-7u2-linux-i586.tar.gz` (32 bit)
     * `sudo mkdir -p /usr/lib/jvm`
-    * `sudo mv ./jdk1.7.0_02 /usr/lib/jvm/jdk1.7.0
+    * `sudo mv ./jdk1.7.0_02 /usr/lib/jvm/jdk1.7.0`
     * `sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0/bin/java" 1`
     * `sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0/bin/javac" 1`
     * `sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.7.0/bin/javaws" 1`
