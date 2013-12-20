@@ -18,13 +18,7 @@ Installation
     * `sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0/bin/java" 1`
     * `sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0/bin/javac" 1`
     * `sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.7.0/bin/javaws" 1`
-    * Change permissions
-      ```
-      sudo chmod a+x /usr/bin/java 
-      sudo chmod a+x /usr/bin/javac 
-      sudo chmod a+x /usr/bin/javaws
-      sudo chown -R root:root /usr/lib/jvm/jdk1.7.0
-      ```
+    * `sudo chmod a+x /usr/bin/java; sudo chmod a+x /usr/bin/javac; sudo chmod a+x /usr/bin/javaws; sudo chown -R root:root /usr/lib/jvm/jdk1.7.0`
     * `sudo update-alternatives --config java`
     * You will see output similar one below - choose the number of jdk1.7.0 - for example 3 in this list:
       ```
