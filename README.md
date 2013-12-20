@@ -15,9 +15,12 @@ Installation
     * `tar -xvf jdk-7u2-linux-x64.tar.gz` (64 bit) or `tar -xvf jdk-7u2-linux-i586.tar.gz` (32 bit)
     * `sudo mkdir -p /usr/lib/jvm`
     * `sudo mv ./jdk1.7.0_02 /usr/lib/jvm/jdk1.7.0`
-    * `sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0/bin/java" 1`
-    * `sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0/bin/javac" 1`
-    * `sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.7.0/bin/javaws" 1`
+    * Next run the following
+      ```
+      sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0/bin/java" 1
+      sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0/bin/javac" 1
+      sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.7.0/bin/javaws" 1
+      ```
     * `sudo chmod a+x /usr/bin/java` 
     * `sudo chmod a+x /usr/bin/javac`
     * `sudo chmod a+x /usr/bin/javaws`
@@ -40,7 +43,6 @@ Installation
       ```
     * `java --version` to chech if you are using the correct version
     * Repeat for `sudo update-alternatives --config javac` and `sudo update-alternatives --config javaws`
-
 
 # Node 0.10.22
 * OSX with Homebrew
