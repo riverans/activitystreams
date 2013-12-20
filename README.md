@@ -18,7 +18,8 @@ Installation
     * `sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0/bin/java" 1`
     * `sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0/bin/javac" 1`
     * `sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.7.0/bin/javaws" 1`
-    * ```
+    * 
+      ```
       sudo chmod a+x /usr/bin/java 
       sudo chmod a+x /usr/bin/javac 
       sudo chmod a+x /usr/bin/javaws
@@ -32,7 +33,7 @@ Installation
 
         Selection Path Priority Status
         ————————————————————
-        * 0 /usr/lib/jvm/java-6-openjdk/jre/bin/java 1061 auto mode
+        0 /usr/lib/jvm/java-6-openjdk/jre/bin/java 1061 auto mode
         1 /usr/lib/jvm/java-6-openjdk/jre/bin/java 1061 manual mode
         2 /usr/lib/jvm/java-6-sun/jre/bin/java 63 manual mode
         3 /usr/lib/jvm/jdk1.7.0/jre/bin/java 3 manual mode
