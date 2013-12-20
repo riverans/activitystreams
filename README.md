@@ -15,7 +15,7 @@ Installation
     * `tar -xvf jdk-7u2-linux-x64.tar.gz` (64 bit) or `tar -xvf jdk-7u2-linux-i586.tar.gz` (32 bit)
     * `sudo mkdir -p /usr/lib/jvm`
     * `sudo mv ./jdk1.7.0_02 /usr/lib/jvm/jdk1.7.0`
-    * Next run the following
+    * Next run the following:
       ```
       sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0/bin/java" 1
       sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0/bin/javac" 1
