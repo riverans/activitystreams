@@ -46,7 +46,7 @@ Installation
         Press enter to keep the current choice[*], or type selection number: 3
         update-alternatives: using /usr/lib/jvm/jdk1.7.0/jre/bin/java to provide /usr/bin/java (java) in manual mode.
       ```
-    * `java --version` to chech if you are using the correct version
+    * `java -version` to chech if you are using the correct version
     * Repeat for `sudo update-alternatives --config javac` and `sudo update-alternatives --config javaws`
 
 # Node 0.10.22
