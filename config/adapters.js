@@ -42,6 +42,7 @@ module.exports.adapters = {
     host: 'localhost',
     protocol: 'http://',
     port: '7474',
-    base: '/db/data/'
+    base: '/db/data/',
+    debug: true
   }
 };

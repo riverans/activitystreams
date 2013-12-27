@@ -52,9 +52,10 @@ module.exports.routes = {
 
   'get /api/v1/:actor': 'ActivityController.getAllActorsOfType',
   'get /api/v1/:actor/:actor_id': 'ActivityController.getSpecificActor',
+  'get /api/v1/:actor/:actor_id/activities': 'ActivityController.getAllActivitiesByActor',
   'get /api/v1/:actor/:actor_id/:verb': 'ActivityController.getAllObjectsVerbedByActor',
   'get /api/v1/:actor/:actor_id/:verb/:object': 'ActivityController.getSpecificObjectTypeVerbedByActor',
-  'get /api/v1/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.GetSpecificActivity',
+  'get /api/v1/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.getSpecificActivity',
 
   // Activity streams POST
   

@@ -19,25 +19,6 @@
   socket.on('connect', function socketConnected() {
 
     // Listen for Comet messages from Sails
-    socket.on('message', function messageReceived(message) {
-
-      ///////////////////////////////////////////////////////////
-      // Replace the following with your own custom logic
-      // to run when a new message arrives from the Sails.js
-      // server.
-      ///////////////////////////////////////////////////////////
-      log('New comet message received :: ', message);
-      //////////////////////////////////////////////////////
-      ///
-        $.each(message.data.object.data, function(l,m) {
-          console.log(l,m);
-            if (l === ('yourshot_photo_id')) {
-                var hearts = $('#' + m + ' i');
-                $('a').find(hearts).toggleClass('chosen');
-            }
-        });
-
-    });
 
 
     ///////////////////////////////////////////////////////////
@@ -50,6 +31,26 @@
     );
     ///////////////////////////////////////////////////////////
 
+
+  });
+
+  socket.on('message', function messageReceived(message) {
+
+    ///////////////////////////////////////////////////////////
+    // Replace the following with your own custom logic
+    // to run when a new message arrives from the Sails.js
+    // server.
+    ///////////////////////////////////////////////////////////
+    log('New comet message received :: ', message);
+    //////////////////////////////////////////////////////
+    ///
+      $.each(message.data.object.data, function(l,m) {
+        console.log(l,m);
+          if (l === ('yourshot_photo_id')) {
+              var hearts = $('#' + m + ' i');
+              $('a').find(hearts).toggleClass('chosen');
+          }
+      });
 
   });
 

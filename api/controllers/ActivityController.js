@@ -71,7 +71,7 @@ module.exports = {
 		q = [
 				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object)',
 				'WHERE actor.' + key + '="' + obj[key] +'"',
-				'RETURN object'
+				'RETURN actor,verb,object'
 			];
 		Actor.adapter.query(q, {}, function(err, results) {
 				if (err) { return res.json(err); }
@@ -86,7 +86,7 @@ module.exports = {
 		q = [
 				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
 				'WHERE actor.' + key + '="' + obj[key] +'"',
-				'RETURN object'
+				'RETURN actor,verb,object'
 			];
 		Actor.adapter.query(q, {}, function(err, results) {
 				if (err) { return res.json(err); }
@@ -103,6 +103,21 @@ module.exports = {
 		q = [
 				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
 				'WHERE actor.' + actor_key + '="' + actor_id +'" AND object.' + object_key + '="' + object_id + '"',
+				'RETURN actor,verb,object'
+			];
+		Actor.adapter.query(q, {}, function(err, results) {
+				if (err) { return res.json(err); }
+				res.json(results);
+			}
+		);
+	},
+	getAllActivitiesByActor: function(req, res) {
+		var obj = {}, q, key;
+		key = req.param('actor') + '_id';
+		obj[key] = req.param('actor_id');
+		q = [
+				'MATCH (actor:' + req.param('actor') +')-[verb]-(object)',
+				'WHERE actor.' + key + '="' + obj[key] +'"',
 				'RETURN actor,verb,object'
 			];
 		Actor.adapter.query(q, {}, function(err, results) {
