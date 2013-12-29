@@ -8,10 +8,10 @@ Installation
 ============
 
 # Java JDK 1.7
-* Download the [latest 1.7 JDK] (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* Download the [latest 1.7 JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
   * OSX users should just need to open the DMG and run the installer.
   * Debian
-    * Download the [linux jdk 7] (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+    * Download the [linux jdk 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
     * `tar -xvf jdk-7u2-linux-x64.tar.gz` (64 bit) or `tar -xvf jdk-7u2-linux-i586.tar.gz` (32 bit)
     * `sudo mkdir -p /usr/lib/jvm`
     * `sudo mv ./jdk1.7.0_02 /usr/lib/jvm/jdk1.7.0`
@@ -88,7 +88,7 @@ Installation
   * NPM was recently removed from Homebrew, so manually install `curl https://npmjs.org/install.sh | sh`
 
 # [Neo4j 2.0!](http://www.neo4j.org)
-* Download the [Neo4j 2.0] (http://www.neo4j.org/download)
+* Download the [Neo4j 2.0](http://www.neo4j.org/download)
 * OSX:
   * `brew update`
   * `brew install neo4j`
@@ -106,10 +106,10 @@ Dependencies
 ============
 These files are part of the package.json file, so NPM is able to install them all with one command. `npm install`
 
-* Neo4j-JS
-* Socket.io
-* Sails.JS
-* Sails-Neo4j
+* [https://github.com/bretcope/neo4j-js]()
+* [Socket.io](http://socket.io)
+* [Sails.JS](http://sailsjs.org/#!documentation)
+* [Sails-Neo4j](https://github.com/natgeo/sails-neo4j)
 
 # Maven
 * `npm install -g maven`
