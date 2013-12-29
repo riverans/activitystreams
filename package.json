@@ -1,21 +1,25 @@
 {
-    "name": "activitystreams",
-    "private": true,
-    "version": "0.0.0",
-    "description": "a Sails application",
-    "dependencies": {
-        "sails": "0.9.8",
-        "grunt": "0.4.1",
-        "sails-disk": "~0.9.0",
-        "ejs": "0.8.4",
-        "optimist": "0.3.4"
-    },
-    "scripts": {
-        "start": "node app.js",
-        "debug": "node debug app.js"
-    },
-    "main": "app.js",
-    "repository": "",
-    "author": "",
-    "license": ""
+  "name": "activitystreams",
+  "private": true,
+  "version": "0.0.0",
+  "description": "a Sails application",
+  "dependencies": {
+    "grunt": "~0.4.1",
+    "sails": "0.9.8",
+    "sails-disk": "~0.9.0",
+    "ejs": "~0.8.4",
+    "optimist": "0.3.4",
+    "neo4j-js": "0.0.7",
+    "socket.io": "~0.9.16",
+    "sails-neo4j": "git+ssh://git@github.com:natgeo/sails-neo4j.git"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js",
+    "debug": "node debug app.js"
+  },
+  "main": "app.js",
+  "repository": "",
+  "author": "",
+  "license": ""
 }

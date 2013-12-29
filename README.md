@@ -49,7 +49,7 @@ Installation
     * `java -version` to chech if you are using the correct version
     * Repeat for `sudo update-alternatives --config javac` and `sudo update-alternatives --config javaws`
 
-# Node 0.10.22
+# [Node 0.10.22](http://nodejs.org)
 * OSX with Homebrew
   * brew update
   * brew tap homebrew/versions
@@ -87,7 +87,7 @@ Installation
 * OSX with Homebrew:
   * NPM was recently removed from Homebrew, so manually install `curl https://npmjs.org/install.sh | sh`
 
-# Neo4j 2.0!
+# [Neo4j 2.0!](http://www.neo4j.org)
 * Download the [Neo4j 2.0] (http://www.neo4j.org/download)
 * OSX:
   * `brew update`
@@ -101,22 +101,19 @@ Installation
   * `sudo service neo4j start`
   * Note had to uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
 
-# Neo4j-JS
-* `npm install -g neo4j-js`
 
-# Socket.io
-* `npm install -g socket.io`
+Dependencies
+============
+These files are part of the package.json file, so NPM is able to install them all with one command. `npm install`
+
+* Neo4j-JS
+* Socket.io
+* Sails.JS
+* Sails-Neo4j
 
 # Maven
 * `npm install -g maven`
 
-# Sails.JS
-* `sudo npm install -g sails`
-
-# Sails-Neo4j
-* `git clone git@github.com:natgeo/sails-neo4j.git`
-* `cd sails-neo4j`
-* `npm link`
 
 Environment Setup
 =================
@@ -131,8 +128,7 @@ deactivate
 workon activitystreams
 npm link sails-neo4j
 ```
-
-To run your server: `sails lift`
+To run your server: `neo4j start` then sails lift`
 To view your server, visit http://localhost:9365
 
 ___
