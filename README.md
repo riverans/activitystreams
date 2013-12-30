@@ -8,10 +8,10 @@ Installation
 ============
 
 # Java JDK 1.7
-* Download the [latest 1.7 JDK] (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* Download the [latest 1.7 JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
   * OSX users should just need to open the DMG and run the installer.
   * Debian
-    * Download the [linux jdk 7] (http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+    * Download the [linux jdk 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
     * `tar -xvf jdk-7u2-linux-x64.tar.gz` (64 bit) or `tar -xvf jdk-7u2-linux-i586.tar.gz` (32 bit)
     * `sudo mkdir -p /usr/lib/jvm`
     * `sudo mv ./jdk1.7.0_02 /usr/lib/jvm/jdk1.7.0`
@@ -49,7 +49,7 @@ Installation
     * `java -version` to chech if you are using the correct version
     * Repeat for `sudo update-alternatives --config javac` and `sudo update-alternatives --config javaws`
 
-# Node 0.10.22
+# [Node 0.10.22](http://nodejs.org)
 * OSX with Homebrew
   * brew update
   * brew tap homebrew/versions
@@ -87,8 +87,8 @@ Installation
 * OSX with Homebrew:
   * NPM was recently removed from Homebrew, so manually install `curl https://npmjs.org/install.sh | sh`
 
-# Neo4j 2.0!
-* Download the [Neo4j 2.0] (http://www.neo4j.org/download)
+# [Neo4j 2.0!](http://www.neo4j.org)
+* Download the [Neo4j 2.0](http://www.neo4j.org/download)
 * OSX:
   * `brew update`
   * `brew install neo4j`
@@ -101,22 +101,19 @@ Installation
   * `sudo service neo4j start`
   * Note had to uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
 
-# Neo4j-JS
-* `npm install -g neo4j-js`
 
-# Socket.io
-* `npm install -g socket.io`
+Dependencies
+============
+These files are part of the package.json file, so NPM is able to install them all with one command. `npm install`
+
+* [https://github.com/bretcope/neo4j-js]()
+* [Socket.io](http://socket.io)
+* [Sails.JS](http://sailsjs.org/#!documentation)
+* [Sails-Neo4j](https://github.com/natgeo/sails-neo4j)
 
 # Maven
 * `npm install -g maven`
 
-# Sails.JS
-* `sudo npm install -g sails`
-
-# Sails-Neo4j
-* `git clone git@github.com:natgeo/sails-neo4j.git`
-* `cd sails-neo4j`
-* `npm link`
 
 Environment Setup
 =================
@@ -131,8 +128,7 @@ deactivate
 workon activitystreams
 npm link sails-neo4j
 ```
-
-To run your server: `sails lift`
+To run your server: `neo4j start` then sails lift`
 To view your server, visit http://localhost:9365
 
 ___
