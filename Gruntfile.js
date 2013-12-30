@@ -134,6 +134,9 @@ module.exports = function (grunt) {
   grunt.loadTasks(depsPath + '/grunt-contrib-less/tasks');
   grunt.loadTasks(depsPath + '/grunt-contrib-coffee/tasks');
 
+    // load Activity Stream  grunt tasks
+    require('load-grunt-tasks')(grunt);
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -409,7 +412,17 @@ module.exports = function (grunt) {
         // When assets are changed:
         tasks: ['compileAssets', 'linkAssets']
       }
-    }
+    },
+     /************************************
+      * Activity Stream Grunt Tasks
+      ************************************/
+
+      jasmine: {
+        dev: {
+          src: "tests/**/*.js"
+        }
+      }
+
   });
 
   // When Sails is lifted:
@@ -423,7 +436,7 @@ module.exports = function (grunt) {
     'clean:dev',
     'jst:dev',
     'less:dev',
-    'copy:dev',    
+    'copy:dev',
     'coffee:dev'
   ]);
 
