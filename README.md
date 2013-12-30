@@ -49,7 +49,10 @@ Installation
     * `java -version` to chech if you are using the correct version
     * Repeat for `sudo update-alternatives --config javac` and `sudo update-alternatives --config javaws`
 
-# [Node](http://nodejs.org) (Until any of this goes to production we are not version locked, but if you must, we use 0.10.24 locally)
+# [Node](http://nodejs.org) 
+
+(Until any of this goes to production we are not version locked, but if you must, we use 0.10.24 locally)
+
 * OSX with Homebrew
   * `brew update`
   * `brew tap homebrew/versions`
@@ -122,7 +125,7 @@ git clone git@github.com:natgeo/activitystreams.git .
 npm install
 ```
 
-To run your server: `neo4j start` then sails lift`
+To run your server: `neo4j start` then `sails lift`
 To view your server, visit http://localhost:9365
 
 ___
