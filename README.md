@@ -49,13 +49,11 @@ Installation
     * `java -version` to chech if you are using the correct version
     * Repeat for `sudo update-alternatives --config javac` and `sudo update-alternatives --config javaws`
 
-# [Node 0.10.22](http://nodejs.org)
+# [Node](http://nodejs.org) (Until any of this goes to production we are not version locked, but if you must, we use 0.10.24 locally)
 * OSX with Homebrew
-  * brew update
-  * brew tap homebrew/versions
-  * brew versions node
-
-  * If the latest version is newer, check out 0.10.22: `git checkout 72f61d1 /usr/local/Library/Formula/node.rb`
+  * `brew update`
+  * `brew tap homebrew/versions`
+  * `brew versions node`
   * `brew install node --upgrade`
 
 * Debian/Ubuntu (Build from source) - recommended with debian
@@ -74,9 +72,9 @@ Installation
   ```
   "This package will be built according to these values:
 
-  0 - Maintainer: [ root@debian ] 1 - Summary: [ Node.js v0.10.22 ] 2 - Name: [ node ] 3 - Version: [ v0.10.22 ]"
+  0 - Maintainer: [ root@debian ] 1 - Summary: [ Node.js v0.10.24 ] 2 - Name: [ node ] 3 - Version: [ v0.10.24 ]"
   ```
-  Version should be 0.10.22 NOT v0.10.22 otherwise your build will fail.
+  Version should be 0.10.24 NOT v0.10.24 otherwise your build will fail.
 
   From https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 
@@ -93,26 +91,26 @@ Installation
   * `brew update`
   * `brew install neo4j`
   * `neo4j install`
+  * Add to launchctl to make your life easier
   * `neo4j start`
 * Debian/Linux
   * `tar xzvf neo4j-communtity.2.0.0-unix.tar.gz`
   * `mv neo4j-communtity.2.0.0-unix /etc/neo4j && cd /etc/neo4j`
   * `bin/neo4j-installer`
   * `sudo service neo4j start`
-  * Note had to uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
+  * Uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
 
 
 Dependencies
 ============
 These files are part of the package.json file, so NPM is able to install them all with one command. `npm install`
 
-* [https://github.com/bretcope/neo4j-js]()
-* [Socket.io](http://socket.io)
+* [Neo4j-JS](https://github.com/bretcope/neo4j-js) (this dependency might be swapped out soon)
 * [Sails.JS](http://sailsjs.org/#!documentation)
 * [Sails-Neo4j](https://github.com/natgeo/sails-neo4j)
 
 # Maven
-* `npm install -g maven`
+* `brew install maven`
 
 
 Environment Setup
@@ -121,13 +119,9 @@ Environment Setup
 mkdir ~/code/activitystreams
 cd ~/code/activitystreams
 git clone git@github.com:natgeo/activitystreams.git .
-mkvirtualenv activitystreams
-workon activitystreams
-echo 'cd ~/code/activitystreams' >> $WORKON_HOME/activitystreams/bin/postactivate
-deactivate
-workon activitystreams
-npm link sails-neo4j
+npm install
 ```
+
 To run your server: `neo4j start` then sails lift`
 To view your server, visit http://localhost:9365
 
