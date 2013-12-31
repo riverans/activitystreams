@@ -417,9 +417,12 @@ module.exports = function (grunt) {
       * Activity Stream Grunt Tasks
       ************************************/
 
-      jasmine: {
+      mochaTest: {
         dev: {
-          src: "tests/**/*.js"
+          src: "tests/**/*.js",
+          options: {
+            reporter: 'spec'
+          }
         }
       }
 
