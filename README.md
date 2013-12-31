@@ -161,6 +161,25 @@ Sample Demo Script
 7. Refresh the page.  The hearts should be black and you should be logged out.
 8. Log in and refresh the page.  The image you favorited should be pink.
 
+
+Testing
+=======
+We are using the Mocha testing framework and have implemented it using grunt.
+
+All our tests live in tests/
+
+To run test:
+
+    //Make sure sails app is running
+    sails lift
+    
+In another terminal window:
+
+	grunt mochaTest:dev
+	
+
+
+
 KNOWN ISSUES
 ==================
 - Sails.js may act inconsistently when connecting with socket.io.  Running sudo npm install in the base of the app may resolve this.
