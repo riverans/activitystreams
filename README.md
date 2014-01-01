@@ -122,6 +122,7 @@ Environment Setup
 mkdir ~/code/activitystreams
 cd ~/code/activitystreams
 git clone git@github.com:natgeo/activitystreams.git .
+cd activitystreams
 npm install
 ```
 
