@@ -18,7 +18,7 @@ beforeEach(function() {
 describe('Test Basic Api End Points', function() {
     describe(' Check all Get Requests', function () {
 
-        it('Check response for all type of actors endpoint', function(done) {
+        it('Check response for actor type endpoint', function(done) {
            baseUrl.pathname += 'user'
            var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) { 
