@@ -123,7 +123,7 @@
     var servicehost = 'http://as.nationalgeographic.com:9365',
         apiHost = servicehost + '/api/v1',
         user_id = '',
-        mmdb_user_api = 'http://mmdb.dev.nationalgeographic.com:8000/user/',
+        mmdb_user_api = 'http://mc.dev.nationalgeographic.com:8000/user/',
         yourshot_photo_api = 'http://yourshot-uat.nationalgeographic.com/api/v1/photo/',
         user_type = 'mmdb_user',
         photo_type = 'yourshot_photo',
@@ -166,9 +166,9 @@
             heart = $('i', this);
             photo_id = $(this).attr('id');
 
-            favObj.actor = {type: user_type, mmdb_user_id: user_id, api: mmdb_user_api};
+            favObj.actor = {type: user_type, mmdb_user_id: user_id, api: mmdb_user_api + user_id + '/'};
             favObj.verb = {type: activity_type};
-            favObj.object = {type: photo_type, yourshot_photo_id: photo_id, api: yourshot_photo_api};
+            favObj.object = {type: photo_type, yourshot_photo_id: photo_id, api: yourshot_photo_api + photo_id};
 
             if (!heart.hasClass('chosen')) {
                 $.ajax({
