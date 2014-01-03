@@ -115,6 +115,10 @@ These files are part of the package.json file, so NPM is able to install them al
 # Maven
 * `brew install maven`
 
+# Bundle
+*This takes care of ruby/sass dependencies*
+* `gem install bundler && bundle install`
+
 
 Environment Setup
 =================
