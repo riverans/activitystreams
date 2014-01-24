@@ -44,8 +44,6 @@ This document is aimed at a high level understanding how the Activity Stream wor
 
 ### Redis
 
-### ShotDog
-
 
 
 
