@@ -731,7 +731,41 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "ActivityController"
           },
           "depth": 2,
-          "outline": []
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Actions contain code telling Sails how to respond to a certain type of request.",
+                "slug": "actions-contain-code-telling-sails-how-to-respond-to-a-certain-type-of-request"
+              },
+              "depth": 1
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "(i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)",
+                "slug": "ie-do-stuff-then-send-some-json-show-an-html-page-or-redirect-to-another-url"
+              },
+              "depth": 1
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "NOTE: The code you write here supports both HTTP and Socket.io automatically.",
+                "slug": "note-the-code-you-write-here-supports-both-http-and-socketio-automatically"
+              },
+              "depth": 1
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "see http://sailsjs.org/#!documentation/controllers",
+                "slug": "see-httpsailsjsorgdocumentationcontrollers"
+              },
+              "depth": 1
+            }
+          ]
         }
       ]
     }, {
