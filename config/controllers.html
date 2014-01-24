@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="en"><head><title>config/controllers</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="config/controllers"><meta name="groc-project-path" content="config/controllers.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/config/controllers.js">config/controllers.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>Controllers</p>
+
+<p>By default, Sails inspects your controllers, models, and configuration and binds
+certain routes automatically. These dynamically generated routes are called blueprints.</p>
+
+<p>These settings are for the global configuration of controllers &amp; blueprint routes.
+You may also override these settings on a per-controller basis by defining a '_config'
+key in any of your controller files, and assigning it an object, e.g.:
+{
+    // ...
+    _config: { blueprints: { rest: false } }
+    // ...
+}</p>
+
+<p>For more information on configuring controllers and blueprints, check out:
+http://sailsjs.org/#documentation</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">controllers</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>NOTE:
+A lot of the configuration options below affect so-called "CRUD methods",
+or your controllers' <code>find</code>, <code>create</code>, <code>update</code>, and <code>destroy</code> actions.</p>
+
+<p>It's important to realize that, even if you haven't defined these yourself, as long as
+a model exists with the same name as the controller, Sails will respond with built-in CRUD
+logic in the form of a JSON API, including support for sort, pagination, and filtering.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">blueprints</span><span class="o">:</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>actions</code></p>
+
+<p>Action blueprints speed up backend development and shorten the development workflow by
+eliminating the need to manually bind routes.
+When enabled, GET, POST, PUT, and DELETE routes will be generated for every one of a controller's actions.</p>
+
+<p>If an <code>index</code> action exists, additional naked routes will be created for it.
+Finally, all <code>actions</code> blueprints support an optional path parameter, <code>id</code>, for convenience.</p>
+
+<p>For example, assume we have an EmailController with actions <code>send</code> and <code>index</code>.
+With <code>actions</code> enabled, the following blueprint routes would be bound at runtime:</p>
+
+<p><code>EmailController.index</code>
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+<code>GET     /email/:id?</code>        <code>GET    /email/index/:id?</code> <br />
+<code>POST    /email/:id?</code>        <code>POST   /email/index/:id?</code>
+<code>PUT     /email/:id?</code>        <code>PUT    /email/index/:id?</code>
+<code>DELETE  /email/:id?</code>        <code>DELETE /email/index/:id?</code></p>
+
+<p><code>EmailController.send</code>
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+<code>GET     /email/send/:id?</code>
+<code>POST    /email/send/:id?</code>
+<code>PUT     /email/send/:id?</code>
+<code>DELETE  /email/send/:id?</code></p>
+
+<p><code>actions</code> are enabled by default, and are OK for production-- however,
+you must take great care not to inadvertently expose unsafe controller logic to GET requests.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">actions</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+
+
+    </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>rest</code></p>
+
+<p>REST blueprints are the automatically generated routes Sails uses to expose
+a conventional REST API on top of a controller's <code>find</code>, <code>create</code>, <code>update</code>, and <code>destroy</code> 
+actions.</p>
+
+<p>For example, a BoatController with <code>rest</code> enabled generates the following routes:
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+GET      /boat/:id?      -> BoatController.find
+POST     /boat           -> BoatController.create
+PUT      /boat/:id       -> BoatController.update
+DELETE   /boat/:id       -> BoatController.destroy</p>
+
+<p><code>rest</code> blueprints are enabled by default, and suitable for a production scenario.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">rest</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>shortcuts</code></p>
+
+<p>Shortcut blueprints are simple helpers to provide access to a controller's CRUD methods
+from your browser's URL bar.  When enabled, GET, POST, PUT, and DELETE routes will be generated
+for the controller's<code>find</code>, <code>create</code>, <code>update</code>, and <code>destroy</code> actions.</p>
+
+<p><code>shortcuts</code> are enabled by default, but SHOULD BE DISABLED IN PRODUCTION!!!!!</p></div></div><div class="code"><div class="wrapper">    <span class="nx">shortcuts</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>prefix</code></p>
+
+<p>An optional mount path for all blueprint routes on a controller, including <code>rest</code>, 
+<code>actions</code>, and <code>shortcuts</code>.  This allows you to continue to use blueprints, even if you
+need to namespace your API methods.</p>
+
+<p>For example, <code>prefix: '/api/v2'</code> would make the following REST blueprint routes
+for a FooController:</p>
+
+<p><code>GET /api/v2/foo/:id?</code>
+<code>POST /api/v2/foo</code>
+<code>PUT /api/v2/foo/:id</code>
+<code>DELETE /api/v2/foo/:id</code></p>
+
+<p>By default, no prefix is used.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">prefix</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>pluralize</code></p>
+
+<p>Whether to pluralize controller names in generated routes</p>
+
+<p>For example, REST blueprints for <code>FooController</code> with <code>pluralize</code> enabled:
+GET    /foos/:id?
+POST   /foos
+PUT    /foos/:id?
+DELETE /foos/:id?</p></div></div><div class="code"><div class="wrapper">    <span class="nx">pluralize</span><span class="o">:</span> <span class="kc">false</span>
+
+  <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>jsonp</code></p>
+
+<p>If enabled, allows built-in CRUD methods to support JSONP for cross-domain requests.</p>
+
+<p>Example usage (REST blueprint + UserController):
+<code>GET /user?name=ciaran&amp;limit=10&amp;callback=receiveJSONPResponse</code></p>
+
+<p>Defaults to false.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">jsonp</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>expectIntegerId</code></p>
+
+<p>If enabled, built-in CRUD methods will only accept valid integers as an :id parameter.</p>
+
+<p>i.e. trigger built-in API if requests look like:
+   <code>GET /user/8</code>
+but not like:
+   <code>GET /user/a8j4g9jsd9ga4ghjasdha</code></p>
+
+<p>Defaults to false.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">expectIntegerId</span><span class="o">:</span> <span class="kc">false</span>
+
+<span class="p">};</span></div></div></div></div></body></html>

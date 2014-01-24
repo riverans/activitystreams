@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="en"><head><title>config/routes</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="config/routes"><meta name="groc-project-path" content="config/routes.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/config/routes.js">config/routes.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>Routes</p>
+
+<p>Sails uses a number of different strategies to route requests.
+Here they are top-to-bottom, in order of precedence.</p>
+
+<p>For more information on routes, check out:
+http://sailsjs.org/#documentation</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>(1) Core middleware</p>
+
+<p>Middleware included with <code>app.use</code> is run first, before the router</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>(2) Static routes</p>
+
+<p>This object routes static URLs to handler functions--
+In most cases, these functions are actions inside of your controllers.
+For convenience, you can also connect routes directly to views or external URLs.</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">routes</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>By default, your root route (aka home page) points to a view
+located at <code>views/home/index.ejs</code>
+(This would also work if you had a file at: <code>/views/home.ejs</code>)</p></div></div><div class="code"><div class="wrapper">  <span class="s1">&#39;/loadtest&#39;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">view</span><span class="o">:</span> <span class="s1">&#39;home/loadtest&#39;</span>
+  <span class="p">},</span>
+
+  <span class="s1">&#39;/as-demo&#39;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">view</span><span class="o">:</span> <span class="s1">&#39;home/as-demo&#39;</span>
+  <span class="p">},</span>
+
+  <span class="s1">&#39;/index&#39;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">view</span><span class="o">:</span> <span class="s1">&#39;home/index&#39;</span>
+  <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Socket session subscribe</p></div></div><div class="code"><div class="wrapper">  <span class="s1">&#39;post /api/v1/subscribe&#39;</span><span class="o">:</span> <span class="s1">&#39;ActivityController.subscribe&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Activity streams GET</p></div></div><div class="code"><div class="wrapper">  <span class="s1">&#39;get /api/v1/:actor&#39;</span><span class="o">:</span> <span class="s1">&#39;ActivityController.getAllActorsOfType&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;get /api/v1/:actor/:actor_id&#39;</span><span class="o">:</span> <span class="s1">&#39;ActivityController.getSpecificActor&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;get /api/v1/:actor/:actor_id/activities&#39;</span><span class="o">:</span> <span class="s1">&#39;ActivityController.getAllActivitiesByActor&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;get /api/v1/:actor/:actor_id/:verb&#39;</span><span class="o">:</span> <span class="s1">&#39;ActivityController.getAllObjectsVerbedByActor&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;get /api/v1/:actor/:actor_id/:verb/:object&#39;</span><span class="o">:</span> <span class="s1">&#39;ActivityController.getSpecificObjectTypeVerbedByActor&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;get /api/v1/:actor/:actor_id/:verb/:object/:object_id&#39;</span><span class="o">:</span> <span class="s1">&#39;ActivityController.getSpecificActivity&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Activity streams POST</p></div></div><div class="code"><div class="wrapper">  
+  <span class="s1">&#39;post /api/v1/activity&#39;</span><span class="o">:</span> <span class="s1">&#39;ActivityController.postSpecificActivity&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;delete /api/v1/:actor/:actor_id/:verb/:object/:object_id&#39;</span><span class="o">:</span> <span class="s1">&#39;ActivityController.deleteSpecificActivity&#39;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>// But what if you want your home page to display
+// a signup form located at <code>views/user/signup.ejs</code>?
+'/': {
+  view: 'user/signup'
+}</p>
+
+<p>// Let's say you're building an email client, like Gmail
+// You might want your home route to serve an interface using custom logic.
+// In this scenario, you have a custom controller <code>MessageController</code>
+// with an <code>inbox</code> action.
+'/': 'MessageController.inbox'</p>
+
+<p>// Alternatively, you can use the more verbose syntax:
+'/': {
+  controller: 'MessageController',
+  action: 'inbox'
+}</p>
+
+<p>// If you decided to call your action <code>index</code> instead of <code>inbox</code>,
+// since the <code>index</code> action is the default, you can shortcut even further to:
+'/': 'MessageController'</p>
+
+<p>// Up until now, we haven't specified a specific HTTP method/verb
+// The routes above will apply to ALL verbs!
+// If you want to set up a route only for one in particular
+// (GET, POST, PUT, DELETE, etc.), just specify the verb before the path.
+// For example, if you have a <code>UserController</code> with a <code>signup</code> action,
+// and somewhere else, you're serving a signup form looks like: 
+//
+//        <form action="/signup">
+//            <input name="username" type="text"/>
+//            <input name="password" type="password"/>
+//            <input type="submit"/>
+//        </form></p>
+
+<p>// You would want to define the following route to handle your form:
+'post /signup': 'UserController.signup'</p>
+
+<p>// What about the ever-popular "vanity URLs" aka URL slugs?
+// (you might remember doing this with <code>mod_rewrite</code> in Apache)
+//
+// This is where you want to set up root-relative dynamic routes like:
+// http://yourwebsite.com/twinkletoez
+//
+// NOTE:
+// You'll still want to allow requests through to the static assets,
+// so we need to set up this route to ignore URLs that have a trailing ".":
+// (e.g. your javascript, CSS, and image files)
+get /<em>(^.</em>)': 'UserController.profile</p></div></div><div class="code"><div class="wrapper"><span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>(3) Action blueprints
+These routes can be disabled by setting (in <code>config/controllers.js</code>):
+<code>module.exports.controllers.blueprints.actions = false</code></p>
+
+<p>All of your controllers ' actions are automatically bound to a route.  For example:
+  + If you have a controller, <code>FooController</code>:
+    + its action <code>bar</code> is accessible at <code>/foo/bar</code>
+    + its action <code>index</code> is accessible at <code>/foo/index</code>, and also <code>/foo</code></p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>(4) Shortcut CRUD blueprints</p>
+
+<p>These routes can be disabled by setting (in config/controllers.js)
+        <code>module.exports.controllers.blueprints.shortcuts = false</code></p>
+
+<p>If you have a model, <code>Foo</code>, and a controller, <code>FooController</code>,
+you can access CRUD operations for that model at:
+    /foo/find/:id?  ->  search lampshades using specified criteria or with id=:id</p>
+
+<pre><code>/foo/create     -&gt;  create a lampshade using specified values
+
+/foo/update/:id -&gt;  update the lampshade with id=:id
+
+/foo/destroy/:id    -&gt;  delete lampshade with id=:id
+</code></pre></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>(5) REST blueprints</p>
+
+<p>These routes can be disabled by setting (in config/controllers.js)
+    <code>module.exports.controllers.blueprints.rest = false</code></p>
+
+<p>If you have a model, <code>Foo</code>, and a controller, <code>FooController</code>,
+you can access CRUD operations for that model at:</p>
+
+<pre><code>get /foo/:id?   -&gt;  search lampshades using specified criteria or with id=:id
+
+post /foo       -&gt; create a lampshade using specified values
+
+put /foo/:id    -&gt;  update the lampshade with id=:id
+
+delete /foo/:id -&gt;  delete lampshade with id=:id
+</code></pre></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>(6) Static assets</p>
+
+<p>Flat files in your <code>assets</code> directory- (these are sometimes referred to as 'public')
+If you have an image file at <code>/assets/images/foo.jpg</code>, it will be made available
+automatically via the route:  <code>/images/foo.jpg</code></p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>(7) 404 (not found) handler</p>
+
+<p>Finally, if nothing else matched, the default 404 handler is triggered.
+See <code>config/404.js</code> to adjust your app's 404 logic.</p></div></div><div class="code"><div class="wrapper"> </div></div></div></div></body></html>

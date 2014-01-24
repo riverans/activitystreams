@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="en"><head><title>config/adapters</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="config/adapters"><meta name="groc-project-path" content="config/adapters.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/config/adapters.js">config/adapters.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>Global adapter config</p>
+
+<p>The <code>adapters</code> configuration object lets you create different global "saved settings"
+that you can mix and match in your models.  The <code>default</code> option indicates which 
+"saved setting" should be used if a model doesn't have an adapter specified.</p>
+
+<p>Keep in mind that options you define directly in your model definitions
+will override these settings.</p>
+
+<p>For more information on adapter configuration, check out:
+http://sailsjs.org/#documentation</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">adapters</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>If you leave the adapter config unspecified 
+in a model definition, 'default' will be used.</p></div></div><div class="code"><div class="wrapper">  <span class="s1">&#39;default&#39;</span><span class="o">:</span> <span class="s1">&#39;neo4j&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Persistent adapter for DEVELOPMENT ONLY
+(data is preserved when the server shuts down)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">disk</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">module</span><span class="o">:</span> <span class="s1">&#39;sails-disk&#39;</span>
+  <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>MySQL is the world's most popular relational database.
+Learn more: http://en.wikipedia.org/wiki/MySQL</p></div></div><div class="code"><div class="wrapper">  <span class="nx">myLocalMySQLDatabase</span><span class="o">:</span> <span class="p">{</span>
+
+    <span class="nx">module</span><span class="o">:</span> <span class="s1">&#39;sails-mysql&#39;</span><span class="p">,</span>
+    <span class="nx">host</span><span class="o">:</span> <span class="s1">&#39;YOUR_MYSQL_SERVER_HOSTNAME_OR_IP_ADDRESS&#39;</span><span class="p">,</span>
+    <span class="nx">user</span><span class="o">:</span> <span class="s1">&#39;YOUR_MYSQL_USER&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Psst.. You can put your password in config/local.js instead
+so you don't inadvertently push it up if you're using version control</p></div></div><div class="code"><div class="wrapper">    <span class="nx">password</span><span class="o">:</span> <span class="s1">&#39;YOUR_MYSQL_PASSWORD&#39;</span><span class="p">,</span>
+    <span class="nx">database</span><span class="o">:</span> <span class="s1">&#39;YOUR_MYSQL_DB&#39;</span>
+  <span class="p">},</span>
+
+  <span class="nx">neo4j</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">module</span><span class="o">:</span> <span class="s1">&#39;sails-neo4j&#39;</span><span class="p">,</span>
+    <span class="nx">host</span><span class="o">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+    <span class="nx">protocol</span><span class="o">:</span> <span class="s1">&#39;http://&#39;</span><span class="p">,</span>
+    <span class="nx">port</span><span class="o">:</span> <span class="s1">&#39;7474&#39;</span><span class="p">,</span>
+    <span class="nx">base</span><span class="o">:</span> <span class="s1">&#39;/db/data/&#39;</span><span class="p">,</span>
+    <span class="nx">debug</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+<span class="p">};</span></div></div></div></div></body></html>

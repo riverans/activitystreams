@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="en"><head><title>config/cors</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="config/cors"><meta name="groc-project-path" content="config/cors.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/config/cors.js">config/cors.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>Cross-Origin Resource Sharing (CORS)</p>
+
+<p>CORS is like a more modern version of JSONP-- it allows your server/API
+to successfully respond to requests from client-side JavaScript code 
+running on some other domain (e.g. google.com)
+Unlike JSONP, it works with POST, PUT, and DELETE requests</p>
+
+<p>For more information on CORS, check out:
+http://en.wikipedia.org/wiki/Cross-origin<em>resource</em>sharing</p>
+
+<p>Note that any of these settings (besides 'allRoutes') can be changed on a per-route basis
+by adding a "cors" object to the route configuration:</p>
+
+<p>'/get foo': {
+  controller: 'foo',
+  action: 'bar',
+  cors: {
+    origin: 'http://foobar.com,https://owlhoot.com' <br />
+  }
+ }</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">cors</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Allow CORS on all routes by default?  If not, you must enable CORS on a 
+per-route basis by either adding a "cors" configuration object
+to the route config, or setting "cors:true" in the route config to
+use the default settings below.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">allRoutes</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Which domains which are allowed CORS access?
+This can be a comma-delimited list of hosts (beginning with http:// or https://)
+or "*" to allow all domains CORS access.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">origin</span><span class="o">:</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Allow cookies to be shared for CORS requests?</p></div></div><div class="code"><div class="wrapper">  <span class="nx">credentials</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Which methods should be allowed for CORS requests?  This is only used
+in response to preflight requests (see article linked above for more info)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">methods</span><span class="o">:</span> <span class="s1">&#39;GET, POST, PUT, DELETE, OPTIONS, HEAD&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Which headers should be allowed for CORS requests?  This is only used
+in response to preflight requests.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">headers</span><span class="o">:</span> <span class="s1">&#39;content-type&#39;</span>
+
+<span class="p">};</span></div></div></div></div></body></html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"><head><title>config/400</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="config/400"><meta name="groc-project-path" content="config/400.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/config/400.js">config/400.js</a></div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Default 400 (Bad Request) handler</p>
+
+<p>Sails will automatically respond using this middleware when a blueprint is requested
+with missing or invalid parameters
+(e.g. <code>POST /user</code> was used to create a user, but required parameters were missing)</p>
+
+<p>This middleware can also be invoked manually from a controller or policy:
+res.badRequest( [validationErrors], [redirectTo] )</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>validationErrors can be an Array, an Object, or a String.</strong><br/>(optional errors usually an array of validation errors from the ORM)</p></li>
+<li><p><strong>redirectTo must be a String.</strong><br/>(optional URL (absolute or relative, e.g. google.com/foo or /bar/baz) of the page to redirect to. Usually only relevant for traditional HTTP requests, since if this was triggered from an AJAX or socket request, JSON should be sent instead.)</p></li>
+</ul></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">[</span><span class="mi">400</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">badRequest</span><span class="p">(</span><span class="nx">validationErrors</span><span class="p">,</span> <span class="nx">redirectTo</span><span class="p">,</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>NOTE: This function is Sails middleware-- that means that not only do <code>req</code> and <code>res</code>
+work just like their Express equivalents to handle HTTP requests, they also simulate
+the same interface for receiving socket messages.</p></div></div><div class="code"><div class="wrapper">  <span class="kd">var</span> <span class="nx">statusCode</span> <span class="o">=</span> <span class="mi">400</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">status</span><span class="o">:</span> <span class="nx">statusCode</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Optional validationErrors object</p></div></div><div class="code"><div class="wrapper">  <span class="k">if</span> <span class="p">(</span><span class="nx">validationErrors</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">validationErrors</span> <span class="o">=</span> <span class="nx">validationErrors</span><span class="p">;</span>
+  <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>For requesters expecting JSON, everything works like you would expect-- a simple JSON response
+indicating the 400: Bad Request status with relevant information will be returned. </p></div></div><div class="code"><div class="wrapper">  <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">wantsJSON</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">status</span><span class="p">);</span>
+  <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>For traditional (not-AJAX) web forms, this middleware follows best-practices
+for when a user submits invalid form data:
+i.   First, a one-time-use flash variable is populated, probably a string message or an array
+     of semantic validation error objects.
+ii.  Then the  user is redirected back to <code>redirectTo</code>, i.e. the URL where the bad request originated.
+iii. There, the controller and/or view might use the flash <code>errors</code> to either display a message or highlight
+     the invalid HTML form fields.</p></div></div><div class="code"><div class="wrapper">  <span class="k">if</span> <span class="p">(</span><span class="nx">redirectTo</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Set flash message called <code>errors</code> (one-time-use in session)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;errors&#39;</span><span class="p">,</span> <span class="nx">validationErrors</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>then redirect back to the <code>redirectTo</code> URL</p></div></div><div class="code"><div class="wrapper">    <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="nx">redirectTo</span><span class="p">);</span>
+  <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Depending on your app's needs, you may choose to look at the Referer header here 
+and redirect back. Please do so at your own risk!
+For security reasons, Sails does not provide this affordance by default.
+It's safest to provide a 'redirectTo' URL and redirect there directly.</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>If <code>redirectTo</code> was not specified, just respond w/ JSON</p></div></div><div class="code"><div class="wrapper">  <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">status</span><span class="p">);</span>
+
+<span class="p">};</span></div></div></div></div></body></html>
