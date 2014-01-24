@@ -1,5 +1,5 @@
 /*
-# @module ActivityController
+# ActivityController
 */
 
 module.exports = {
