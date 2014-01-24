@@ -1,0 +1,6 @@
+{
+  "glob": ["api/**/*.js", "README.md", "config/**/*.js"],
+  "github": true,
+  "out": "./docs",
+  "verbose": true
+}

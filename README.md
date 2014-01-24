@@ -1,7 +1,183 @@
-activitystreams
-===============
+#VII - Activity Stream Service
 
-NatGeo Activity Streams
+
+
+
+### Table of Contents
+
+1. Introduction
+2. What is Activity Stream
+3. What problem is it solving?
+4. Current Situation at Natgeo
+5. Technology and Standared Choices
+6. Graph Problems
+7. Graph Structure
+7. Service Point
+8. Rest End Point
+9. Road Map
+10. Installation
+
+
+
+
+
+
+
+
+
+
+## Introduction
+
+This document is aimed at a high level understanding how the Activity Stream works with Neo4j. We have defined a broad structure that to talk to the database.
+
+
+
+
+
+## Technology choices
+
+
+
+### Node
+
+### Neo4j
+
+### Redis
+
+
+
+
+This document is aimed at a high level understanding how the Activity Stream works with Neo4j. We have defined a broad structure that to talk to the database.
+
+
+
+
+## Activity Stream Spec
+
+ACTOR -> VERB -> OBJECT -> TARGET
+
+
+mmdb_user -> FAVORITED -> yourshot_photo
+
+
+## Graph Structure
+
+Nodes have labels, the labels are bascially types of nodes we have. The current naming structure we for labels for are
+
+	{app_name}_{model}
+
+So an mmdb User would be
+
+	mmdb_user
+	
+A Yourshot photo would be
+	
+	yourshot_photo
+	
+An ngm article would be
+	
+	ngm_article
+
+
+
+### Node properties
+
+Nodes currently have the folowing properties
+
+	{app_name}_{model}_id : {int} / {slug} … open ended
+	{app_name}_{model}_api : {url}
+	type: {app_name}_{model}
+	created: {unix timestamp
+	updated: {unix timestamp}
+	
+The reason why we add an type to that node so that we can return the label for the node. 
+
+
+
+For example an MMDB USER node will have the following:
+
+	mmdb_user_id : 1
+	mmdb_user_api: http://mc.dev.nationalgeographic.com:8000/user/1/
+	type: mmdb_user
+	created: 1388767442091
+	updated: 1389039127283
+	
+Your Shot Photo
+
+	yourshot_photo: 11121
+	yourshot_photo_api: http://yourshot-uat.nationalgeographic.com/api/v1/photo/14055
+	type: yourshot_photo
+	created: 1388767442091
+	updated: 1389039127283
+
+
+
+### Edges
+
+These represent represent relationships. They are in all caps and also have timestamps
+
+List of Current Verbs:
+	
+	FAVORITED
+	PLEDGES
+	FOLLOWS
+	
+There shall be a master list of verbs that will be used within the graph. Users are not allowd to add new verb that are not in the master list.
+
+
+### Activity Service REST API
+
+
+Get all nodes of type
+
+	'get /api/v1/:actor' --> /api/v1/mmdb_user
+  
+Get node of specfic id
+
+	'get /api/v1/:actor/:actor_id' --> /api/v1/mmdb_user/1
+  
+Get all activites of specifc actor
+
+	'get /api/v1/:actor/:actor_id/activities' -> /api/v1/mmdb_user/1/activities
+ 
+Get all specific verbed activites of user 
+
+	'get /api/v1/:actor/:actor_id/:verb' -> /api/v1/mmdb_user/1/FAVORITED
+	
+Getall activies verb by type of object by user
+
+	'get /api/v1/:actor/:actor_id/:verb/:object' -> api/v1/mmdb_user/1/FAVORITED/yourshot_photo
+	
+Get specific activity with user verbed object
+
+	'get /api/v1/:actor/:actor_id/:verb/:object/:object_id' -> api/v1/mmdb_user/FAVORITED/yourshot_photo/1212
+
+Post an Activity
+
+ 	'post /api/v1/activity': 'ActivityController.postSpecificActivity',
+ 
+Delete an Activity
+	
+	'delete /api/v1/:actor/:actor_id/:verb/:object/:object_id' -> 
+	api/v1/mmdb_user/1/Favorited/yourshot_photo/14442
+
+
+
+### Gate Keeping
+
+
+For users:
+
+	Need a valid mmdb session cookie
+
+
+For batch requests:
+
+
+	api key
+
+
+
 
 
 Installation
@@ -115,6 +291,10 @@ These files are part of the package.json file, so NPM is able to install them al
 # Maven
 * `brew install maven`
 
+# Bundle
+*This takes care of ruby/sass dependencies*
+* `gem install bundler && bundle install`
+
 
 Environment Setup
 =================
@@ -122,6 +302,7 @@ Environment Setup
 mkdir ~/code/activitystreams
 cd ~/code/activitystreams
 git clone git@github.com:natgeo/activitystreams.git .
+cd activitystreams
 npm install
 ```
 
@@ -188,4 +369,7 @@ KNOWN ISSUES
 TODO
 ====
 - Use socket.io to display the activity stream in the large box
+
+
+
 

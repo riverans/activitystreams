@@ -137,11 +137,11 @@ module.exports = {
 			object_key = object.type + '_id',
 			object_id = object[object_key];
 		q = [
-			'MERGE (actor:' + actor.type + ' { ' + actor_key + ':"' + actor_id + '" })',
+			'MERGE (actor:' + actor.type + ' { ' + actor_key + ':"' + actor_id + '", type:"' + actor.type + '", ' + actor.type + '_api:"' + actor.api + '" })',
 			'ON CREATE SET actor.created = timestamp()',
 			'ON MATCH SET actor.updated = timestamp()',
 			'WITH actor',
-			'MERGE (object:' + object.type + ' { ' + object_key + ':"' + object_id + '" })',
+			'MERGE (object:' + object.type + ' { ' + object_key + ':"' + object_id + '", type:"' + object.type + '",  ' + object.type + '_api:"' + object.api + '" })',
 			'ON CREATE SET object.created = timestamp()',
 			'ON MATCH SET object.updated = timestamp()',
 			'WITH object, actor',
@@ -152,7 +152,7 @@ module.exports = {
 		];
 		Actor.adapter.query(q, {}, function(err, results) {
 				if (err) { return res.json(err); }
-				Actor.publishUpdate(actor_id, results[0]);
+				Actor.publishCreate({id: actor_id, data: results[0]});
 				res.json(results);
 			}
 		);
