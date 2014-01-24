@@ -16,7 +16,7 @@ beforeEach(function() {
 });
 
 describe('Test Basic Api End Points', function() {
-    describe(' Check all Get Requests', function () {
+    describe(' Check  Basic Get Requests', function () {
 
         it('Check response for actor type endpoint', function(done) {
            baseUrl.pathname += 'user'
@@ -72,7 +72,9 @@ describe('Test Basic Api End Points', function() {
                 done();
             });
         });
+    });
 
+    describe(' Check Basic Post Request', function () {
         it('check response for posting specific activity', function (done) {
             baseUrl.pathname += 'activity';
             var apiUrl = url.format(baseUrl);
@@ -99,7 +101,9 @@ describe('Test Basic Api End Points', function() {
                 done();
             });  
         });
+    });
 
+    describe('Check Basic DEL request', function () {
         it("check response for deleting specfic activity", function(done) {
             baseUrl.pathname += 'user/1/FAVORITED/picture/1'
             var apiUrl = url.format(baseUrl);

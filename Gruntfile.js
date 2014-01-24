@@ -417,14 +417,14 @@ module.exports = function (grunt) {
       * Activity Stream Grunt Tasks
       ************************************/
 
-      mochaTest: {
-        dev: {
-          src: "tests/**/*.js",
-          options: {
-            reporter: 'spec'
-          }
+    mochaTest: {
+      dev: {
+        src: "tests/**/*.js",
+        options: {
+          reporter: 'spec'
         }
       }
+    }
 
   });
 
@@ -480,6 +480,11 @@ module.exports = function (grunt) {
     'sails-linker:prodJsJADE',
     'sails-linker:prodStylesJADE',
     'sails-linker:devTplJADE'
+  ]);
+
+
+  grunt.registerTask('test', [
+    'mochaTest:dev'
   ]);
 
   // When API files are changed:
