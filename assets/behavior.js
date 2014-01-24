@@ -728,17 +728,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "api/controllers/ActivityController.js",
             "targetPath": "controllers/ActivityController",
             "pageTitle": "controllers/ActivityController",
-            "firstHeader": {
-              "type": "heading",
-              "data": {
-                "level": 1,
-                "title": "Activity Controller",
-                "slug": "activity-controller",
-                "isFileHeader": true
-              },
-              "depth": 1
-            },
-            "title": "Activity Controller"
+            "title": "ActivityController"
           },
           "depth": 2,
           "outline": []

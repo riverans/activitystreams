@@ -1,9 +1,20 @@
-<!DOCTYPE html><html lang="en"><head><title>controllers/ActivityController</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/ActivityController"><meta name="groc-project-path" content="api/controllers/ActivityController.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/api/controllers/ActivityController.js">api/controllers/ActivityController.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="activity-controller">Activity Controller</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Overrides for the settings in <code>config/controllers.js</code>
-(specific to ActivityController)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">_config</span><span class="o">:</span> <span class="p">{},</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-public"><div class="wrapper"><p><span class='doc-section-header'>Public method index</span></p>
+<!DOCTYPE html><html lang="en"><head><title>controllers/ActivityController</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/ActivityController"><meta name="groc-project-path" content="api/controllers/ActivityController.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/api/controllers/ActivityController.js">api/controllers/ActivityController.js</a></div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module :: Controller docs :: http://sailsjs.org/#!documentation/controllers</span></p>
 
-<p>Base (/)</p>
+<p>ActivityController</p>
 
-<p><strong>Returns a JSON</strong><br/>(A JSON object representing all nodes in the graph)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">index</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+<p>:: A set of functions called <code>actions</code>.</p>
+
+<pre><code>            Actions contain code telling Sails how to respond to a certain type of request.
+            (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+
+            You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+            and/or override them with custom routes (`config/routes.js`)
+
+            NOTE: The code you write here supports both HTTP and Socket.io automatically.
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Overrides for the settings in <code>config/controllers.js</code>
+(specific to ActivityController)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">_config</span><span class="o">:</span> <span class="p">{},</span>
+
+  <span class="nx">index</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">Actor</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span>
       <span class="p">[</span>
         <span class="s1">&#39;MATCH (n)&#39;</span><span class="p">,</span>
