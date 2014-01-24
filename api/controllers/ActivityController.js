@@ -3,6 +3,7 @@
 * @module ActivityController
 *
 */
+/*
 #
 # @description A set of functions defining the Activity Stream API.
 #
@@ -16,7 +17,7 @@
 #
 #  see http://sailsjs.org/#!documentation/controllers
 #
-
+*/
 module.exports = {
 
 /** * Sets a cookie given a value of any type.
