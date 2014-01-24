@@ -37,7 +37,7 @@ describe('Test Basic Api End Points', function() {
         });
 
         it('Check resposne for specific actors activites', function (done) {
-            baseUrl.pathname += 'user/1/favorited'
+            baseUrl.pathname += 'user/1/FAVORITED'
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body){
                 assert.equal(response.statusCode, 200);
@@ -65,7 +65,7 @@ describe('Test Basic Api End Points', function() {
         });
 
         it('check response for specfic activity', function (done) {
-            baseUrl.pathname += 'user/1/favorited/picture/1';
+            baseUrl.pathname += 'user/1/FAVORITED/picture/1';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) {
                 assert.equal(response.statusCode, 200);
@@ -104,7 +104,7 @@ describe('Test Basic Api End Points', function() {
             baseUrl.pathname += 'user/1/FAVORITED/picture/1'
             var apiUrl = url.format(baseUrl);
             request.del(apiUrl, function (err, response, body) {
-                asset.equal(response.statusCode, 200);
+                assert.equal(response.statusCode, 200);
                 done();
             });
         });
