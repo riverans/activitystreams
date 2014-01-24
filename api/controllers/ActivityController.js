@@ -1,23 +1,7 @@
-/**
-*
-* @module ActivityController
-*
-*/
 /*
-#
-# @description A set of functions defining the Activity Stream API.
-#
-#  Actions contain code telling Sails how to respond to a certain type of request.
-#  (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
-#
-#  You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
-#  and/or override them with custom routes (`config/routes.js`)
-#
-#  NOTE: The code you write here supports both HTTP and Socket.io automatically.
-#
-#  see http://sailsjs.org/#!documentation/controllers
-#
+# @module ActivityController
 */
+
 module.exports = {
 
 /** * Sets a cookie given a value of any type.
