@@ -356,7 +356,7 @@ To run test:
     
 In another terminal window:
 
-	grunt mochaTest:dev
+	grunt test
 	
 
 
