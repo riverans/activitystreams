@@ -11,7 +11,27 @@
             and/or override them with custom routes (`config/routes.js`)
 
             NOTE: The code you write here supports both HTTP and Socket.io automatically.
-</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Overrides for the settings in <code>config/controllers.js</code>
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-public"><div class="wrapper"><p><span class='doc-section-header'>Public method set</span></p>
+
+<p>Sets a cookie given a value of any type.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>name must be a String.</strong><br/>(The name of the cookie to be set )</p></li>
+<li><p><strong>value can be of any type.</strong><br/>(The value to convert to string and set in the cookie )</p></li>
+<li><p><strong>options is optional and must be an Object.</strong><br/>(Options hash )</p>
+
+<ul><li><strong>options.expires is optional and can be of any type.</strong><br/>(The expiration as a number of seconds, or "session", or undefined for one year )</li></ul></li>
+</ul>
+
+<p><strong>Returns a Boolean</strong><br/>(Whether or not the cookie was successfully set )</p>
+
+<p>Example:</p>
+
+<p>cookie.set('foo', 'bar', { expires : 1000000 }); 
+cookie.set('foo', [1, 2, 3], { expires : 'session' }); 
+cookie.set('foo', { bar : 'baz', boom : 'boosh' }); </p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Overrides for the settings in <code>config/controllers.js</code>
 (specific to ActivityController)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">_config</span><span class="o">:</span> <span class="p">{},</span>
 
   <span class="nx">index</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
