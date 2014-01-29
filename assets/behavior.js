@@ -735,11 +735,11 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             {
               "type": "heading",
               "data": {
-                "level": 2,
+                "level": 6,
                 "title": "Retrieve Entry Point [GET][/api/v1/]",
                 "slug": "retrieve-entry-point-getapiv1"
               },
-              "depth": 2
+              "depth": 6
             }
           ]
         }
