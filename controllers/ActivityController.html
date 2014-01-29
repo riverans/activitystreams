@@ -14,22 +14,16 @@
 </code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Overrides for the settings in <code>config/controllers.js</code>
 (specific to ActivityController)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">_config</span><span class="o">:</span> <span class="p">{},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h6 id="retrieve-entry-point-getapiv1">Retrieve Entry Point [GET][/api/v1/]</h6>
 
-<p>Returns all nodes in the graph (To be deprecated).</p>
+<p>Returns all nodes in the graph (To be deprecated and switched to an api navigator).</p>
 
 <ul>
 <li><p>Response 200 (application/json)</p>
 
-<ul><li><p>Headers</p>
-
-<pre><code>Link: &lt;http:///&gt;;rel="self",&lt;http:/api.gistfox.com/gists&gt;;rel="gists"
-</code></pre></li>
+<ul><li><p>Headers</p></li>
 <li><p>Body</p>
 
 <pre><code>{
-    "_links": {
-        "self": { "href": "/" },
-        "gists": { "href": "/gists?{since}", "templated": true }
-    }
+    []
 }
 </code></pre></li></ul></li>
 </ul></div></div><div class="code"><div class="wrapper">  <span class="nx">index</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
@@ -42,9 +36,63 @@
         <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">);</span>
-  <span class="p">},</span>
+  <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h6 id="actor-getappname-model">Actor [GET][/{appname_model}]</h6>
 
-  <span class="nx">getAllActorsOfType</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+<p>An activity is always started by an Actor. The endpoint will return all nodes in the db that fit the appname_model label, represented as an actor.</p>
+
+<p>All actors have the following data:</p>
+
+<ul>
+<li>id (this id is assigned by Neo4j and should not be used)</li>
+</ul>
+
+<p>And within the data property:</p>
+
+<ul>
+<li>created: <em>Timestamp</em></li>
+<li>updated (optional): <em>Timestamp</em></li>
+<li>appname<em>model</em>id: <em>Integer/String</em></li>
+<li>appname<em>model</em>api: <em>URL</em></li>
+<li><p>type: {appname_model}</p></li>
+<li><p>Parameters</p>
+
+<ul><li>appname<em>model (string) where appname is the name of the app, and model is the name of the model we are dealing with (eg. mmdb</em>user or ngm_article)</li></ul></li>
+<li><p>Model (application/json)</p>
+
+<p>JSON representation of an actor node</p>
+
+<ul><li><p>Headers</p></li>
+<li><p>Body</p>
+
+<pre><code>{
+    actor: {
+        id: "17",
+        data: {
+            created: 1388691303471,
+            appname_model_id: "1",
+            updated: 1388789935187,
+            appname_model_api: "http://reallycool.api.url/path/1/",
+            type: "appname_model"
+        }
+    }
+}
+</code></pre></li>
+<li><p>Example</p>
+
+<pre><code>{
+    actor: {
+        id: "17",
+        data: {
+            created: 1388691303471,
+            mmdb_user_id: "1",
+            updated: 1388789935187,
+            mmdb_user_api: "https://mmdb.nationalgeographic.com/user/1",
+            type: "mmdb_user"
+        }
+    }
+}
+</code></pre></li></ul></li>
+</ul></div></div><div class="code"><div class="wrapper">  <span class="nx">getAllActorsOfType</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">q</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s1">&#39;MATCH(actor:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">,</span>
         <span class="s1">&#39;RETURN actor&#39;</span>
