@@ -26,6 +26,25 @@ module.exports = {
 	*/
 	_config: {},
 
+	/**
+	## Retrieve Entry Point [GET][/api/v1/]
+
+	Returns all nodes in the graph (To be deprecated).
+
+	+ Response 200 (application/json)
+	    + Headers
+
+	            Link: <http:///>;rel="self",<http:/api.gistfox.com/gists>;rel="gists"
+
+	    + Body
+
+	            {
+	                "_links": {
+	                    "self": { "href": "/" },
+	                    "gists": { "href": "/gists?{since}", "templated": true }
+	                }
+	            }
+	*/
 	index: function(req, res) {
 		Actor.adapter.query(
 			[
