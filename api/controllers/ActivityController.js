@@ -27,7 +27,7 @@ module.exports = {
 	_config: {},
 
 	/**
-	## Retrieve Entry Point [GET][/api/v1/]
+	###### Retrieve Entry Point [GET][/api/v1/]
 
 	Returns all nodes in the graph (To be deprecated).
 
