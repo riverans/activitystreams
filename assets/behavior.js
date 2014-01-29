@@ -731,7 +731,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "ActivityController"
           },
           "depth": 2,
-          "outline": []
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Retrieve Entry Point [GET][/api/v1/]",
+                "slug": "retrieve-entry-point-getapiv1"
+              },
+              "depth": 2
+            }
+          ]
         }
       ]
     }, {

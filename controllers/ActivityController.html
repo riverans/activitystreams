@@ -12,9 +12,27 @@
 
             NOTE: The code you write here supports both HTTP and Socket.io automatically.
 </code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Overrides for the settings in <code>config/controllers.js</code>
-(specific to ActivityController)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">_config</span><span class="o">:</span> <span class="p">{},</span>
+(specific to ActivityController)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">_config</span><span class="o">:</span> <span class="p">{},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h2 id="retrieve-entry-point-getapiv1">Retrieve Entry Point [GET][/api/v1/]</h2>
 
-  <span class="nx">index</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+<p>Returns all nodes in the graph (To be deprecated).</p>
+
+<ul>
+<li><p>Response 200 (application/json)</p>
+
+<ul><li><p>Headers</p>
+
+<pre><code>Link: &lt;http:///&gt;;rel="self",&lt;http:/api.gistfox.com/gists&gt;;rel="gists"
+</code></pre></li>
+<li><p>Body</p>
+
+<pre><code>{
+    "_links": {
+        "self": { "href": "/" },
+        "gists": { "href": "/gists?{since}", "templated": true }
+    }
+}
+</code></pre></li></ul></li>
+</ul></div></div><div class="code"><div class="wrapper">  <span class="nx">index</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">Actor</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span>
       <span class="p">[</span>
         <span class="s1">&#39;MATCH (n)&#39;</span><span class="p">,</span>
