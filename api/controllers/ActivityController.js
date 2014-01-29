@@ -29,21 +29,18 @@ module.exports = {
 	/**
 	###### Retrieve Entry Point [GET][/api/v1/]
 
-	Returns all nodes in the graph (To be deprecated).
+	Returns all nodes in the graph (To be deprecated and switched to an api navigator).
 
 	+ Response 200 (application/json)
-	    + Headers
+		+ Headers
 
-	            Link: <http:///>;rel="self",<http:/api.gistfox.com/gists>;rel="gists"
+				
 
-	    + Body
+		+ Body
 
-	            {
-	                "_links": {
-	                    "self": { "href": "/" },
-	                    "gists": { "href": "/gists?{since}", "templated": true }
-	                }
-	            }
+				{
+					[]
+				}
 	*/
 	index: function(req, res) {
 		Actor.adapter.query(
@@ -56,6 +53,63 @@ module.exports = {
 			}
 		);
 	},
+	/**
+	###### Actor [GET][/{appname_model}]
+	An activity is always started by an Actor. The endpoint will return all nodes in the db that fit the appname_model label, represented as an actor.
+
+	All actors have the following data:
+
+	- id (this id is assigned by Neo4j and should not be used)
+
+	And within the data property:
+
+	- created: _Timestamp_
+	- updated (optional): _Timestamp_
+	- appname_model_id: _Integer/String_
+	- appname_model_api: _URL_
+	- type: {appname_model}
+
+	+ Parameters
+		+ appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with (eg. mmdb_user or ngm_article)
+
+	+ Model (application/json)
+
+		JSON representation of an actor node
+
+		+ Headers
+
+			
+
+		+ Body
+
+				{
+					actor: {
+						id: "17",
+						data: {
+							created: 1388691303471,
+							appname_model_id: "1",
+							updated: 1388789935187,
+							appname_model_api: "http://reallycool.api.url/path/1/",
+							type: "appname_model"
+						}
+					}
+				}
+
+		+ Example
+
+				{
+					actor: {
+						id: "17",
+						data: {
+							created: 1388691303471,
+							mmdb_user_id: "1",
+							updated: 1388789935187,
+							mmdb_user_api: "https://mmdb.nationalgeographic.com/user/1",
+							type: "mmdb_user"
+						}
+					}
+				}
+	*/
 
 	getAllActorsOfType: function(req, res) {
 		var q = [
