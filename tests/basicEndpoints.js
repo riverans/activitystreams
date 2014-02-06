@@ -1,7 +1,7 @@
 var request = require('request'),
     url = require('url'),
     assert = require('assert'),
-    baseUrl = 'http://as.nationalgeographic.com:9365/api',
+    baseUrl = 'http://as.dev.nationalgeographic.com:9365/api',
     apiVersion = '1';
 
 beforeEach(function() { 
@@ -9,7 +9,7 @@ beforeEach(function() {
 
     baseUrl = {
         protocol: 'http',
-        hostname: 'as.nationalgeographic.com',
+        hostname: 'as.dev.nationalgeographic.com',
         port: 9365,
         pathname: 'api/v1/'
     }
