@@ -16,6 +16,36 @@ module.exports = {
 	_config: {},
 
 	/**
+	* Generic Functions 
+	**/
+
+	/**
+	###### Establish Session Cookie [GET][/]
+
+	Sets an authenticated session cookie if the client does not already have one,
+	Existing valid sessions are reestablished.  Only necessary when you need to
+	establish a socket connection.
+
+	Making an empty JSONP call to this endpoint before establishing your socket
+	connection is necessary for clients on 3rd party domains.  Otherwise session
+	auth will fail, as the AS service will try to use a cookie of 'undefined'
+	during authentication.
+
+	Example client call using jQuery:
+	$.ajax({
+		url: 'as.nationalgeographic.com',
+		dataType: 'jsonp',
+		complete: function() {
+			// Establish socket connection
+		}
+	});
+
+	**/
+	setCookie: function(req, res) {
+		res.send({});
+	},
+
+	/**
 	###### Retrieve Entry Point [GET][/api/v1/]
 
 	Returns all nodes in the graph (To be deprecated and switched to an api navigator).
