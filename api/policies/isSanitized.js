@@ -7,14 +7,14 @@
  * @docs        :: ??
  *
  */
+
+var isCypherInjectionFree = require('sails-neo4j/lib/helpers/isCypherInjectionFree');
 module.exports = function(req, res, next) {
 
   var url = req.url;
-
-  if (url.indexOf('-') === -1) {
-    console.log(url);
+  if (isCypherInjectionFree(url)) {
     return next();
-  } 
-  return res.send(400);
-   
+  }
+  return res.send(400, { error: 'Hacker!!!' });
+
 };

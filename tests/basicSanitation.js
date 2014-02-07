@@ -25,14 +25,14 @@ after(function(done) {
 
 describe('Test MiddleWare Sanitiation', function () {
 
-    it('it should reject on - character', function (done) {
+    it('it should reject on cypher injection query', function (done) {
 
 
-        url = '/api/v1/mmdb_user-(object/'
+        url = '/api/v1/mmdb_user-(object/';
 
         request(app.express.app)
         .get(url)
-        .end(function (err, res){
+        .end(function (err, res) { 
             assert.equal(res.statusCode, 400)
             done();
         });
