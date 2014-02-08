@@ -4,7 +4,7 @@ var request = require('request'),
     baseUrl = 'http://as.dev.nationalgeographic.com:9365/api',
     apiVersion = '1';
 
-beforeEach(function() { 
+beforeEach(function() {
 
 
     baseUrl = {
@@ -12,24 +12,32 @@ beforeEach(function() {
         hostname: 'as.dev.nationalgeographic.com',
         port: 9365,
         pathname: 'api/v1/'
-    }
+    };
 });
 
 describe('Test Basic API End Points', function() {
     describe('Check Basic Get Requests', function () {
 
-        it('Check response for actor type endpoint', function(done) {
-           baseUrl.pathname += 'user'
+        it('Check response for setting auth cookie endpoint', function(done) {
            var apiUrl = url.format(baseUrl);
-            request(apiUrl, function (err, response, body) { 
-                assert.equal(response.statusCode, 200); 
+            request(apiUrl, function (err, response, body) {
+                assert.equal(response.statusCode, 200);
+                done();
+            });
+        });
+
+        it('Check response for actor type endpoint', function(done) {
+           baseUrl.pathname += 'user';
+           var apiUrl = url.format(baseUrl);
+            request(apiUrl, function (err, response, body) {
+                assert.equal(response.statusCode, 200);
                 done();
             });
         });
 
         it('Check response for specific actor endpoint', function(done) {
-            baseUrl.pathname += 'user/1'
-            var apiUrl = url.format(baseUrl); 
+            baseUrl.pathname += 'user/1';
+            var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body){
                 assert.equal(response.statusCode, 200);
                 done();
@@ -37,7 +45,7 @@ describe('Test Basic API End Points', function() {
         });
 
         it('Check response for specific actors activites', function (done) {
-            baseUrl.pathname += 'user/1/FAVORITED'
+            baseUrl.pathname += 'user/1/FAVORITED';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body){
                 assert.equal(response.statusCode, 200);
@@ -95,17 +103,17 @@ describe('Test Basic API End Points', function() {
                         type: 'FAVORITED'
                     }
                 })
-            }
+            };
             request.post(reqOptions, function (err, response, body) {
                 assert.equal(response.statusCode, 200);
                 done();
-            });  
+            });
         });
     });
 
     describe('Check Basic DEL request', function () {
         it("check response for deleting specfic activity", function(done) {
-            baseUrl.pathname += 'user/1/FAVORITED/picture/1'
+            baseUrl.pathname += 'user/1/FAVORITED/picture/1';
             var apiUrl = url.format(baseUrl);
             request.del(apiUrl, function (err, response, body) {
                 assert.equal(response.statusCode, 200);
