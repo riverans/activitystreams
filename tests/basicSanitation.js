@@ -1,39 +1,27 @@
-var Sails = require('Sails'),
-request = require('supertest'),
-assert = require('assert'),
-app;
+var request = require('supertest'),
+assert = require('assert');
 
-
-//SetUp
-before(function(done) {
-
-
-    Sails.lift({
-        log: {
-            level: 'error'
-        }
-    }, function(err, sails){
-        app = sails;
-        done(err, sails);
-    });
-});
-
-// After Function
-after(function(done) {
-    app.lower(done);
-});
 
 describe('Test MiddleWare Sanitiation', function () {
 
-    it('it should reject on cypher injection query', function (done) {
+    it('it should reject url with special charcters',  function (done) {
 
 
         url = '/api/v1/mmdb_user-(object/';
-
-        request(app.express.app)
+        request(sails.express.app)
         .get(url)
         .end(function (err, res) { 
-            assert.equal(res.statusCode, 400)
+            assert.equal(res.statusCode, 400);
+            done();
+        });
+    });
+
+    it('shoudl reject url with Cypher Keyword', function (done) {
+        url = '/api/v1/mmdb_user/MATCH/';
+        request(sails.express.app)
+        .get(url)
+        .end(function (err, res) {
+            assert.equal(res.statusCode, 400);
             done();
         });
 

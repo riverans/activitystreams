@@ -322,7 +322,6 @@ module.exports = {
 			];
 		Actor.adapter.query(q, {}, function(err, results) {
 				if (err) { return res.json(err); }
-				console.log(results);
 				res.json(results);
 			}
 		);
@@ -385,7 +384,6 @@ module.exports = {
 		];
 		Actor.adapter.query(q, {}, function(err, results) {
 				if (err) { return res.json(err); }
-				console.log(results);
 				Actor.publishCreate({id: actor_id, data: results[0]});
 				res.json(results);
 			}

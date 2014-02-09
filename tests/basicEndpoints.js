@@ -1,63 +1,60 @@
-var request = require('request'),
-    url = require('url'),
-    assert = require('assert'),
-    baseUrl = 'http://as.nationalgeographic.com:9365/api',
-    apiVersion = '1';
-
-beforeEach(function() { 
-
-
-    baseUrl = {
-        protocol: 'http',
-        hostname: 'as.nationalgeographic.com',
-        port: 9365,
-        pathname: 'api/v1/'
-    }
-});
+var request = require('supertest'),
+assert = require('assert');
 
 describe('Test Basic API End Points', function() {
     describe('Check Basic Get Requests', function () {
 
         it('Check response for actor type endpoint', function(done) {
-           baseUrl.pathname += 'user'
-           var apiUrl = url.format(baseUrl);
-            request(apiUrl, function (err, response, body) { 
-                assert.equal(response.statusCode, 200); 
+
+            url = '/api/v1/mmdb_user/';
+
+            request(sails.express.app)
+            .get(url)
+            .end(function (err, res) { 
+                assert.equal(res.statusCode, 200)
                 done();
             });
+
         });
 
         it('Check response for specific actor endpoint', function(done) {
-            baseUrl.pathname += 'user/1'
-            var apiUrl = url.format(baseUrl); 
-            request(apiUrl, function (err, response, body){
-                assert.equal(response.statusCode, 200);
+
+            url = '/api/v1/mmdb_user/1/';
+            request(sails.express.app)
+            .get(url)
+            .end(function (err, res) {
+                assert.equal(res.statusCode, 200);
                 done();
             });
         });
 
         it('Check response for specific actors activites', function (done) {
-            baseUrl.pathname += 'user/1/FAVORITED'
-            var apiUrl = url.format(baseUrl);
-            request(apiUrl, function (err, response, body){
+
+
+            url = '/api/v1/mmdb_user/1/FAVORITED/'
+            request(sails.express.app)
+            .get(url)
+            .end(function (err, response){
                 assert.equal(response.statusCode, 200);
                 done();
             });
         });
 
         it('Check response for all verbs of specific actor', function (done) {
-            baseUrl.pathname += 'user/1/activites';
-            var apiUrl = url.format(baseUrl);
-            request(apiUrl, function (err, response, body) {
+            url = '/api/v1/user/1/activities';
+            request(sails.express.app)
+            .get(url)
+            .end(function (err, response) {
                 assert.equal(response.statusCode, 200);
                 done();
             });
         });
 
         it('check response for specfic object typed verbed by actor', function(done) {
-            baseUrl.pathname += 'user/1/favorited/picture';
-            var apiUrl = url.format(baseUrl);
-            request(apiUrl, function (err, response, body) {
+            url = '/api/v1/user/1/favorited/picture';
+            request(sails.express.app)
+            .get(url)
+            .end(function (err, response) {
                 assert.equal(response.statusCode, 200);
                 done();
 
@@ -65,9 +62,10 @@ describe('Test Basic API End Points', function() {
         });
 
         it('check response for specfic activity', function (done) {
-            baseUrl.pathname += 'user/1/FAVORITED/picture/1';
-            var apiUrl = url.format(baseUrl);
-            request(apiUrl, function (err, response, body) {
+          url = '/api/v1/user/1/FAVORITED/picture/1';
+            request(sails.express.app)
+            .get(url)
+            .end(function (err, response) {
                 assert.equal(response.statusCode, 200);
                 done();
             });
@@ -76,13 +74,9 @@ describe('Test Basic API End Points', function() {
 
     describe('Check Basic Post Request', function () {
         it('check response for posting specific activity', function (done) {
-            baseUrl.pathname += 'activity';
-            var apiUrl = url.format(baseUrl);
+            url = '/api/v1/activity/';
 
-            reqOptions = {
-                url: apiUrl,
-                method: 'POST',
-                body: JSON.stringify({
+            postObj = {
                     actor: {
                         type: 'mmdb_user',
                         mmdb_user_id: 1
@@ -94,9 +88,12 @@ describe('Test Basic API End Points', function() {
                     verb: {
                         type: 'FAVORITED'
                     }
-                })
-            }
-            request.post(reqOptions, function (err, response, body) {
+            };
+
+            request(sails.express.app)
+            .post(url)
+            .send(postObj)
+            .end(function (err, response) {
                 assert.equal(response.statusCode, 200);
                 done();
             });  
@@ -105,9 +102,11 @@ describe('Test Basic API End Points', function() {
 
     describe('Check Basic DEL request', function () {
         it("check response for deleting specfic activity", function(done) {
-            baseUrl.pathname += 'user/1/FAVORITED/picture/1'
-            var apiUrl = url.format(baseUrl);
-            request.del(apiUrl, function (err, response, body) {
+            url = '/api/v1/mmdb_user/1/FAVORITED/picture/1';
+
+            request(sails.express.app)
+            .del(url)
+            .end(function (err, response) {
                 assert.equal(response.statusCode, 200);
                 done();
             });
