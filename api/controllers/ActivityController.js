@@ -31,6 +31,10 @@ module.exports = {
 	auth will fail, as the AS service will try to use a cookie of 'undefined'
 	during authentication.
 
+	The other purpose this empty endpoint serves is so we don't have to convert
+	the other API calls to return JSONP, which apparently has some security flaws
+	that we don't want to expose.
+
 	Example client call using jQuery:
 	$.ajax({
 		url: 'as.nationalgeographic.com',
