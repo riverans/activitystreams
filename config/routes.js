@@ -46,7 +46,7 @@ module.exports.routes = {
   },
 
   // Establish session auth cookie
-  '/api/v1': 'ActivityController.setCookie',
+  'get /api/v1': 'ActivityController.setCookie',
 
   // Socket session subscribe
   'post /api/v1/subscribe': 'ActivityController.subscribe',
