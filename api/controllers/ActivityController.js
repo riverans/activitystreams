@@ -32,8 +32,9 @@ module.exports = {
 	during authentication.
 
 	The other purpose this empty endpoint serves is so we don't have to convert
-	the other API calls to return JSONP, which apparently has some security flaws
-	that we don't want to expose.
+	the other API calls to return JSONP, which has some security flaws
+	that we don't want to expose.  We still need this endpoint to return JSONP,
+	otherwise, the caller will throw a parse error.
 
 	Example client call using jQuery:
 	$.ajax({
@@ -46,7 +47,7 @@ module.exports = {
 
 	**/
 	setCookie: function(req, res) {
-		res.send({});
+		res.jsonp({});
 	},
 
 	/**
