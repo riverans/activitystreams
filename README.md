@@ -122,11 +122,10 @@ List of Current Verbs:
 	PLEDGES
 	FOLLOWS
 	
-There shall be a master list of verbs that will be used within the graph. Users are not allowd to add new verb that are not in the master list.
+There shall be a master list of verbs that will be used within the graph. Users are not allowed to add new verb that are not in the master list.
 
 
 ### Activity Service REST API
-
 
 Get all nodes of type
 
@@ -176,7 +175,18 @@ For batch requests:
 
 	api key
 
+For clients who need to establish a signed auth cookie with this service:
+ 
+  Send a blank JSONP request to / before establishing your socket connection
 
+  Example:
+    $.ajax({
+      url: 'as.nationalgeographic.com',
+      dataType: 'jsonp',
+      complete: function() {
+        // Establish socket connection
+      }
+    });
 
 
 
@@ -279,6 +289,12 @@ Installation
   * `sudo service neo4j start`
   * Uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
 
+# [Redis](http://redis.io/)
+* OSX with Homebrew:
+  * `brew install redis`
+  * `launchctl load ~/Library/LaunchAgents/homebrew.mxcl.redis.plist`
+  * To test that your server is running:  `redis-cli`.  You should be at a prompt "127.0.0.1:6379"
+  * `exit`
 
 Dependencies
 ============

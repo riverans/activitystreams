@@ -45,6 +45,9 @@ module.exports.routes = {
     view: 'home/index'
   },
 
+  // Establish session auth cookie
+  'get /api/v1': 'ActivityController.setCookie',
+
   // Socket session subscribe
   'post /api/v1/subscribe': 'ActivityController.subscribe',
 
