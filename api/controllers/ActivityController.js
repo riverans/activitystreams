@@ -20,7 +20,7 @@ module.exports = {
 	**/
 
 	/**
-	###### Establish Session Cookie [GET][/]
+	###### Establish Session Cookie [GET][/api/v1/]
 
 	Sets an authenticated session cookie if the client does not already have one,
 	Existing valid sessions are reestablished.  Only necessary when you need to
@@ -38,33 +38,42 @@ module.exports = {
 
 	Example client call using jQuery:
 	$.ajax({
-		url: 'as.nationalgeographic.com',
+		url: 'as.nationalgeographic.com/api/v1/',
 		dataType: 'jsonp',
 		complete: function() {
 			// Establish socket connection
 		}
 	});
 
+	Allows for 
+
+	+ Response 200 (application/jsonp)
+		+ Headers
+			HTTP/1.1 200 OK
+			X-Powered-By: Sails <sailsjs.org>
+			Content-Type: text/javascript; charset=utf-8
+			Content-Length: 93
+			Date: Fri, 21 Feb 2014 15:33:42 GMT
+			Connection: keep-alive
+				
+
+		+ Cookies
+			sails.sid (HTTP only)
+
+		+ Body
+
+				{}
+
 	**/
 	setCookie: function(req, res) {
 		res.jsonp({});
 	},
 
+
 	/**
-	###### Retrieve Entry Point [GET][/api/v1/]
-
+	###### Retrieve Entry Point [GET][/index]
+	
 	Returns all nodes in the graph (To be deprecated and switched to an api navigator).
-
-	+ Response 200 (application/json)
-		+ Headers
-
-				
-
-		+ Body
-
-				{
-					[]
-				}
 
 	*/
 	index: function(req, res) {
