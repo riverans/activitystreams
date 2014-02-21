@@ -1,18 +1,27 @@
 var request = require('request'),
-    url = require('url'),
-    assert = require('assert'),
-    baseUrl = 'http://as.nationalgeographic.com:9365/api',
-    apiVersion = '1';
+    url = require('url');
+    assert = require('assert');
+
+before(function (done) {
+    require('sails').lift({
+        port: 9365,
+        adapters: {
+            default: 'neo4j' // should be defined in config/adapters.js
+        }
+    }, done);
+})
 
 beforeEach(function() { 
-
-
     baseUrl = {
         protocol: 'http',
         hostname: 'as.nationalgeographic.com',
         port: 9365,
         pathname: 'api/v1/'
     }
+});
+
+after(function (done) {
+    sails.lower(done);
 });
 
 describe('Test Basic API End Points', function() {
