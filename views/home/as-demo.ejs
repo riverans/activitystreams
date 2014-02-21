@@ -54,6 +54,7 @@
         memcenHost: 'http://mc.dev.nationalgeographic.com:8000/_membercenter', // Member Center Hostname
         noSSL: true, // Do we want to use SSL or not? Default: True
         staticMedia: 'https://assets-qa.nationalgeographic.com/ngs-header/', // SAM Header Static Assets
+        // staticMedia: 'http://mc.dev.nationalgeographic.com:8010/static-media/ngs-header/', // Local Header Static Assets
         crossDomain: false, // not used right now...
         debug: true, // Load the header in debug mode?
         debug_lvl: 3, // 1-5: Different output levels for errors
@@ -64,7 +65,7 @@
                 'http://members.nationalgeographic.com',
                 'http://www.nationalgeographic.com',
                 'http://ngm.nationalgeographic.com',
-                'http://as.nationalgeographic.com'
+                'http://as.dev.nationalgeographic.com'
             ],
             targets: [ // Valid targets for header requests
                 'mc', // Member Center
@@ -76,6 +77,7 @@
     };
 </script>
 <script type="text/javascript" src="http://assets-qa.nationalgeographic.com/ngs-header/bootstrap.js"></script>
+<!--<script type="text/javascript" src="http://mc.dev.nationalgeographic.com:8010/static-media/ngs-header/bootstrap.js"></script>-->
 <body>
     <header class="identity_bar clearfix">
         <div class="lessWide">
@@ -120,7 +122,7 @@
 </body>
 <script type="text/javascript">
     // Global Vars
-    var servicehost = 'http://as.nationalgeographic.com:9365',
+    var servicehost = 'http://as.dev.nationalgeographic.com:9365',
         apiHost = servicehost + '/api/v1',
         user_id = '',
         mmdb_user_api = 'http://mc.dev.nationalgeographic.com:8000/user/',
