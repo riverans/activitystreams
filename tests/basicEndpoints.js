@@ -77,7 +77,7 @@ describe('Test Basic API End Points', function() {
             });
         });
 
-        it('Check response for specific actors activites', function (done) {
+        it('Check response for specific actors activities', function (done) {
             baseUrl.pathname += 'user/1/FAVORITED';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body){
@@ -95,7 +95,7 @@ describe('Test Basic API End Points', function() {
             });
         });
 
-        it('check response for specfic object typed verbed by actor', function(done) {
+        it('check response for specific object typed verbed by actor', function(done) {
             baseUrl.pathname += 'user/1/favorited/picture';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) {
@@ -105,7 +105,7 @@ describe('Test Basic API End Points', function() {
             });
         });
 
-        it('check response for specfic activity', function (done) {
+        it('check response for specific activity', function (done) {
             baseUrl.pathname += 'user/1/FAVORITED/picture/1';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) {
@@ -145,7 +145,7 @@ describe('Test Basic API End Points', function() {
     });
 
     describe('Check Basic DEL request', function () {
-        it("check response for deleting specfic activity", function(done) {
+        it("check response for deleting specific activity", function(done) {
             baseUrl.pathname += 'user/1/FAVORITED/picture/1';
             var apiUrl = url.format(baseUrl);
             request.del(apiUrl, function (err, response, body) {
