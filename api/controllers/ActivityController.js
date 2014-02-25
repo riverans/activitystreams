@@ -6,9 +6,6 @@
 
 module.exports = {
 
-
-
-
 	/**
 	* Overrides for the settings in `config/controllers.js`
 	* (specific to ActivityController)
@@ -163,11 +160,19 @@ module.exports = {
 				'MATCH(actor:' + req.param('actor') + ')',
 				'RETURN actor'
 			];
-		Actor.adapter.query(q,{}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
+		if (typeof process.env.testMode === undefined) {
+			Actor.adapter.query(q,{}, function(err, results) {
+					if (err) { return res.json(err); }
+					res.json(results);
+				}
+			);
+		} else {
+			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Actor.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
 
 	/**
@@ -237,11 +242,19 @@ module.exports = {
 			'WHERE actor.' + key + '="' + req.param('actor_id') + '"',
 			'RETURN actor'
 		];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
+		if (typeof process.env.testMode === undefined) {
+			Actor.adapter.query(q, {}, function(err, results) {
+					if (err) { return res.json(err); }
+					res.json(results);
+				}
+			);
+		} else {
+			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Actor.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
 	/**
 	###### Actor [GET][/{appname_model}/{appname_model_id}/{verb}]
@@ -349,11 +362,19 @@ module.exports = {
 				'WHERE actor.' + key + '="' + obj[key] +'"',
 				'RETURN actor,verb,object'
 			];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
+		if (typeof process.env.testMode === undefined) {
+			Actor.adapter.query(q, {}, function(err, results) {
+					if (err) { return res.json(err); }
+					res.json(results);
+				}
+			);
+		} else {
+			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Actor.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
 	getSpecificObjectTypeVerbedByActor: function(req, res) {
 		var obj = {}, q, key;
@@ -364,11 +385,19 @@ module.exports = {
 				'WHERE actor.' + key + '="' + obj[key] +'"',
 				'RETURN actor,verb,object'
 			];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
+		if (typeof process.env.testMode === undefined) {
+			Actor.adapter.query(q, {}, function(err, results) {
+					if (err) { return res.json(err); }
+					res.json(results);
+				}
+			);
+		} else {
+			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Actor.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
 	getSpecificActivity: function(req, res) {
 		var q,
@@ -381,11 +410,19 @@ module.exports = {
 				'WHERE actor.' + actor_key + '="' + actor_id +'" AND object.' + object_key + '="' + object_id + '"',
 				'RETURN actor,verb,object'
 			];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
+		if (typeof process.env.testMode === undefined) {
+			Actor.adapter.query(q, {}, function(err, results) {
+					if (err) { return res.json(err); }
+					res.json(results);
+				}
+			);
+		} else {
+			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Actor.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
 	getAllActivitiesByActor: function(req, res) {
 		var obj = {}, q, key;
@@ -396,11 +433,19 @@ module.exports = {
 				'WHERE actor.' + key + '="' + obj[key] +'"',
 				'RETURN actor,verb,object'
 			];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
+		if (typeof process.env.testMode === undefined) {
+			Actor.adapter.query(q, {}, function(err, results) {
+					if (err) { return res.json(err); }
+					res.json(results);
+				}
+			);
+		} else {
+			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Actor.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
 
 	postSpecificActivity: function(req, res) {
@@ -426,12 +471,20 @@ module.exports = {
 			'ON MATCH SET verb.updated = timestamp()',
 			'RETURN actor, verb, object'
 		];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				Actor.publishCreate({id: actor_id, data: results[0]});
-				res.json(results);
+		if (typeof process.env.testMode === undefined) {
+			Actor.adapter.query(q, {}, function(err, results) {
+					if (err) { return res.json(err); }
+					Actor.publishCreate({id: actor_id, data: results[0]});
+					res.json(results);
+				}
+			);
+		} else {
+			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Actor.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
 
 	deleteSpecificActivity: function(req, res) {
@@ -446,12 +499,20 @@ module.exports = {
 			'DELETE verb',
 			'RETURN actor, object'
 		];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				Actor.publishUpdate(actor_id, {data: results[0]});
-				res.json(results);
+		if (typeof process.env.testMode === undefined) {
+			Actor.adapter.query(q, {}, function(err, results) {
+					if (err) { return res.json(err); }
+					Actor.publishUpdate(actor_id, {data: results[0]});
+					res.json(results);
+				}
+			);
+		} else {
+			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Actor.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
 
 	subscribe: function(req, res) {
