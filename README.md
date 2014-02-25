@@ -180,14 +180,20 @@ For clients who need to establish a signed auth cookie with this service:
   Send a blank JSONP request to / before establishing your socket connection
 
   Example:
+  ```
     $.ajax({
       url: 'as.nationalgeographic.com',
       dataType: 'jsonp',
-      complete: function() {
-        // Establish socket connection
+      timeout: 12000,
+      cache: false,
+      success: function(data) {
+        // Establish socket
+      },
+      error: function(xhr, textStatus) {
+        // Handle error
       }
     });
-
+  ```
 
 
 Installation
@@ -361,31 +367,71 @@ Sample Demo Script
 
 Testing
 =======
-We are using the Mocha testing framework and have implemented it using grunt.
+We are using the Mocha testing framework and have implemented it using grunt.  All tests live in /tests.
+While the Sails service relies on itself and will lift/lower itself, Neo4j can be mimicked so that the
+service tests can run independent.  You can set two environment variables in each of your tests:
 
-All our tests live in tests/
+* process.env.testMode = true
+    True: Runs mimicked Neo4j responses
+    Undefined:  Runs queries against the live database  (either comment out or delete the setting)
 
-To run test:
+* process.env.testModeDebug = true:false
+    True:  Displays cypher queries in the test console when they run for each test
+    False:  Does not display cypher queries in the test console
 
-    //Make sure sails app is running
-    sails lift
-    
-In another terminal window:
+To mimic the Neo4j service, you will need to require Nock and set up a server to intercept the host:port.
+All this server needs to do is to capture requests on '/db/data/' and to reply with a 200 response.  Be sure
+to clean up after the Nock service by running `nock.cleanAll();` after each test and `nock.restore();` after all
+tests are done.  For more info on Nock, visit: https://github.com/pgte/nock
 
-	grunt test
+To lift/lower your Sails server, you need to require Sails and then issue the lift command with your config
+options (ports, adapters, etc.).  An example to start the server:
+
+```
+// Run a sails instance using the Neo4j adapter -- ran in the before() function
+require('sails').lift({
+    port: 9365,
+    adapters: {
+        default: 'neo4j' // defined in config/adapters.js
+    }
+}, done);
+```
+
+```
+// Lower a sails instance after all tests are done -- ran in the after() function
+sails.lower();
+```
+
+In the view controller (api/controllers/) is where you would supply the test data you want returned to your
+tests.  An example structure that the views support:
+
+```
+myView: function(req, res) {
+    var q = [
+            // Cpyher query
+            'MATCH (n)',
+            'RETURN n'
+        ];
+    if (typeof process.env.testMode === undefined) {
+        View.adapter.query(q,{}, function(err, results) {
+                if (err) { return res.json(err); }
+                res.json(results);
+            }
+        );
+    } else {
+        if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+            // Display debug query in console
+            View.adapter.query(q, {});
+        }
+        res.json(200, { // return data here in JSON format });
+    }
+}
+```
+
+
+To run test: `grunt test`
 	
-
-
 
 KNOWN ISSUES
 ==================
 - Sails.js may act inconsistently when connecting with socket.io.  Running sudo npm install in the base of the app may resolve this.
-
-
-TODO
-====
-- Use socket.io to display the activity stream in the large box
-
-
-
-

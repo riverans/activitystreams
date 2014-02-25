@@ -74,15 +74,24 @@ module.exports = {
 
 	*/
 	index: function(req, res) {
-		Actor.adapter.query(
-			[
+		var q = [
 				'MATCH (n)',
 				'RETURN n'
-			],{}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
+			];
+		if (typeof process.env.testMode === undefined) {
+			Actor.adapter.query(
+				q,{}, function(err, results) {
+					if (err) { return res.json(err); }
+					res.json(results);
+				}
+			);
+		} else {
+			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Actor.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
 	/**
 	###### Actor [GET][/{appname_model}]
