@@ -28,7 +28,7 @@
 
 ## Introduction
 
-This document is aimed at a high level understanding how the Activity Stream works with Neo4j. We have defined a broad structure that to talk to the database.
+This document provides a high level understanding of how the Activity Stream works with Neo4j and the broad structure we have defined for interacting with the database.
 
 
 
@@ -47,26 +47,26 @@ This document is aimed at a high level understanding how the Activity Stream wor
 
 
 
-This document is aimed at a high level understanding how the Activity Stream works with Neo4j. We have defined a broad structure that to talk to the database.
-
-
 
 
 ## Activity Stream Spec
+Our activity stream model conforms to the Activity Streams specification found here: http://activitystrea.ms/, where:
+
 
 ACTOR -> VERB -> OBJECT -> TARGET
 
+might be implemented, for sake of example, as:
 
 mmdb_user -> FAVORITED -> yourshot_photo
 
 
 ## Graph Structure
 
-Nodes have labels, the labels are bascially types of nodes we have. The current naming structure we for labels for are
+Nodes have labels, and the naming convention for these labels represents the types of nodes we have
 
 	{app_name}_{model}
 
-So an mmdb User would be
+For example, an mmdb User would be
 
 	mmdb_user
 	
@@ -90,7 +90,7 @@ Nodes currently have the folowing properties
 	created: {unix timestamp
 	updated: {unix timestamp}
 	
-The reason why we add an type to that node so that we can return the label for the node. 
+Nodes contain a 'type' property so that we can return the label for the node. 
 
 
 
@@ -114,7 +114,7 @@ Your Shot Photo
 
 ### Edges
 
-These represent represent relationships. They are in all caps and also have timestamps
+Edges represent relationships. They are in all caps and also have timestamps
 
 List of Current Verbs:
 	
