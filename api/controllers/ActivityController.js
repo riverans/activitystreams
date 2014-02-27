@@ -78,7 +78,7 @@ module.exports = {
 				'MATCH (n)',
 				'RETURN n'
 			];
-		if (typeof process.env.testMode === undefined) {
+		if (process.env.testMode === undefined) {
 			Actor.adapter.query(
 				q,{}, function(err, results) {
 					if (err) { return res.json(err); }
@@ -86,7 +86,7 @@ module.exports = {
 				}
 			);
 		} else {
-			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
 				// Display debug query in console
 				Actor.adapter.query(q, {});
 			}
@@ -169,14 +169,14 @@ module.exports = {
 				'MATCH(actor:' + req.param('actor') + ')',
 				'RETURN actor'
 			];
-		if (typeof process.env.testMode === undefined) {
+		if (process.env.testMode === undefined) {
 			Actor.adapter.query(q,{}, function(err, results) {
 					if (err) { return res.json(err); }
 					res.json(results);
 				}
 			);
 		} else {
-			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
 				// Display debug query in console
 				Actor.adapter.query(q, {});
 			}
@@ -251,14 +251,14 @@ module.exports = {
 			'WHERE actor.' + key + '="' + req.param('actor_id') + '"',
 			'RETURN actor'
 		];
-		if (typeof process.env.testMode === undefined) {
+		if (process.env.testMode === undefined) {
 			Actor.adapter.query(q, {}, function(err, results) {
 					if (err) { return res.json(err); }
 					res.json(results);
 				}
 			);
 		} else {
-			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
 				// Display debug query in console
 				Actor.adapter.query(q, {});
 			}
@@ -371,14 +371,14 @@ module.exports = {
 				'WHERE actor.' + key + '="' + obj[key] +'"',
 				'RETURN actor,verb,object'
 			];
-		if (typeof process.env.testMode === undefined) {
+		if (process.env.testMode === undefined) {
 			Actor.adapter.query(q, {}, function(err, results) {
 					if (err) { return res.json(err); }
 					res.json(results);
 				}
 			);
 		} else {
-			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
 				// Display debug query in console
 				Actor.adapter.query(q, {});
 			}
@@ -394,14 +394,14 @@ module.exports = {
 				'WHERE actor.' + key + '="' + obj[key] +'"',
 				'RETURN actor,verb,object'
 			];
-		if (typeof process.env.testMode === undefined) {
+		if (process.env.testMode === undefined) {
 			Actor.adapter.query(q, {}, function(err, results) {
 					if (err) { return res.json(err); }
 					res.json(results);
 				}
 			);
 		} else {
-			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
 				// Display debug query in console
 				Actor.adapter.query(q, {});
 			}
@@ -419,14 +419,14 @@ module.exports = {
 				'WHERE actor.' + actor_key + '="' + actor_id +'" AND object.' + object_key + '="' + object_id + '"',
 				'RETURN actor,verb,object'
 			];
-		if (typeof process.env.testMode === undefined) {
+		if (process.env.testMode === undefined) {
 			Actor.adapter.query(q, {}, function(err, results) {
 					if (err) { return res.json(err); }
 					res.json(results);
 				}
 			);
 		} else {
-			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
 				// Display debug query in console
 				Actor.adapter.query(q, {});
 			}
@@ -442,14 +442,14 @@ module.exports = {
 				'WHERE actor.' + key + '="' + obj[key] +'"',
 				'RETURN actor,verb,object'
 			];
-		if (typeof process.env.testMode === undefined) {
+		if (process.env.testMode === undefined) {
 			Actor.adapter.query(q, {}, function(err, results) {
 					if (err) { return res.json(err); }
 					res.json(results);
 				}
 			);
 		} else {
-			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
 				// Display debug query in console
 				Actor.adapter.query(q, {});
 			}
@@ -480,7 +480,7 @@ module.exports = {
 			'ON MATCH SET verb.updated = timestamp()',
 			'RETURN actor, verb, object'
 		];
-		if (typeof process.env.testMode === undefined) {
+		if (process.env.testMode === undefined) {
 			Actor.adapter.query(q, {}, function(err, results) {
 					if (err) { return res.json(err); }
 					Actor.publishCreate({id: actor_id, data: results[0]});
@@ -488,7 +488,7 @@ module.exports = {
 				}
 			);
 		} else {
-			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
 				// Display debug query in console
 				Actor.adapter.query(q, {});
 			}
@@ -508,7 +508,7 @@ module.exports = {
 			'DELETE verb',
 			'RETURN actor, object'
 		];
-		if (typeof process.env.testMode === undefined) {
+		if (process.env.testMode === undefined) {
 			Actor.adapter.query(q, {}, function(err, results) {
 					if (err) { return res.json(err); }
 					Actor.publishUpdate(actor_id, {data: results[0]});
@@ -516,7 +516,7 @@ module.exports = {
 				}
 			);
 		} else {
-			if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
 				// Display debug query in console
 				Actor.adapter.query(q, {});
 			}
