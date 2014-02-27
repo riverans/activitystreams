@@ -27,7 +27,7 @@ module.exports = {
 	 * Action blueprints:
 	 *    `/object/getAllObjectOfType`
 	 */
-	getAllObjectOfType: function(req, res) {
+	getAllObjectsOfType: function(req, res) {
 
 		var q = [
 			'MATCH(object:' + req.param('object') + ')',
@@ -56,10 +56,28 @@ module.exports = {
 	 */
 	getSpecificObject: function(req, res) {
 
-		// Send a JSON response
-		return res.json({
-			hello: 'world'
-		});
+		var obj = {}, q, key;
+		key = req.param('object') + '_id';
+		obj[key] = req.param('object_id');
+		q = [
+			'MATCH(object:' + req.param('object') + ')',
+			'WHERE object.' + key + '="' + req.param('object_id') + '"',
+			'RETURN object'
+		];
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+				if (err) {
+					return res.json(err);
+				}
+				res.json(results);
+			});
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
+			}
+			res.json(200, {});
+		}
 	},
 
 
@@ -69,10 +87,28 @@ module.exports = {
 	 */
 	getAllActivitiesByObject: function(req, res) {
 
-		// Send a JSON response
-		return res.json({
-			hello: 'world'
-		});
+		var obj = {}, q, key;
+		key = req.param('object') + '_id';
+		obj[key] = req.param('object_id');
+		q = [
+			'MATCH (object:' + req.param('object') + ')<-[verb]-(actor)-[cfverb]->(cfo)',
+			'WHERE object.' + key + '="' + obj[key] + '" AND type(verb) = type(cfverb)',
+			'RETURN actor, verb, object, COUNT(cfo) AS verb_count'
+		];
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+				if (err) {
+					return res.json(err);
+				}
+				res.json(results);
+			});
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
+			}
+			res.json(200, {});
+		}
 	},
 
 
@@ -82,10 +118,28 @@ module.exports = {
 	 */
 	getAllActorsWhoVerbedObject: function(req, res) {
 
-		// Send a JSON response
-		return res.json({
-			hello: 'world'
-		});
+		var obj = {}, q, key;
+		key = req.param('object') + '_id';
+		obj[key] = req.param('object_id');
+		q = [
+			'MATCH (object:' + req.param('object') + ')<-[verb:' + req.param('verb') + ']-(actor:' + req.param('actor') + ')',
+			'WHERE object.' + key + '="' + obj[key] + '"',
+			'RETURN actor,verb,object'
+		];
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+				if (err) {
+					return res.json(err);
+				}
+				res.json(results);
+			});
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
+			}
+			res.json(200, {});
+		}
 	},
 
 
@@ -95,9 +149,27 @@ module.exports = {
 	 */
 	getSpecificActorTypeWhoVerbedObject: function(req, res) {
 
-		// Send a JSON response
-		return res.json({
-			hello: 'world'
-		});
-	},
+		var obj = {}, q, key;
+		key = req.param('object') + '_id';
+		obj[key] = req.param('object_id');
+		q = [
+			'MATCH (object:' + req.param('object') + ')<-[verb:' + req.param('verb') + ']-(actor:' + req.param('actor') + ')',
+			'WHERE object.' + key + '="' + obj[key] + '"',
+			'RETURN actor,verb,object'
+		];
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+				if (err) {
+					return res.json(err);
+				}
+				res.json(results);
+			});
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
+			}
+			res.json(200, {});
+		}
+	}
 };
