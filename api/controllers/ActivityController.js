@@ -367,7 +367,7 @@ module.exports = {
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object)',
+				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']->(object)',
 				'WHERE actor.' + key + '="' + obj[key] +'"',
 				'RETURN actor,verb,object'
 			];
@@ -438,9 +438,9 @@ module.exports = {
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-				'MATCH (actor:' + req.param('actor') +')-[verb]-(object)',
-				'WHERE actor.' + key + '="' + obj[key] +'"',
-				'RETURN actor,verb,object'
+				'MATCH (actor:' + req.param('actor') +')-[verb]-(object)-[cfverb]-(aa)',
+				'WHERE actor.' + key + '="' + obj[key] +'" AND type(verb) = type(cfverb)',
+				'RETURN actor, verb, object, COUNT(aa) AS verb_count'
 			];
 		if (process.env.testMode === undefined) {
 			Actor.adapter.query(q, {}, function(err, results) {
