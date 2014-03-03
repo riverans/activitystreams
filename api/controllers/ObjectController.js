@@ -122,9 +122,10 @@ module.exports = {
 		key = req.param('object') + '_id';
 		obj[key] = req.param('object_id');
 		q = [
-			'MATCH (object:' + req.param('object') + ')<-[verb:' + req.param('verb') + ']-(actor:' + req.param('actor') + ')',
+			'MATCH (object:' + req.param('object') + ')<-[verb:' + req.param('verb') + ']-(actor)',
 			'WHERE object.' + key + '="' + obj[key] + '"',
-			'RETURN actor,verb,object'
+			'WITH object, collect(actor) as actors, collect(verb) as verbs, count(actor) as count',
+			'RETURN object, actors, verbs, count'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {

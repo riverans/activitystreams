@@ -300,7 +300,8 @@ module.exports = {
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'RETURN actor,verb,object'
+			'WITH actor, collect(verb) as verbs, collect(object) as objects, count(object) as count',
+			'RETURN actor,verbs,objects,count'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
