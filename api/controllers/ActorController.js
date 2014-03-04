@@ -294,20 +294,21 @@ module.exports = {
 		}
 	*/
 	getAllObjectsVerbedByActor: function(req, res) {
-		var obj = {}, q, key;
+		var obj = {}, q, key, count;
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-			'MATCH (actor:' + req.param('actor') + ')-[vb:' + req.param('verb') + ']->(object)',
+			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'WITH actor, type(vb) as verb, collect(object) as items, count(object) as totalItems',
-			'RETURN actor,verb,items,totalItems'
+			'RETURN actor, verb, object'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
 					return res.json(err);
 				}
+				count = results.filter(function(value) { return value !== undefined; }).length;
+				results = {'itemsCount': count, 'items': results};
 				res.json(results);
 			});
 		} else {
@@ -325,7 +326,7 @@ module.exports = {
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') + ')',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'RETURN actor,verb,object'
+			'RETURN actor, verb, object'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
@@ -343,20 +344,21 @@ module.exports = {
 		}
 	},
 	getAllActivitiesByActor: function(req, res) {
-		var obj = {}, q, key;
+		var obj = {}, q, key, count;
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-			'MATCH (actor:' + req.param('actor') + ')-[vb]->(object)',
+			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'WITH actor, type(vb) as verb, collect(object) as items, count(object) as totalItems',
-			'RETURN actor, verb, items, totalItems'
+			'RETURN actor, verb, object'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
 					return res.json(err);
 				}
+				count = results.filter(function(value) { return value !== undefined; }).length;
+				results = {'itemsCount': count, 'items': results};
 				res.json(results);
 			});
 		} else {

@@ -87,19 +87,21 @@ module.exports = {
 	 */
 	getAllActivitiesByObject: function(req, res) {
 
-		var obj = {}, q, key;
+		var obj = {}, q, key, count;
 		key = req.param('object') + '_id';
 		obj[key] = req.param('object_id');
 		q = [
-			'MATCH (object:' + req.param('object') + ')<-[verb]-(actor)-[cfverb]->(cfo)',
-			'WHERE object.' + key + '="' + obj[key] + '" AND type(verb) = type(cfverb)',
-			'RETURN actor, verb, object, COUNT(cfo) AS verb_count'
+			'MATCH (object:' + req.param('object') + ')<-[verb]-(actor)',
+			'WHERE object.' + key + '="' + obj[key] + '"',
+			'RETURN actor, verb, object'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
 					return res.json(err);
 				}
+				count = results.filter(function(value) { return value !== undefined; }).length;
+				results = {'itemsCount': count, 'items': results};
 				res.json(results);
 			});
 		} else {
@@ -118,20 +120,21 @@ module.exports = {
 	 */
 	getAllActorsWhoVerbedObject: function(req, res) {
 
-		var obj = {}, q, key;
+		var obj = {}, q, key, count;
 		key = req.param('object') + '_id';
 		obj[key] = req.param('object_id');
 		q = [
-			'MATCH (object:' + req.param('object') + ')<-[vb:' + req.param('verb') + ']-(actor)',
+			'MATCH (object:' + req.param('object') + ')<-[verb:' + req.param('verb') + ']-(actor)',
 			'WHERE object.' + key + '="' + obj[key] + '"',
-			'WITH object, collect(actor) as items, type(vb) as verb, count(actor) as totalItems',
-			'RETURN object, items, verb, totalItems'
+			'RETURN actor, verb, object'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
 					return res.json(err);
 				}
+				count = results.filter(function(value) { return value !== undefined; }).length;
+				results = {'itemsCount': count, 'items': results};
 				res.json(results);
 			});
 		} else {
@@ -156,7 +159,7 @@ module.exports = {
 		q = [
 			'MATCH (object:' + req.param('object') + ')<-[verb:' + req.param('verb') + ']-(actor:' + req.param('actor') + ')',
 			'WHERE object.' + key + '="' + obj[key] + '"',
-			'RETURN actor,verb,object'
+			'RETURN actor, verb, object'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
