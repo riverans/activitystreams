@@ -298,10 +298,10 @@ module.exports = {
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
+			'MATCH (actor:' + req.param('actor') + ')-[vb:' + req.param('verb') + ']->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'WITH actor, collect(verb) as verbs, collect(object) as objects, count(object) as count',
-			'RETURN actor,verbs,objects,count'
+			'WITH actor, type(vb) as verb, collect(object) as items, count(object) as totalItems',
+			'RETURN actor,verb,items,totalItems'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
@@ -347,19 +347,10 @@ module.exports = {
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-			// 'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)<-[cfverb]-(aa)',
-			// 'WHERE actor.' + key + '="' + obj[key] + '" AND type(verb) = type(cfverb)',
-			// 'RETURN actor, verb, object, COUNT(aa) AS verb_count'
-
-			// This query returns actor, activity, objects, count for each activity type
-			// Ex: [{actor: 1, activity: "Favorited", Objects: [{1},{2},{3}], Count: 3}
-			//      {actor: 1, activity: "Shared", Objects: [{1},{2}], Count: 2}]
-			// Wasn't sure what the context of the counts was, if we were looking for
-			// counts per activity or total number of activities (5 in the above example)
-			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
+			'MATCH (actor:' + req.param('actor') + ')-[vb]->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'WITH actor, type(verb) as activity, collect(object) as objects, count(object) as obj_cnt',
-			'RETURN actor, activity, objects, obj_cnt'
+			'WITH actor, type(vb) as verb, collect(object) as items, count(object) as totalItems',
+			'RETURN actor, verb, items, totalItems'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
