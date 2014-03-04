@@ -162,7 +162,7 @@ module.exports = {
 	},
 
 	/**
-	###### Actor [GET][/{appname_model}/{appname_model_id}/{verb}]
+	###### Actor [GET][/actor/{appname_model}/{appname_model_id}/{verb}]
 	This endpoint will return activities in the db that match the actor and specific verb specified in the params, along with
 	a count of the number of activities for this specific verb.
 
@@ -310,7 +310,7 @@ module.exports = {
 	},
 
 	/**
-	###### Actor [GET][/{appname_model}/{appname_model_id}/activities]
+	###### Actor [GET][/actor/{appname_model}/{appname_model_id}/activities]
 	This endpoint will return all activities in the db that match the actor specified in the params, along with
 	a count of the number of activities for this specific actor.
 
