@@ -41,7 +41,7 @@ beforeEach(function() {
 
 after(function (done) {
     nock.restore();
-    sails.lower(done);
+    require('sails').lower(done);
 });
 
 afterEach(function() {
