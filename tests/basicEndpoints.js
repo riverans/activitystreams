@@ -49,7 +49,7 @@ afterEach(function() {
 });
 
 describe('Test Basic API End Points', function() {
-    describe('Check Basic Get Requests', function () {
+    describe('Check Utility Requests', function () {
 
         it('Check response for setting auth cookie endpoint', function(done) {
             var apiUrl = url.format(baseUrl);
@@ -58,9 +58,11 @@ describe('Test Basic API End Points', function() {
                 done();
             });
         });
+    });
 
-        it('Check response for actor type endpoint', function(done) {
-            baseUrl.pathname += 'user';
+    describe('Check Actor Requests', function () {
+        it('Check response for actor type endpoint (getAllActorsOfType)', function(done) {
+            baseUrl.pathname += 'actor/user';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) {
                 assert.equal(response.statusCode, 200);
@@ -68,8 +70,8 @@ describe('Test Basic API End Points', function() {
             });
         });
 
-        it('Check response for specific actor endpoint', function(done) {
-            baseUrl.pathname += 'user/1';
+        it('Check response for specific actor endpoint (getSpecificActor)', function(done) {
+            baseUrl.pathname += 'actor/user/1';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body){
                 assert.equal(response.statusCode, 200);
@@ -77,8 +79,17 @@ describe('Test Basic API End Points', function() {
             });
         });
 
-        it('Check response for specific actors activities', function (done) {
-            baseUrl.pathname += 'user/1/FAVORITED';
+        it('Check response for all verbs of specific actor (getAllActivitiesByActor)', function (done) {
+            baseUrl.pathname += 'actor/user/1/activites';
+            var apiUrl = url.format(baseUrl);
+            request(apiUrl, function (err, response, body) {
+                assert.equal(response.statusCode, 200);
+                done();
+            });
+        });
+
+        it('Check response for specific actors activities (getAllObjectsVerbedByActor)', function (done) {
+            baseUrl.pathname += 'actor/user/1/FAVORITED';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body){
                 assert.equal(response.statusCode, 200);
@@ -86,17 +97,8 @@ describe('Test Basic API End Points', function() {
             });
         });
 
-        it('Check response for all verbs of specific actor', function (done) {
-            baseUrl.pathname += 'user/1/activites';
-            var apiUrl = url.format(baseUrl);
-            request(apiUrl, function (err, response, body) {
-                assert.equal(response.statusCode, 200);
-                done();
-            });
-        });
-
-        it('check response for specific object typed verbed by actor', function(done) {
-            baseUrl.pathname += 'user/1/favorited/picture';
+        it('check response for specific object typed verbed by actor (getSpecificObjectTypeVerbedByActor)', function(done) {
+            baseUrl.pathname += 'actor/user/1/favorited/picture';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) {
                 assert.equal(response.statusCode, 200);
@@ -105,8 +107,8 @@ describe('Test Basic API End Points', function() {
             });
         });
 
-        it('check response for specific activity', function (done) {
-            baseUrl.pathname += 'user/1/FAVORITED/picture/1';
+        it('check response for specific activity (getSpecificActivity)', function (done) {
+            baseUrl.pathname += 'activity/user/1/FAVORITED/picture/10010';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) {
                 assert.equal(response.statusCode, 200);
@@ -115,8 +117,56 @@ describe('Test Basic API End Points', function() {
         });
     });
 
+    describe('Check Object Requests', function () {
+        it('Check response for object type endpoint (getAllObjectsOfType)', function(done) {
+            baseUrl.pathname += 'object/photo';
+            var apiUrl = url.format(baseUrl);
+            request(apiUrl, function (err, response, body) {
+                assert.equal(response.statusCode, 200);
+                done();
+            });
+        });
+
+        it('Check response for specific object endpoint (getSpecificObject)', function(done) {
+            baseUrl.pathname += 'object/photo/10010';
+            var apiUrl = url.format(baseUrl);
+            request(apiUrl, function (err, response, body){
+                assert.equal(response.statusCode, 200);
+                done();
+            });
+        });
+
+        it('Check response for all verbs of specific object (getAllActivitiesByObject)', function (done) {
+            baseUrl.pathname += 'object/photo/10010/activites';
+            var apiUrl = url.format(baseUrl);
+            request(apiUrl, function (err, response, body) {
+                assert.equal(response.statusCode, 200);
+                done();
+            });
+        });
+
+        it('Check response for specific object activities (getAllActorsWhoVerbedObject)', function (done) {
+            baseUrl.pathname += 'object/photo/10010/FAVORITED';
+            var apiUrl = url.format(baseUrl);
+            request(apiUrl, function (err, response, body){
+                assert.equal(response.statusCode, 200);
+                done();
+            });
+        });
+
+        it('check response for specific actor type who verbed an object (getSpecificActorTypeWhoVerbedObject)', function(done) {
+            baseUrl.pathname += 'object/photo/10010/FAVORITED/1';
+            var apiUrl = url.format(baseUrl);
+            request(apiUrl, function (err, response, body) {
+                assert.equal(response.statusCode, 200);
+                done();
+
+            });
+        });
+    });
+
     describe('Check Basic Post Request', function () {
-        it('check response for posting specific activity', function (done) {
+        it('check response for posting specific activity (postSpecificActivity)', function (done) {
             baseUrl.pathname += 'activity';
             var apiUrl = url.format(baseUrl);
 
@@ -125,12 +175,12 @@ describe('Test Basic API End Points', function() {
                 method: 'POST',
                 body: JSON.stringify({
                     actor: {
-                        type: 'mmdb_user',
-                        mmdb_user_id: 1
+                        type: 'user',
+                        user_id: 1
                     },
                     object: {
-                        type: 'yourshot_photo',
-                        yourshot_photo_id: '1'
+                        type: 'photo',
+                        photo_id: '1'
                     },
                     verb: {
                         type: 'FAVORITED'
@@ -145,8 +195,8 @@ describe('Test Basic API End Points', function() {
     });
 
     describe('Check Basic DEL request', function () {
-        it("check response for deleting specific activity", function(done) {
-            baseUrl.pathname += 'user/1/FAVORITED/picture/1';
+        it('check response for deleting specific activity (deleteSpecificActivity)', function(done) {
+            baseUrl.pathname += 'activity/user/1/FAVORITED/picture/1';
             var apiUrl = url.format(baseUrl);
             request.del(apiUrl, function (err, response, body) {
                 assert.equal(response.statusCode, 200);

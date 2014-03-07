@@ -23,7 +23,7 @@ module.exports = {
 	_config: {},
 
 	/**
-	###### Actor [GET][/{appname_model}]
+	###### Actor [GET][/actor/{appname_model}]
 	An activity is always started by an Actor. The endpoint will return all nodes in the db that fit the appname_model label, represented as an actor.
 
 	All actors have the following data:
@@ -39,58 +39,39 @@ module.exports = {
 	- type: {appname_model}
 
 	+ Parameters
-	+ appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with (eg. mmdb_user or ngm_article)
+	+ appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with
 
 	+ Model (application/json)
 
 	JSON representation of an actor node
 
-	+ Headers
-
-
-
-	+ Body
-
-		{
-			actor: {
-				id: "17",
-				data: {
-					created: 1388691303471,
-					appname_model_id: "1",
-					updated: 1388789935187,
-					appname_model_api: "http://reallycool.api.url/path/1/",
-					type: "appname_model"
-				}
-			}
-		}
-
-		{
-			actor: {
-				id: "17",
-				data: {
-					created: 1388691303471,
-					appname_model_id: "1",
-					updated: 1388789935187,
-					appname_model_api: "http://reallycool.api.url/path/1/",
-					type: "appname_model"
-				}
-			}
-		}
-
 	+ Example
-
-		{
-			actor: {
-				id: "17",
-				data: {
-					created: 1388691303471,
-					mmdb_user_id: "1",
-					updated: 1388789935187,
-					mmdb_user_api: "https://mmdb.nationalgeographic.com/user/1",
-					type: "mmdb_user"
-				}
-			}
-		}
+		[
+			{
+				actor: {
+					id: "17",
+					data: {
+						created: 1388691303471,
+						appname_model_id: "1",
+						updated: 1388789935187,
+						appname_model_api: "http://reallycool.api.url/path/1",
+						type: "appname_model",
+					},
+				},
+			},
+			{
+				actor: {
+					id: "22",
+					data: {
+						created: 1388691303471,
+						appname_model_id: "2",
+						updated: 1388789935187,
+						appname_model_api: "http://reallycool.api.url/path/2",
+						type: "appname_model",
+					},
+				},
+			},
+		]
 	*/
 
 	getAllActorsOfType: function(req, res) {
@@ -115,7 +96,7 @@ module.exports = {
 	},
 
 	/**
-	###### Actor [GET][/{appname_model}/{appname_model_id}]
+	###### Actor [GET][/actor/{appname_model}/{appname_model_id}]
 	An activity is always started by an Actor. This endpoint will return the node representing an actor of specific id.
 
 	All actors have the following data:
@@ -131,47 +112,30 @@ module.exports = {
 	- type: {appname_model}
 
 	+ Parameters
-	+ appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with (eg. mmdb_user or ngm_article)
+	+ appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with
 	+ appname_model_id (integer) a number that matches an appropriate id from another applications model
 
 	+ Model (application/json)
 
 	JSON representation of an actor node
 
-	+ Headers
-
-
-
-	+Body
-
-		{
-			actor: {
-				id: "17",
-				data: {
-					created: 1388691303471,
-					appname_model_id: "1",
-					updated: 1388789935187,
-					appname_model_api: "http://reallycool.api.url/path/1/",
-					type: "appname_model"
-				}
-			}
-		}
-
 	+ Example
-
-		{
-			actor: {
-				id: "17",
-				data: {
-					created: 1388691303471,
-					mmdb_user_id: "1",
-					updated: 1388789935187,
-					mmdb_user_api: "https://mmdb.nationalgeographic.com/user/1",
-					type: "mmdb_user"
-				}
-			}
-		}
+		[
+			{
+				actor: {
+					id: "17",
+					data: {
+						created: 1388691303471,
+						appname_model_id: "1",
+						updated: 1388789935187,
+						appname_model_api: "http://reallycool.api.url/path/1/",
+						type: "appname_model",
+					},
+				},
+			},
+		]
 	*/
+
 	getSpecificActor: function(req, res) {
 		var obj = {}, q, key;
 		key = req.param('actor') + '_id';
@@ -196,11 +160,13 @@ module.exports = {
 			res.json(200, {});
 		}
 	},
-	/**
-	###### Actor [GET][/{appname_model}/{appname_model_id}/{verb}]
-	This endpoint will return activities in the db that match the actor and specific verb specified in the params.
 
-	Activity:
+	/**
+	###### Actor [GET][/actor/{appname_model}/{appname_model_id}/{verb}]
+	This endpoint will return activities in the db that match the actor and specific verb specified in the params, along with
+	a count of the number of activities for this specific verb.
+
+	Actor:
 
 	- id (this id is assigned by Neo4j and should not be used)
 
@@ -213,7 +179,7 @@ module.exports = {
 	- type: {appname_model}
 
 	+ Parameters
-	+ appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with (eg. mmdb_user or ngm_article)
+	+ appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with
 	+ appname_model_id (integer) a number that matches an appropriate id from another applications model
 	+ verb (string) where verb is the name of a valid activity type attached to that user
 
@@ -221,93 +187,92 @@ module.exports = {
 
 	JSON representation of an actor node
 
-	+ Headers
-
-
-
-	+ Body
-
-		{
-			actor: {
-				id: "17",
-				data: {
-					created: 1388691303471,
-					mmdb_user_id: "1",
-					updated: 1388789935187,
-					mmdb_user_api: "https://mmdb.nationalgeographic.com/user/1/",
-					type: "mmdb_user"
-				}
-			},
-			verb: {
-				id: "50",
-				data: {
-					created: 1388777568757
-				},
-				type: "FAVORITED",
-				start: "17",
-				end: "18"
-			},
-			object: {
-				id: "18",
-				data: {
-					yourshot_photo_api: "http://yourshot.nationalgeographic.com/api/v1/photo/14055",
-					created: 1388692564273,
-					yourshot_photo_id: "14055",
-					updated: 1388777568757,
-					type: "yourshot_photo"
-				}
-			}
-		}
-
 	+ Example
-
-		{
-			actor: {
-				id: "17",
-				data: {
-					created: 1388691303471,
-					mmdb_user_id: "1",
-					updated: 1388789935187,
-					mmdb_user_api: "https://mmdb.nationalgeographic.com/user/1/",
-					type: "mmdb_user"
-				}
-			},
-			verb: {
-				id: "50",
-				data: {
-					created: 1388777568757
+	{
+		itemsCount: 2,
+		items: [
+			{
+				actor: {
+					id: "17",
+					data: {
+						created: 1388691303471,
+						appname_model_id: "1",
+						updated: 1388789935187,
+						appname_model_api: "http://reallycool.api.url/path/1/",
+						type: "appname_model"
+					}
 				},
-				type: "FAVORITED",
-				start: "17",
-				end: "18"
+				verb: {
+					id: "50",
+					data: {
+						created: 1388777568757
+					},
+					type: "FAVORITED",
+					start: "17",
+					end: "18"
+				},
+				object: {
+					id: "18",
+					data: {
+						resource_type_api: "http://reallycool.api.url/path/14055",
+						created: 1388692564273,
+						resource_type_id: "14055",
+						updated: 1388777568757,
+						type: "resource_type"
+					},
+				},
 			},
-			object: {
-				id: "18",
-				data: {
-					yourshot_photo_api: "http://yourshot.nationalgeographic.com/api/v1/photo/14055",
-					created: 1388692564273,
-					yourshot_photo_id: "14055",
-					updated: 1388777568757,
-					type: "yourshot_photo"
-				}
-			}
-		}
+			{
+				actor: {
+					id: "17",
+					data: {
+						created: 1388691303471,
+						appname_model_id: "1",
+						updated: 1388789935187,
+						appname_model_api: "http://reallycool.api.url/path/1/",
+						type: "appname_model"
+					}
+				},
+				verb: {
+					id: "50",
+					data: {
+						created: 1388777568757
+					},
+					type: "FAVORITED",
+					start: "17",
+					end: "19"
+				},
+				object: {
+					id: "19",
+					data: {
+						resource_type_api: "http://reallycool.api.url/path/16225",
+						created: 1388692564273,
+						resource_type_id: "16225",
+						updated: 1388777568757,
+						type: "resource_type"
+					},
+				},
+			},
+		]
+	}
 	*/
+
 	getAllObjectsVerbedByActor: function(req, res) {
-		var obj = {}, q, key;
+		var obj = {}, q, key, count;
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'WITH actor, collect(verb) as verbs, collect(object) as objects, count(object) as count',
-			'RETURN actor,verbs,objects,count'
+			'RETURN actor, verb, object'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
 					return res.json(err);
 				}
+				count = results.filter(function(value) { return value !== undefined; }).length;
+				results = {'itemsCount': count, 'items': results};
 				res.json(results);
 			});
 		} else {
@@ -318,6 +283,7 @@ module.exports = {
 			res.json(200, {});
 		}
 	},
+
 	getSpecificObjectTypeVerbedByActor: function(req, res) {
 		var obj = {}, q, key;
 		key = req.param('actor') + '_id';
@@ -325,7 +291,7 @@ module.exports = {
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') + ')',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'RETURN actor,verb,object'
+			'RETURN actor, verb, object'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
@@ -342,30 +308,118 @@ module.exports = {
 			res.json(200, {});
 		}
 	},
+
+	/**
+	###### Actor [GET][/actor/{appname_model}/{appname_model_id}/activities]
+	This endpoint will return all activities in the db that match the actor specified in the params, along with
+	a count of the number of activities for this specific actor.
+
+	Actor:
+
+	- id (this id is assigned by Neo4j and should not be used)
+
+	And within the data property:
+
+	- created: _Timestamp_
+	- updated (optional): _Timestamp_
+	- appname_model_id: _Integer/String_
+	- appname_model_api: _URL_
+	- type: {appname_model}
+
+	+ Parameters
+	+ appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with
+	+ appname_model_id (integer) a number that matches an appropriate id from another applications model
+
+	+ Model (application/json)
+
+	JSON representation of an actor node
+
+	+ Example
+	{
+		itemsCount: 2,
+		items: [
+			{
+				actor: {
+					id: "17",
+					data: {
+						created: 1388691303471,
+						appname_model_id: "1",
+						updated: 1388789935187,
+						appname_model_api: "http://reallycool.api.url/path/1/",
+						type: "appname_model"
+					}
+				},
+				verb: {
+					id: "50",
+					data: {
+						created: 1388777568757
+					},
+					type: "FAVORITED",
+					start: "17",
+					end: "18"
+				},
+				object: {
+					id: "18",
+					data: {
+						resource_type_api: "http://reallycool.api.url/path/14055",
+						created: 1388692564273,
+						resource_type_id: "14055",
+						updated: 1388777568757,
+						type: "resource_type"
+					},
+				},
+			},
+			{
+				actor: {
+					id: "17",
+					data: {
+						created: 1388691303471,
+						appname_model_id: "1",
+						updated: 1388789935187,
+						appname_model_api: "http://reallycool.api.url/path/1/",
+						type: "appname_model"
+					}
+				},
+				verb: {
+					id: "52",
+					data: {
+						created: 1388777568757
+					},
+					type: "WATCHED",
+					start: "17",
+					end: "22"
+				},
+				object: {
+					id: "22",
+					data: {
+						resource_type_api: "http://reallycool.api.url/path/58442",
+						created: 1388692564273,
+						resource_type_id: "58442",
+						updated: 1388777568757,
+						type: "resource_type"
+					},
+				},
+			},
+		]
+	}
+	*/
+	
 	getAllActivitiesByActor: function(req, res) {
-		var obj = {}, q, key;
+		var obj = {}, q, key, count;
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-			// 'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)<-[cfverb]-(aa)',
-			// 'WHERE actor.' + key + '="' + obj[key] + '" AND type(verb) = type(cfverb)',
-			// 'RETURN actor, verb, object, COUNT(aa) AS verb_count'
-
-			// This query returns actor, activity, objects, count for each activity type
-			// Ex: [{actor: 1, activity: "Favorited", Objects: [{1},{2},{3}], Count: 3}
-			//      {actor: 1, activity: "Shared", Objects: [{1},{2}], Count: 2}]
-			// Wasn't sure what the context of the counts was, if we were looking for
-			// counts per activity or total number of activities (5 in the above example)
 			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'WITH actor, type(verb) as activity, collect(object) as objects, count(object) as obj_cnt',
-			'RETURN actor, activity, objects, obj_cnt'
+			'RETURN actor, verb, object'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
 					return res.json(err);
 				}
+				count = results.filter(function(value) { return value !== undefined; }).length;
+				results = {'itemsCount': count, 'items': results};
 				res.json(results);
 			});
 		} else {
