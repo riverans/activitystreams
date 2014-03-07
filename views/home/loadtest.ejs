@@ -1,17 +1,17 @@
 <div>Check your console for the load test</div>
-<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery.min.js"></script>
 <script>
     $(function() {
         console.log('starting this crazy thing');
         var rand_user, rand_photo, i;
-        for (i=0; i<10000; i++) {
+        for (i=0; i<100; i++) {
             setTimeout(function() {
-                rand_user = Math.round(Math.random()*10000);
-                rand_photo = Math.round(Math.random()*10000);
+                rand_user = Math.round(Math.random()*100);
+                rand_photo = Math.round(Math.random()*100);
                 var data = {
-                    actor: { type: 'mmdb_user', mmdb_user_id: rand_user, mmdb_user_api: 'mmdb.dev.nationalgeographic.com:8000/api/v1/' + rand_user }, 
-                    verb: { type: 'WATCHED' }, 
-                    object: { type: 'yourshot_photo', yourshot_photo_id: rand_photo, yourshot_photo_api: 'yourshot.dev.nationalgeographic.com:8005/api/v1/' + rand_photo }
+                    actor: { type: 'mmdb_user', mmdb_user_id: rand_user, mmdb_user_api: 'mmdb.dev.nationalgeographic.com:8000/api/v1/{rand_user}'}, 
+                    verb: { type: 'FAVORITED' }, 
+                    object: { type: 'yourshot_photo', yourshot_photo_id: rand_photo, yourshot_photo_api: 'yourshot.api'}
                 };
                 $.ajax({
                     type: 'POST',
