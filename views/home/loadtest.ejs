@@ -10,7 +10,7 @@
                 rand_photo = Math.round(Math.random()*100);
                 var data = {
                     actor: { type: 'mmdb_user', mmdb_user_id: rand_user, mmdb_user_api: 'mmdb.dev.nationalgeographic.com:8000/api/v1/{rand_user}'}, 
-                    verb: { type: 'FAVORITED' }, 
+                    verb: { type: 'NITPICKETED' }, 
                     object: { type: 'yourshot_photo', yourshot_photo_id: rand_photo, yourshot_photo_api: 'yourshot.api'}
                 };
                 $.ajax({

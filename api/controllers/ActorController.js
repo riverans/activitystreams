@@ -258,21 +258,21 @@ module.exports = {
 	*/
 
 	getAllObjectsVerbedByActor: function(req, res) {
-		var obj = {}, q, key, count;
+		var obj = {}, q, key;
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
+			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)<-[ov:' + req.param('verb') + ']-(oa)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'RETURN actor, verb, object'
+			'WITH count(oa) as objectCount, actor, verb, object',
+			'WITH { actor: actor, verb: verb, object: object, objectCount: objectCount } as activity',
+			'RETURN collect(activity) as items'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
 					return res.json(err);
 				}
-				count = results.filter(function(value) { return value !== undefined; }).length;
-				results = {'itemsCount': count, 'items': results};
 				res.json(results);
 			});
 		} else {
@@ -336,90 +336,97 @@ module.exports = {
 
 	+ Example
 	{
-		itemsCount: 2,
-		items: [
-			{
-				actor: {
-					id: "17",
-					data: {
-						created: 1388691303471,
-						appname_model_id: "1",
-						updated: 1388789935187,
-						appname_model_api: "http://reallycool.api.url/path/1/",
-						type: "appname_model"
-					}
-				},
-				verb: {
-					id: "50",
-					data: {
-						created: 1388777568757
+		{
+			type: 'FAVORITED',
+			totalItems: 1,
+			items: {
+				0: {
+					actor: {
+						id: "17",
+						data: {
+							created: 1388691303471,
+							appname_model_id: "1",
+							updated: 1388789935187,
+							appname_model_api: "http://reallycool.api.url/path/1/",
+							type: "appname_model"
+						}
 					},
-					type: "FAVORITED",
-					start: "17",
-					end: "18"
-				},
-				object: {
-					id: "18",
-					data: {
-						resource_type_api: "http://reallycool.api.url/path/14055",
-						created: 1388692564273,
-						resource_type_id: "14055",
-						updated: 1388777568757,
-						type: "resource_type"
+					verb: {
+						id: "50",
+						data: {
+							created: 1388777568757
+						},
+						type: "FAVORITED",
+						start: "17",
+						end: "18"
 					},
-				},
-			},
-			{
-				actor: {
-					id: "17",
-					data: {
-						created: 1388691303471,
-						appname_model_id: "1",
-						updated: 1388789935187,
-						appname_model_api: "http://reallycool.api.url/path/1/",
-						type: "appname_model"
-					}
-				},
-				verb: {
-					id: "52",
-					data: {
-						created: 1388777568757
-					},
-					type: "WATCHED",
-					start: "17",
-					end: "22"
-				},
-				object: {
-					id: "22",
-					data: {
-						resource_type_api: "http://reallycool.api.url/path/58442",
-						created: 1388692564273,
-						resource_type_id: "58442",
-						updated: 1388777568757,
-						type: "resource_type"
+					object: {
+						id: "18",
+						data: {
+							resource_type_api: "http://reallycool.api.url/path/14055",
+							created: 1388692564273,
+							resource_type_id: "14055",
+							updated: 1388777568757,
+							type: "resource_type"
+						},
 					},
 				},
-			},
+		}
+		{
+			type: 'WATCHED',
+			totalItems: 1,
+			items: {
+					actor: {
+						id: "17",
+						data: {
+							created: 1388691303471,
+							appname_model_id: "1",
+							updated: 1388789935187,
+							appname_model_api: "http://reallycool.api.url/path/1/",
+							type: "appname_model"
+						}
+					},
+					verb: {
+						id: "52",
+						data: {
+							created: 1388777568757
+						},
+						type: "WATCHED",
+						start: "17",
+						end: "22"
+					},
+					object: {
+						id: "22",
+						data: {
+							resource_type_api: "http://reallycool.api.url/path/58442",
+							created: 1388692564273,
+							resource_type_id: "58442",
+							updated: 1388777568757,
+							type: "resource_type"
+						},
+					},
+				},
+			}
 		]
 	}
 	*/
 	
 	getAllActivitiesByActor: function(req, res) {
-		var obj = {}, q, key, count;
+		var obj = {}, q, key;
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
+			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)<-[ov]-(oa)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'RETURN actor, verb, object'
+			'WITH type(verb) as verbType, count(oa) as objectCount, actor, verb, object',
+			'WITH verbType, { actor: actor, verb: verb, object: object, objectCount: objectCount } as activity',
+			'RETURN verbType as type, collect(activity) as items'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
 					return res.json(err);
 				}
-				count = results.filter(function(value) { return value !== undefined; }).length;
-				results = {'itemsCount': count, 'items': results};
 				res.json(results);
 			});
 		} else {
