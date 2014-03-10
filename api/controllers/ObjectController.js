@@ -94,7 +94,7 @@ module.exports = {
 			'MATCH (object:' + req.param('object') + ')<-[verb]-(actor)',
 			'WHERE object.' + key + '="' + obj[key] + '"',
 			'WITH type(verb) as verbType, count(actor) as actors, { actor: actor, verb: verb, object: object } as activity',
-			'RETURN verbType as type, count(actors) as totalItems, collect(activity) as items'
+			'RETURN verbType as verb, count(actors) as totalItems, collect(activity) as items'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {

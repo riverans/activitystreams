@@ -337,7 +337,7 @@ module.exports = {
 	+ Example
 	{
 		{
-			type: 'FAVORITED',
+			verb: 'FAVORITED',
 			totalItems: 1,
 			items: {
 				0: {
@@ -420,7 +420,7 @@ module.exports = {
 			'WHERE actor.' + key + '="' + obj[key] + '"',
 			'WITH type(verb) as verbType, count(oa) as objectCount, actor, verb, object',
 			'WITH verbType, { actor: actor, verb: verb, object: object, objectCount: objectCount } as activity',
-			'RETURN verbType as type, collect(activity) as items'
+			'RETURN verbType as verb, collect(activity) as items'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
