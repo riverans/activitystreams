@@ -280,7 +280,7 @@ Installation
 * OSX with Homebrew:
   * NPM was recently removed from Homebrew, so manually install `curl https://npmjs.org/install.sh | sh`
 
-# [Neo4j 2.0!](http://www.neo4j.org)
+# [Neo4j 2.0.1!](http://www.neo4j.org)
 * Download the [Neo4j 2.0](http://www.neo4j.org/download)
 * OSX:
   * `brew update`
@@ -289,8 +289,8 @@ Installation
   * Add to launchctl to make your life easier
   * `neo4j start`
 * Debian/Linux
-  * `tar xzvf neo4j-communtity.2.0.0-unix.tar.gz`
-  * `mv neo4j-communtity.2.0.0-unix /etc/neo4j && cd /etc/neo4j`
+  * `tar xzvf neo4j-community.2.0.1-unix.tar.gz`
+  * `mv neo4j-community.2.0.1-unix /etc/neo4j && cd /etc/neo4j`
   * `bin/neo4j-installer`
   * `sudo service neo4j start`
   * Uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
