@@ -11,7 +11,8 @@
     "optimist": "0.3.4",
     "neo4j-js": "0.0.7",
     "socket.io": "~0.9.16",
-    "sails-neo4j": "git+ssh://git@github.com:natgeo/sails-neo4j.git"
+    "sails-neo4j": "git+ssh://git@github.com:natgeo/sails-neo4j.git",
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "load-grunt-tasks": "~0.2.1",
