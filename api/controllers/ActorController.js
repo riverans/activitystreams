@@ -262,8 +262,10 @@ module.exports = {
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)<-[ov:' + req.param('verb') + ']-(oa)',
+			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
+			'WITH actor, verb, object',
+			'OPTIONAL MATCH (object)<-[ov:' + req.param('verb') + ']-(oa)',
 			'WITH count(oa) as objectCount, actor, verb, object',
 			'WITH { actor: actor, verb: verb, object: object, objectCount: objectCount } as activity',
 			'RETURN collect(activity) as items'
@@ -416,8 +418,9 @@ module.exports = {
 		key = req.param('actor') + '_id';
 		obj[key] = req.param('actor_id');
 		q = [
-			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)<-[ov]-(oa)',
+			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
+			'OPTIONAL MATCH (object)<-[ov]-(oa)',
 			'WITH type(verb) as verbType, count(oa) as objectCount, actor, verb, object',
 			'WITH verbType, { actor: actor, verb: verb, object: object, objectCount: objectCount } as activity',
 			'RETURN verbType as verb, collect(activity) as items'
