@@ -19,8 +19,8 @@
  * http://sailsjs.org/#documentation
  */
 
-var fs = require('fs');
-var _ = require('underscore');
+var fs = require('fs'),
+     _ = require('underscore');
 
 module.exports = (function() {
 
