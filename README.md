@@ -1,6 +1,6 @@
 #VII - Activity Stream Service
+Want to help? [![Stories in Ready](https://badge.waffle.io/natgeo/activitystreams.png?label=ready&title=Ready)](http://waffle.io/natgeo/activitystreams)
 
-|	Want to help? -> [![Stories in Ready](https://badge.waffle.io/natgeo/activitystreams.png?label=ready&title=Ready)](http://waffle.io/natgeo/activitystreams)
 
 
 ### Table of Contents
