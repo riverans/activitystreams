@@ -264,11 +264,8 @@ module.exports = {
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'WITH actor, verb, object',
-			'OPTIONAL MATCH (object)<-[ov:' + req.param('verb') + ']-(oa)',
-			'WITH count(oa) as objectCount, actor, verb, object',
-			'WITH { actor: actor, verb: verb, object: object, objectCount: objectCount } as activity',
-			'RETURN collect(activity) as items'
+			'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
+			'RETURN count(objectCollection) as totalItems, collect(activity) as items'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
@@ -420,10 +417,8 @@ module.exports = {
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
 			'WHERE actor.' + key + '="' + obj[key] + '"',
-			'OPTIONAL MATCH (object)<-[ov]-(oa)',
-			'WITH type(verb) as verbType, count(oa) as objectCount, actor, verb, object',
-			'WITH verbType, { actor: actor, verb: verb, object: object, objectCount: objectCount } as activity',
-			'RETURN verbType as verb, collect(activity) as items'
+			'WITH type(verb) as verbType, collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
+			'RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
