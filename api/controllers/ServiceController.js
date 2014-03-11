@@ -45,7 +45,7 @@ module.exports = {
 
 	Example client call using jQuery:
 		$.ajax({
-			url: 'as.nationalgeographic.com/api/v1/',
+			url: 'as.service.com/api/v1/',
 			dataType: 'jsonp',
 			complete: function() {
 			// Establish socket connection

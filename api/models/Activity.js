@@ -9,8 +9,6 @@
 module.exports = {
 
   attributes: {
-    //       //object type could be mmdb-user
-    //       //object type could ys-photo
     //       objectType: {
     //           type: 'string',
     //           required: true,

@@ -9,13 +9,13 @@
                 rand_user = Math.round(Math.random()*100);
                 rand_photo = Math.round(Math.random()*100);
                 var data = {
-                    actor: { type: 'mmdb_user', mmdb_user_id: rand_user, mmdb_user_api: 'mmdb.dev.nationalgeographic.com:8000/api/v1/{rand_user}'}, 
+                    actor: { type: 'exampleapp_user', exampleapp_user_id: rand_user, exampleapp_user_api: 'exampleapp_user.api/{rand_user}'}, 
                     verb: { type: 'FAVORITED' }, 
-                    object: { type: 'yourshot_photo', yourshot_photo_id: rand_photo, yourshot_photo_api: 'yourshot.api'}
+                    object: { type: 'exampleapp_photo', exampleapp_photo_id: rand_photo, exampleapp_photo_api: 'exampleapp_photo.api'}
                 };
                 $.ajax({
                     type: 'POST',
-                    url: 'http://as.dev.nationalgeographic.com:9365/api/v1/activity',
+                    url: 'http://localhost:9365/api/v1/activity',
                     data: data,
                     dataType: 'json'
                 }).done(function(input) {
