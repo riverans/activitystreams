@@ -1,25 +1,27 @@
 <div>Check your console for the load test</div>
-<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery.min.js"></script>
 <script>
     $(function() {
         console.log('starting this crazy thing');
         var rand_user, rand_photo, i;
         for (i=0; i<100; i++) {
-            rand_user = Math.round(Math.random()*100);
-            rand_photo = Math.round(Math.random()*100);
-            var data = {
-                actor: { type: 'mmdb_user', mmdb_user_id: rand_user, mmdb_user_api: 'mmdb.dev.nationalgeographic.com:8000/api/v1/' + rand_user }, 
-                verb: { type: 'FAVORITED' }, 
-                object: { type: 'yourshot_photo', yourshot_photo_id: rand_photo, yourshot_photo_api: 'yourshot.dev.nationalgeographic.com:8005/api/v1/' + rand_photo }
-            };
-            $.ajax({
-                type: 'POST',
-                url: 'http://as.dev.nationalgeographic.com:9365/api/v1/activity',
-                data: data,
-                dataType: 'json'
-            }).done(function(input) { 
-                console.log(input);
-            });
+            setTimeout(function() {
+                rand_user = Math.round(Math.random()*100);
+                rand_photo = Math.round(Math.random()*100);
+                var data = {
+                    actor: { type: 'exampleapp_user', exampleapp_user_id: rand_user, exampleapp_user_api: 'exampleapp_user.api/{rand_user}'}, 
+                    verb: { type: 'FAVORITED' }, 
+                    object: { type: 'exampleapp_photo', exampleapp_photo_id: rand_photo, exampleapp_photo_api: 'exampleapp_photo.api'}
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:9365/api/v1/activity',
+                    data: data,
+                    dataType: 'json'
+                }).done(function(input) {
+                    console.log(input);
+                });
+            }, 500+i*10);
         }
     });
 </script>
