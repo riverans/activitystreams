@@ -331,6 +331,27 @@ npm install
 To run your server: `neo4j start` then `sails lift`
 To view your server, visit http://localhost:9365
 
+
+Environment Config Overrides
+============================
+
+The config/local.js file should include any settings specifically for your
+development computer (db passwords, etc.) - See http://sailsjs.org/#!documentation/config.local.  
+We take this a step further, so that we can have different 'local' settings
+based on the environment (development or production), and the config/local.js
+file was updated to reflect this.
+
+The environment-specific settings are found in /config/environments/.  The file
+at config/local.js will check the current environment (from process.env.NODE_ENV
+or defaults to 'development'), then load settings from config/environments/<environment>.
+
+Also note that, if needed, you can create a file in /config/environments/
+called 'myLocal.js'.  This file is included in .gitignore and will not be
+committed, and should only be used if your particular local development
+environment needs further customizations from what is found in the existing
+'development.js' configuration module.
+
+
 ___
 
 Activity Streams Demo
