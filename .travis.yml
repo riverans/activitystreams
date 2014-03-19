@@ -7,7 +7,7 @@ services:
   - neo4j
 notifications:
   hipchat:
-  	rooms:
-  	  - Bdh0l/7Oworx1yU268O6r9c3YwRPD0TVt/hvRpetN14BjBqhCCS4zTQrihDjxrvlV+CQ0O5YOgDTqEgxDrxz5j1LXy0VEITLlBEPFifsUgXpWDpbHYQL2UWnuj6wtTlerleTgGmUBg2tsAV5R/z5JJs5WMk4tdjAIyTZhrttLXc=@Activity Streams!
-  template:
+    rooms:
+      - Bdh0l/7Oworx1yU268O6r9c3YwRPD0TVt/hvRpetN14BjBqhCCS4zTQrihDjxrvlV+CQ0O5YOgDTqEgxDrxz5j1LXy0VEITLlBEPFifsUgXpWDpbHYQL2UWnuj6wtTlerleTgGmUBg2tsAV5R/z5JJs5WMk4tdjAIyTZhrttLXc=@Activity Streams!
+    template:
       - '%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}'
