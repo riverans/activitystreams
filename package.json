@@ -24,7 +24,8 @@
   },
   "scripts": {
     "start": "node app.js",
-    "debug": "node debug app.js"
+    "debug": "node debug app.js",
+    "test": "mocha tests/ --reporter=Spec"
   },
   "main": "app.js",
   "repository": "",
