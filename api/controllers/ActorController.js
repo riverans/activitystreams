@@ -137,12 +137,10 @@ module.exports = {
 	*/
 
 	getSpecificActor: function(req, res) {
-		var obj = {}, q, key;
-		key = req.param('actor') + '_id';
-		obj[key] = req.param('actor_id');
+		var obj = {}, q;
 		q = [
 			'MATCH(actor:' + req.param('actor') + ')',
-			'WHERE actor.' + key + '="' + req.param('actor_id') + '"',
+			'WHERE actor.aid="' + req.param('actor_id') + '"',
 			'RETURN actor'
 		];
 		if (process.env.testMode === undefined) {
@@ -258,12 +256,10 @@ module.exports = {
 	*/
 
 	getAllObjectsVerbedByActor: function(req, res) {
-		var obj = {}, q, key;
-		key = req.param('actor') + '_id';
-		obj[key] = req.param('actor_id');
+		var obj = {}, q;
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
-			'WHERE actor.' + key + '="' + obj[key] + '"',
+			'WHERE actor.aid="' + oreq.param('actor_id') + '"',
 			'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
 			'RETURN count(objectCollection) as totalItems, collect(activity) as items'
 		];
@@ -284,12 +280,10 @@ module.exports = {
 	},
 
 	getSpecificObjectTypeVerbedByActor: function(req, res) {
-		var obj = {}, q, key;
-		key = req.param('actor') + '_id';
-		obj[key] = req.param('actor_id');
+		var obj = {}, q;
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') + ')',
-			'WHERE actor.' + key + '="' + obj[key] + '"',
+			'WHERE actor.aid="' + req.param('actor_id') + '"',
 			'RETURN actor, verb, object'
 		];
 		if (process.env.testMode === undefined) {
@@ -411,12 +405,10 @@ module.exports = {
 	*/
 	
 	getAllActivitiesByActor: function(req, res) {
-		var obj = {}, q, key;
-		key = req.param('actor') + '_id';
-		obj[key] = req.param('actor_id');
+		var obj = {}, q;
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
-			'WHERE actor.' + key + '="' + obj[key] + '"',
+			'WHERE actor.aid="' + req.param('actor_id') + '"',
 			'WITH type(verb) as verbType, collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
 			'RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items'
 		];
