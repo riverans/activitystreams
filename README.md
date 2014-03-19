@@ -1,9 +1,11 @@
-#VII - Activity Stream Service
-Want to help? [![Stories in Ready](https://badge.waffle.io/natgeo/activitystreams.png?label=ready&title=Ready)](http://waffle.io/natgeo/activitystreams)
+[![Build Status](https://travis-ci.org/natgeo/activitystreams.png)](https://travis-ci.org/natgeo/activitystreams) [![Stories in Ready](https://badge.waffle.io/natgeo/activitystreams.png?label=ready&title=Ready)](http://waffle.io/natgeo/activitystreams)
+
+#### Activity Stream Service
 
 
 
-### Table of Contents
+
+##### Table of Contents
 
 1. Introduction
 2. What is Activity Stream
