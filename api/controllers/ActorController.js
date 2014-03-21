@@ -259,7 +259,7 @@ module.exports = {
 		var obj = {}, q;
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
-			'WHERE actor.aid="' + oreq.param('actor_id') + '"',
+			'WHERE actor.aid="' + req.param('actor_id') + '"',
 			'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
 			'RETURN count(objectCollection) as totalItems, collect(activity) as items'
 		];

@@ -55,7 +55,6 @@ module.exports = {
 	 */
 	getSpecificObject: function(req, res) {
 		var obj = {}, q;
-		obj[key] = req.param('object_id');
 		q = [
 			'MATCH(object:' + req.param('object') + ')',
 			'WHERE object.aid="' + req.param('object_id') + '"',

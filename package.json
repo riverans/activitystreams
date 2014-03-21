@@ -26,7 +26,7 @@
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test": "mocha tests/ --reporter=Spec"
+    "test": "mocha tests/ --reporter=spec"
   },
   "main": "app.js",
   "repository": "",
