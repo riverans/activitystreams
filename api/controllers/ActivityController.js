@@ -63,7 +63,7 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 					if (err) { return res.json(err); }
-					Activity.publishCreate({id: actor_id, data: results[0]});
+					Activity.publishCreate({ id: actor_id, data: results[0] });
 					res.json(results);
 				}
 			);
