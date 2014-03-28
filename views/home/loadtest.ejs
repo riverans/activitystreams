@@ -9,9 +9,9 @@
                 rand_user = Math.round(Math.random()*100);
                 rand_photo = Math.round(Math.random()*100);
                 var data = {
-                    actor: { type: 'exampleapp_user', exampleapp_user_id: rand_user, exampleapp_user_api: 'exampleapp_user.api/{rand_user}'}, 
+                    actor: { aid: rand_user, api: 'exampleapp_user.api/{rand_user}'}, 
                     verb: { type: 'FAVORITED' }, 
-                    object: { type: 'exampleapp_photo', exampleapp_photo_id: rand_photo, exampleapp_photo_api: 'exampleapp_photo.api'}
+                    object: { aid: rand_photo, api: 'exampleapp_photo.api'}
                 };
                 $.ajax({
                     type: 'POST',
