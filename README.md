@@ -371,7 +371,7 @@ A simple demo page for the NatGeo Activity Streams project
 Install
 =======
 
-add as.nationalgeographic.com to your /etc/hosts file
+add as.dev.yourhostnamehere.com to your /etc/hosts file
 
 Usage
 =====
