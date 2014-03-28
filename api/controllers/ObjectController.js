@@ -28,7 +28,6 @@ module.exports = {
 	 *    `/object/getAllObjectOfType`
 	 */
 	getAllObjectsOfType: function(req, res) {
-
 		var q = [
 			'MATCH(object:' + req.param('object') + ')',
 			'RETURN object'
@@ -55,13 +54,10 @@ module.exports = {
 	 *    `/object/getSpecificObject`
 	 */
 	getSpecificObject: function(req, res) {
-
-		var obj = {}, q, key;
-		key = req.param('object') + '_id';
-		obj[key] = req.param('object_id');
+		var obj = {}, q;
 		q = [
 			'MATCH(object:' + req.param('object') + ')',
-			'WHERE object.' + key + '="' + req.param('object_id') + '"',
+			'WHERE object.aid="' + req.param('object_id') + '"',
 			'RETURN object'
 		];
 		if (process.env.testMode === undefined) {
@@ -86,13 +82,10 @@ module.exports = {
 	 *    `/object/getAllActivitiesByObject`
 	 */
 	getAllActivitiesByObject: function(req, res) {
-
-		var obj = {}, q, key;
-		key = req.param('object') + '_id';
-		obj[key] = req.param('object_id');
+		var obj = {}, q;
 		q = [
 			'MATCH (object:' + req.param('object') + ')<-[verb]-(actor)',
-			'WHERE object.' + key + '="' + obj[key] + '"',
+			'WHERE object.aid="' + req.param('object_id') + '"',
 			'WITH type(verb) as verbType, count(actor) as actors, { actor: actor, verb: verb, object: object } as activity',
 			'RETURN verbType as verb, count(actors) as totalItems, collect(activity) as items'
 		];
@@ -118,13 +111,10 @@ module.exports = {
 	 *    `/object/getAllActorsWhoVerbedObject`
 	 */
 	getAllActorsWhoVerbedObject: function(req, res) {
-
-		var obj = {}, q, key;
-		key = req.param('object') + '_id';
-		obj[key] = req.param('object_id');
+		var obj = {}, q;
 		q = [
 			'MATCH (object:' + req.param('object') + ')<-[verb:' + req.param('verb') + ']-(actor)',
-			'WHERE object.' + key + '="' + obj[key] + '"',
+			'WHERE object.aid="' + req.param('object_id') + '"',
 			'WITH count(actor) as actors, { actor: actor, verb: verb, object: object } as activity',
 			'RETURN count(actors) as totalItems, collect(activity) as items'
 		];
@@ -150,13 +140,10 @@ module.exports = {
 	 *    `/object/getSpecificActorTypeWhoVerbedObject`
 	 */
 	getSpecificActorTypeWhoVerbedObject: function(req, res) {
-
-		var obj = {}, q, key;
-		key = req.param('object') + '_id';
-		obj[key] = req.param('object_id');
+		var obj = {}, q;
 		q = [
 			'MATCH (object:' + req.param('object') + ')<-[verb:' + req.param('verb') + ']-(actor:' + req.param('actor') + ')',
-			'WHERE object.' + key + '="' + obj[key] + '"',
+			'WHERE object.aid="' + req.param('object_id') + '"',
 			'RETURN actor,verb,object'
 		];
 		if (process.env.testMode === undefined) {

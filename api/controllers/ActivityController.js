@@ -18,13 +18,11 @@ module.exports = {
 
 	getSpecificActivity: function(req, res) {
 		var q,
-			actor_key = req.param('actor') + '_id',
 			actor_id = req.param('actor_id'),
-			object_key = req.param('object') + '_id',
 			object_id = req.param('object_id');
 		q = [
 			'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
-			'WHERE actor.' + actor_key + '="' + actor_id +'" AND object.' + object_key + '="' + object_id + '"',
+			'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
 			'RETURN actor,verb,object'
 		];
 		if (process.env.testMode === undefined) {
@@ -44,18 +42,16 @@ module.exports = {
 	postSpecificActivity: function(req, res) {
 		var q,
 			actor = req.body.actor,
-			actor_key = actor.type + '_id',
-			actor_id = actor[actor_key],
+			actor_id = actor['aid'],
 			verb = req.body.verb,
 			object = req.body.object,
-			object_key = object.type + '_id',
-			object_id = object[object_key];
+			object_id = object['aid'];
 		q = [
-			'MERGE (actor:' + actor.type + ' { ' + actor_key + ':"' + actor_id + '", type:"' + actor.type + '", ' + actor.type + '_api:"' + actor.api + '" })',
+			'MERGE (actor:' + actor.type + ' { aid:"' + actor_id + '", api:"' + actor.api + '" })',
 			'ON CREATE SET actor.created = timestamp()',
 			'ON MATCH SET actor.updated = timestamp()',
 			'WITH actor',
-			'MERGE (object:' + object.type + ' { ' + object_key + ':"' + object_id + '", type:"' + object.type + '",  ' + object.type + '_api:"' + object.api + '" })',
+			'MERGE (object:' + object.type + ' { aid:"' + object_id + '", api:"' + object.api + '" })',
 			'ON CREATE SET object.created = timestamp()',
 			'ON MATCH SET object.updated = timestamp()',
 			'WITH object, actor',
@@ -67,7 +63,7 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 					if (err) { return res.json(err); }
-					Activity.publishCreate({id: actor_id, data: results[0]});
+					Activity.publishCreate({ id: actor_id, data: results[0] });
 					res.json(results);
 				}
 			);
@@ -82,13 +78,11 @@ module.exports = {
 
 	deleteSpecificActivity: function(req, res) {
 		var q,
-			actor_key = req.param('actor') + '_id',
 			actor_id = req.param('actor_id'),
-			object_key = req.param('object') + '_id',
 			object_id = req.param('object_id');
 		q = [
-			'MATCH (actor:' + req.param('actor') +')<-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
-			'WHERE actor.' + actor_key + '="' + actor_id +'" AND object.' + object_key + '="' + object_id + '"',
+			'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']->(object:' + req.param('object') +')',
+			'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
 			'DELETE verb',
 			'RETURN actor, object'
 		];
