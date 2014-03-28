@@ -353,6 +353,15 @@ committed, and should only be used if your particular local development
 environment needs further customizations from what is found in the existing
 'development.js' configuration module.
 
+####Important:
+In order to create a more secure environment, we are overriding the session secret key in the specific environment confs.
+Therefore, you should create a myLocal.js file in the environments folder and add:
+```
+module.exports.session = {
+  secret: 'replace with your secret key'
+};
+
+```
 
 ___
 

@@ -9,9 +9,8 @@
     "sails-disk": "~0.9.0",
     "ejs": "~0.8.4",
     "optimist": "0.3.4",
-    "neo4j-js": "0.0.7",
     "socket.io": "~0.9.16",
-    "sails-neo4j": "0.0.1",
+    "sails-neo4j": "0.0.3",
     "underscore": "~1.6.0"
   },
   "devDependencies": {
