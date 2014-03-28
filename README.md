@@ -86,9 +86,8 @@ An ngm article would be
 
 Nodes currently have the folowing properties
 
-	{app_name}_{model}_id : {int} / {slug} … open ended
-	{app_name}_{model}_api : {url}
-	type: {app_name}_{model}
+	aid : {int} / {slug} … open ended
+	api : {url}
 	created: {unix timestamp
 	updated: {unix timestamp}
 	
@@ -96,19 +95,17 @@ Nodes contain a 'type' property so that we can return the label for the node.
 
 
 
-For example an MMDB USER node will have the following:
+For example a USER node will have the following:
 
-	mmdb_user_id : 1
-	mmdb_user_api: http://mc.dev.nationalgeographic.com:8000/user/1/
-	type: mmdb_user
+	aid : 1
+	api: http://exampleapp.com/user/1/
 	created: 1388767442091
 	updated: 1389039127283
 	
-Your Shot Photo
+A Photo
 
-	yourshot_photo: 11121
-	yourshot_photo_api: http://yourshot-uat.nationalgeographic.com/api/v1/photo/14055
-	type: yourshot_photo
+	aid: 11121
+	api: http://example.com/api/v1/photo/14055
 	created: 1388767442091
 	updated: 1389039127283
 
@@ -184,7 +181,7 @@ For clients who need to establish a signed auth cookie with this service:
   Example:
   ```
     $.ajax({
-      url: 'as.nationalgeographic.com',
+      url: 'as.example.com',
       dataType: 'jsonp',
       timeout: 12000,
       cache: false,
