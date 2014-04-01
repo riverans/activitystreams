@@ -1,9 +1,11 @@
-#VII - Activity Stream Service
+[![Build Status](https://travis-ci.org/natgeo/activitystreams.png)](https://travis-ci.org/natgeo/activitystreams) [![Stories in Ready](https://badge.waffle.io/natgeo/activitystreams.png?label=ready&title=Ready)](http://waffle.io/natgeo/activitystreams)
+
+#### Activity Stream Service
 
 
 
 
-### Table of Contents
+##### Table of Contents
 
 1. Introduction
 2. What is Activity Stream
@@ -28,7 +30,7 @@
 
 ## Introduction
 
-This document is aimed at a high level understanding how the Activity Stream works with Neo4j. We have defined a broad structure that to talk to the database.
+This document provides a high level understanding of how the Activity Stream works with Neo4j and the broad structure we have defined for interacting with the database.
 
 
 
@@ -47,26 +49,26 @@ This document is aimed at a high level understanding how the Activity Stream wor
 
 
 
-This document is aimed at a high level understanding how the Activity Stream works with Neo4j. We have defined a broad structure that to talk to the database.
-
-
 
 
 ## Activity Stream Spec
+Our activity stream model conforms to the Activity Streams specification found here: http://activitystrea.ms/, where:
+
 
 ACTOR -> VERB -> OBJECT -> TARGET
 
+might be implemented, for sake of example, as:
 
 mmdb_user -> FAVORITED -> yourshot_photo
 
 
 ## Graph Structure
 
-Nodes have labels, the labels are bascially types of nodes we have. The current naming structure we for labels for are
+Nodes have labels, and the naming convention for these labels represents the types of nodes we have
 
 	{app_name}_{model}
 
-So an mmdb User would be
+For example, an mmdb User would be
 
 	mmdb_user
 	
@@ -84,29 +86,26 @@ An ngm article would be
 
 Nodes currently have the folowing properties
 
-	{app_name}_{model}_id : {int} / {slug} … open ended
-	{app_name}_{model}_api : {url}
-	type: {app_name}_{model}
+	aid : {int} / {slug} … open ended
+	api : {url}
 	created: {unix timestamp
 	updated: {unix timestamp}
 	
-The reason why we add an type to that node so that we can return the label for the node. 
+Nodes contain a 'type' property so that we can return the label for the node. 
 
 
 
-For example an MMDB USER node will have the following:
+For example a USER node will have the following:
 
-	mmdb_user_id : 1
-	mmdb_user_api: http://mc.dev.nationalgeographic.com:8000/user/1/
-	type: mmdb_user
+	aid : 1
+	api: http://exampleapp.com/user/1/
 	created: 1388767442091
 	updated: 1389039127283
 	
-Your Shot Photo
+A Photo
 
-	yourshot_photo: 11121
-	yourshot_photo_api: http://yourshot-uat.nationalgeographic.com/api/v1/photo/14055
-	type: yourshot_photo
+	aid: 11121
+	api: http://example.com/api/v1/photo/14055
 	created: 1388767442091
 	updated: 1389039127283
 
@@ -114,7 +113,7 @@ Your Shot Photo
 
 ### Edges
 
-These represent represent relationships. They are in all caps and also have timestamps
+Edges represent relationships. They are in all caps and also have timestamps
 
 List of Current Verbs:
 	
@@ -122,11 +121,10 @@ List of Current Verbs:
 	PLEDGES
 	FOLLOWS
 	
-There shall be a master list of verbs that will be used within the graph. Users are not allowd to add new verb that are not in the master list.
+There shall be a master list of verbs that will be used within the graph. Users are not allowed to add new verb that are not in the master list.
 
 
 ### Activity Service REST API
-
 
 Get all nodes of type
 
@@ -176,8 +174,25 @@ For batch requests:
 
 	api key
 
+For clients who need to establish a signed auth cookie with this service:
+ 
+  Send a blank JSONP request to / before establishing your socket connection
 
-
+  Example:
+  ```
+    $.ajax({
+      url: 'as.example.com',
+      dataType: 'jsonp',
+      timeout: 12000,
+      cache: false,
+      success: function(data) {
+        // Establish socket
+      },
+      error: function(xhr, textStatus) {
+        // Handle error
+      }
+    });
+  ```
 
 
 Installation
@@ -264,7 +279,7 @@ Installation
 * OSX with Homebrew:
   * NPM was recently removed from Homebrew, so manually install `curl https://npmjs.org/install.sh | sh`
 
-# [Neo4j 2.0!](http://www.neo4j.org)
+# [Neo4j 2.0.1!](http://www.neo4j.org)
 * Download the [Neo4j 2.0](http://www.neo4j.org/download)
 * OSX:
   * `brew update`
@@ -273,12 +288,18 @@ Installation
   * Add to launchctl to make your life easier
   * `neo4j start`
 * Debian/Linux
-  * `tar xzvf neo4j-communtity.2.0.0-unix.tar.gz`
-  * `mv neo4j-communtity.2.0.0-unix /etc/neo4j && cd /etc/neo4j`
+  * `tar xzvf neo4j-community.2.0.1-unix.tar.gz`
+  * `mv neo4j-community.2.0.1-unix /etc/neo4j && cd /etc/neo4j`
   * `bin/neo4j-installer`
   * `sudo service neo4j start`
   * Uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
 
+# [Redis](http://redis.io/)
+* OSX with Homebrew:
+  * `brew install redis`
+  * `launchctl load ~/Library/LaunchAgents/homebrew.mxcl.redis.plist`
+  * To test that your server is running:  `redis-cli`.  You should be at a prompt "127.0.0.1:6379"
+  * `exit`
 
 Dependencies
 ============
@@ -309,6 +330,36 @@ npm install
 To run your server: `neo4j start` then `sails lift`
 To view your server, visit http://localhost:9365
 
+
+Environment Config Overrides
+============================
+
+The config/local.js file should include any settings specifically for your
+development computer (db passwords, etc.) - See http://sailsjs.org/#!documentation/config.local.  
+We take this a step further, so that we can have different 'local' settings
+based on the environment (development or production), and the config/local.js
+file was updated to reflect this.
+
+The environment-specific settings are found in /config/environments/.  The file
+at config/local.js will check the current environment (from process.env.NODE_ENV
+or defaults to 'development'), then load settings from config/environments/<environment>.
+
+Also note that, if needed, you can create a file in /config/environments/
+called 'myLocal.js'.  This file is included in .gitignore and will not be
+committed, and should only be used if your particular local development
+environment needs further customizations from what is found in the existing
+'development.js' configuration module.
+
+####Important:
+In order to create a more secure environment, we are overriding the session secret key in the specific environment confs.
+Therefore, you should create a myLocal.js file in the environments folder and add:
+```
+module.exports.session = {
+  secret: 'replace with your secret key'
+};
+
+```
+
 ___
 
 Activity Streams Demo
@@ -320,7 +371,7 @@ A simple demo page for the NatGeo Activity Streams project
 Install
 =======
 
-add as.nationalgeographic.com to your /etc/hosts file
+add as.dev.yourhostnamehere.com to your /etc/hosts file
 
 Usage
 =====
@@ -345,31 +396,71 @@ Sample Demo Script
 
 Testing
 =======
-We are using the Mocha testing framework and have implemented it using grunt.
+We are using the Mocha testing framework and have implemented it using grunt.  All tests live in /tests.
+While the Sails service relies on itself and will lift/lower itself, Neo4j can be mimicked so that the
+service tests can run independent.  You can set two environment variables in each of your tests:
 
-All our tests live in tests/
+* process.env.testMode = true
+    True: Runs mimicked Neo4j responses
+    Undefined:  Runs queries against the live database  (either comment out or delete the setting)
 
-To run test:
+* process.env.testModeDebug = true:false
+    True:  Displays cypher queries in the test console when they run for each test
+    False:  Does not display cypher queries in the test console
 
-    //Make sure sails app is running
-    sails lift
-    
-In another terminal window:
+To mimic the Neo4j service, you will need to require Nock and set up a server to intercept the host:port.
+All this server needs to do is to capture requests on '/db/data/' and to reply with a 200 response.  Be sure
+to clean up after the Nock service by running `nock.cleanAll();` after each test and `nock.restore();` after all
+tests are done.  For more info on Nock, visit: https://github.com/pgte/nock
 
-	grunt test
+To lift/lower your Sails server, you need to require Sails and then issue the lift command with your config
+options (ports, adapters, etc.).  An example to start the server:
+
+```
+// Run a sails instance using the Neo4j adapter -- ran in the before() function
+require('sails').lift({
+    port: 9365,
+    adapters: {
+        default: 'neo4j' // defined in config/adapters.js
+    }
+}, done);
+```
+
+```
+// Lower a sails instance after all tests are done -- ran in the after() function
+sails.lower();
+```
+
+In the view controller (api/controllers/) is where you would supply the test data you want returned to your
+tests.  An example structure that the views support:
+
+```
+myView: function(req, res) {
+    var q = [
+            // Cpyher query
+            'MATCH (n)',
+            'RETURN n'
+        ];
+    if (typeof process.env.testMode === undefined) {
+        View.adapter.query(q,{}, function(err, results) {
+                if (err) { return res.json(err); }
+                res.json(results);
+            }
+        );
+    } else {
+        if (typeof process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+            // Display debug query in console
+            View.adapter.query(q, {});
+        }
+        res.json(200, { // return data here in JSON format });
+    }
+}
+```
+
+
+To run test: `grunt test`
 	
-
-
 
 KNOWN ISSUES
 ==================
 - Sails.js may act inconsistently when connecting with socket.io.  Running sudo npm install in the base of the app may resolve this.
-
-
-TODO
-====
-- Use socket.io to display the activity stream in the large box
-
-
-
-

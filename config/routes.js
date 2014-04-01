@@ -45,22 +45,35 @@ module.exports.routes = {
     view: 'home/index'
   },
 
+  // Establish session auth cookie
+  'get /api/v1': 'ServiceController.setCookie',
+
   // Socket session subscribe
-  'post /api/v1/subscribe': 'ActivityController.subscribe',
+  'post /api/v1/subscribe': 'ServiceController.subscribe',
 
-  // Activity streams GET
-
-  'get /api/v1/:actor': 'ActivityController.getAllActorsOfType',
-  'get /api/v1/:actor/:actor_id': 'ActivityController.getSpecificActor',
-  'get /api/v1/:actor/:actor_id/activities': 'ActivityController.getAllActivitiesByActor',
-  'get /api/v1/:actor/:actor_id/:verb': 'ActivityController.getAllObjectsVerbedByActor',
-  'get /api/v1/:actor/:actor_id/:verb/:object': 'ActivityController.getSpecificObjectTypeVerbedByActor',
-  'get /api/v1/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.getSpecificActivity',
-
-  // Activity streams POST
-  
+  // Activity streams Activity
+  // GET
+  'get /api/v1/activity/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.getSpecificActivity',
+  // POST
   'post /api/v1/activity': 'ActivityController.postSpecificActivity',
-  'delete /api/v1/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.deleteSpecificActivity'
+  // DELETE
+  'delete /api/v1/activity/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.deleteSpecificActivity',
+
+  // Activity streams Actor GET
+
+  'get /api/v1/actor/:actor': 'ActorController.getAllActorsOfType',
+  'get /api/v1/actor/:actor/:actor_id': 'ActorController.getSpecificActor',
+  'get /api/v1/actor/:actor/:actor_id/activities': 'ActorController.getAllActivitiesByActor',
+  'get /api/v1/actor/:actor/:actor_id/:verb': 'ActorController.getAllObjectsVerbedByActor',
+  'get /api/v1/actor/:actor/:actor_id/:verb/:object': 'ActorController.getSpecificObjectTypeVerbedByActor',
+
+  // Activity streams Object GET
+
+  'get /api/v1/object/:object': 'ObjectController.getAllObjectsOfType',
+  'get /api/v1/object/:object/:object_id': 'ObjectController.getSpecificObject',
+  'get /api/v1/object/:object/:object_id/activities': 'ObjectController.getAllActivitiesByObject',
+  'get /api/v1/object/:object/:object_id/:verb': 'ObjectController.getAllActorsWhoVerbedObject',
+  'get /api/v1/object/:object/:object_id/:verb/:actor': 'ObjectController.getSpecificActorTypeWhoVerbedObject',
 
   /*
   // But what if you want your home page to display
