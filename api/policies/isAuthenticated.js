@@ -7,15 +7,27 @@
  * @docs        :: http://sailsjs.org/#!documentation/policies
  *
  */
+
+var http = require('http');
+var util = require('util');
+
 module.exports = function(req, res, next) {
-
-  // User is allowed, proceed to the next policy, 
-  // or if this is the last policy, the controller
-  if (req.session.authenticated) {
-    return next();
-  }
-
-  // User is not allowed
-  // (default res.forbidden() behavior can be overridden in `config/403.js`)
-  return res.forbidden('You are not permitted to perform this action.');
-};
+    if (!req.cookies.mmdbsessionid) {
+        return next(new Error(401));
+    }
+    var userId = req.body.actor['aid'];
+    var url = util.format('http://mmdb.dev.nationalgeographic.com:8000/api/v1/user/%i/', userId);
+    http.get(url, function(res) {
+        var data = '';
+        res.on('data', function(chunk) {
+            data += chunk;
+        });
+        res.on('end', function() {
+            var jsonBody = JSON.parse(data);
+            if (jsonBody.first_name && jsonBody.last_name && jsonBody.username) {
+                return next();
+            }
+            return next(new Error(401));
+        });
+    });
+}
