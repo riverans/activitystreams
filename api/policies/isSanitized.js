@@ -8,13 +8,9 @@
  *
  */
 
-var isCypher = require('sails-neo4j/lib/helpers/isCypher');
 module.exports = function(req, res, next) {
 
-  var url = req.url,
-  specialCharReg = /[-!$%^&*()+|~=`{}\[\]:";'<>?,.]/;
-
-  if (!isCypher(url) && !specialCharReg.test(url)) {
+  if (Activity.adapter.sanitized(req.params)) {
     return next();
   }
   return res.send(400, { error: 'Hacker!!!' });

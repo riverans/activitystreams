@@ -16,10 +16,18 @@ module.exports.policies = {
 
   // Default policy for all controllers and actions
   // (`true` allows public access) 
-  '*': true, 
+  '*': true,
 
   ActivityController: {
-  	'*': 'isSanitized'
+	'*': 'isSanitized'
+  },
+
+  ActorController: {
+	'*': 'isSanitized'
+  },
+
+  ObjectController: {
+	'*': 'isSanitized'
   },
 
   /*
