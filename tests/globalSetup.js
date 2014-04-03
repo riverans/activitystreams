@@ -1,11 +1,10 @@
 //Global Set Up for all tests
-var Sails = require('Sails'),
-app;
-
+var sails = require('Sails'),
+	app;
 
 before(function(done) {
 
-    Sails.lift({
+    sails.lift({
         log: {
             level: 'error'
         }
