@@ -9,10 +9,9 @@
  */
 
 module.exports = function(req, res, next) {
-
-  if (Activity.adapter.sanitized(req.params)) {
+  if (Activity.adapter.sanitized(req.params) && Activity.adapter.sanitized(req.body)) {
     return next();
   }
-  return res.send(400, { error: 'Hacker!!!' });
+  return res.send(420, { error: 'Hacker!!!' });
 
 };
