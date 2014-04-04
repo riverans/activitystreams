@@ -7,8 +7,7 @@ module.exports = {
 	authPolicy : {
 	    endpoint: { // A url for your service's authentication endpoint
             host: 'localhost',
-            port: 6969,
-            pathname: '_membercenter/header/session-auth/'
+            port: 6969
         },
         policy: function(req, res, next) {
             if (!req.cookies.mmdbsessionid) {

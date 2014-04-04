@@ -8,7 +8,8 @@ module.exports = {
     authPolicy : {
         endpoint: { // A url for your service's authentication endpoint
             host: 'mmdb.dev.nationalgeographic.com',
-            port: 8000
+            port: 8000,
+            pathname: '_membercenter/header/session-auth/'
         },
         policy: function(req, res, next) {
             if (!req.cookies.mmdbsessionid) {
