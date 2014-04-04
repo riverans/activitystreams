@@ -1,6 +1,7 @@
 var http = require('http');
 var util = require('util');
 module.exports = {
+    port: 9365,
 
     //auth policy
 	authPolicy : {
