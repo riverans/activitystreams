@@ -10,10 +10,6 @@ module.exports = {
             host: 'mmdb.dev.nationalgeographic.com',
             port: 8000
         },
-        params: [], // An array of options to pass to the endpoint
-        valid: 200, // The status code returned by the endpoint for valid/authenticated states
-        invalid: 401, // The status code returned by the endpoint for invalid/unauthenticated states
-        method: 'GET', // HTTP method for making authentication requests
         policy: function(req, res, next) {
             if (!req.cookies.mmdbsessionid) {
                 return res.send(401, 'Not Authorized Noob')
