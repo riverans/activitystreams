@@ -5,12 +5,12 @@
   "description": "a Sails application",
   "dependencies": {
     "grunt": "~0.4.1",
-    "sails": "0.9.8",
+    "sails": "^0.9.16",
     "sails-disk": "~0.9.0",
     "ejs": "~0.8.4",
     "optimist": "0.3.4",
     "socket.io": "~0.9.16",
-    "sails-neo4j": "~0.0.4",
+    "sails-neo4j": "~0.1.0",
     "underscore": "~1.6.0"
   },
   "devDependencies": {
@@ -22,7 +22,9 @@
     "grunt-mocha-test": "~0.9.0",
     "nock": "~0.27.2",
     "grunt-env": "^0.4.1",
-    "express": "^3.5.1"
+    "express": "^3.5.1",
+    "nock": "~0.27.2",
+    "supertest": "~0.10.0"
   },
   "scripts": {
     "start": "node app.js",

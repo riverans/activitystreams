@@ -20,9 +20,20 @@ module.exports.policies = {
 
   ActivityController: {
 
-      postSpecificActivity : 'isAuthenticated',
-      deleteSpecificActivity: 'isAuthenticated'
+	'*': 'isSanitized',
+    postSpecificActivity: 'isAuthenticated',
+    deleteSpecificActivity: 'isAuthenticated',
+    
   },
+
+  ActorController: {
+	'*': 'isSanitized'
+  },
+
+  ObjectController: {
+	'*': 'isSanitized'
+  },
+
   /*
 	// Here's an example of adding some policies to a controller
 	RabbitController: {
