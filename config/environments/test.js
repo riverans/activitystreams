@@ -1,19 +1,18 @@
 var http = require('http');
 var util = require('util');
 module.exports = {
-	port: 9365,
-
 
     //auth policy
-    authPolicy : {
-        endpoint: { // A url for your service's authentication endpoint
-            host: 'mmdb.dev.nationalgeographic.com',
-            port: 8000
+	authPolicy : {
+	    endpoint: { // A url for your service's authentication endpoint
+            host: 'localhost',
+            port: 6969,
+            pathname: '_membercenter/header/session-auth/'
         },
-        params: [], // An array of options to pass to the endpoint
-        valid: 200, // The status code returned by the endpoint for valid/authenticated states
-        invalid: 401, // The status code returned by the endpoint for invalid/unauthenticated states
-        method: 'GET', // HTTP method for making authentication requests
+	    params: ['session_id'], // An array of options to pass to the endpoint
+	    valid: 200, // The status code returned by the endpoint for valid/authenticated states
+	    invalid: 401, // The status code returned by the endpoint for invalid/unauthenticated states
+	    method: 'GET', // HTTP method for making authentication requests
         policy: function(req, res, next) {
             if (!req.cookies.mmdbsessionid) {
                 return res.send(401, 'Not Authorized Noob')
@@ -56,5 +55,5 @@ module.exports = {
                 });
             });
         }
-    }
+	}
 }

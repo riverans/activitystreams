@@ -20,7 +20,8 @@
     "request": "~2.30.0",
     "mocha": "~1.17.1",
     "grunt-mocha-test": "~0.9.0",
-    "nock": "~0.27.2"
+    "nock": "~0.27.2",
+    "grunt-env": "^0.4.1"
   },
   "scripts": {
     "start": "node app.js",
