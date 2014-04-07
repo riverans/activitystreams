@@ -24,7 +24,6 @@ describe('Check Actor Requests', function () {
     it('GET: actor/{appname_model}/{id}/activities (getAllActivitiesByActor)', function (done) {
         baseUrl.pathname += 'actor/user/1/activites';
         var apiUrl = url.format(baseUrl);
-        console.log(apiUrl);
         request(apiUrl, function (err, response, body) {
             assert.equal(response.statusCode, 200);
             done();

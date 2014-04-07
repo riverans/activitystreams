@@ -2,7 +2,7 @@ var request = require('request');
 var assert = require('assert');
 var url = require('url');
 var http = require('http');
-var testUtils = require('../utils/test');
+var testUtils = require('./utils');
 
 describe(' Test Auth Policy', function () {
 

@@ -29,7 +29,7 @@
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test": "mocha tests/ --reporter=spec"
+    "test": "grunt test"
   },
   "main": "app.js",
   "repository": "",
