@@ -8,9 +8,6 @@
  *
  */
 
-var http = require('http');
-var util = require('util');
-
 module.exports = function(req, res, next) {
 
     if (sails.config.authPolicy.policy) {
