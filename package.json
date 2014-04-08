@@ -11,7 +11,7 @@
     "optimist": "0.3.4",
     "socket.io": "~0.9.16",
     "sails-neo4j": "~0.1.0",
-    "underscore": "~1.6.0"
+    "lodash": "^2.4.1"
   },
   "devDependencies": {
     "load-grunt-tasks": "~0.2.1",
@@ -23,7 +23,6 @@
     "nock": "~0.27.2",
     "grunt-env": "^0.4.1",
     "express": "^3.5.1",
-    "nock": "~0.27.2",
     "supertest": "~0.10.0"
   },
   "scripts": {

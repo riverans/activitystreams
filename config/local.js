@@ -1,7 +1,7 @@
 /**
  * Local environment settings
- * 
- * This config file should include any settings specific to a particular 
+ *
+ * This config file should include any settings specific to a particular
  * environment (development / production).
  *
  * Note the configuration files located in /config/environments/.  That is where
@@ -20,7 +20,7 @@
  */
 
 var fs = require('fs'),
-     _ = require('underscore');
+     _ = require('lodash');
 
 module.exports = (function() {
 
@@ -33,7 +33,7 @@ module.exports = (function() {
         for(var i=0; i <= envConfigs.length; i++) {
 		configPath = __dirname + '/environments/' + envConfigs[i];
 		if (fs.existsSync(configPath)) {
-			_.extend(localConfig, require(configPath));
+			_.merge(localConfig, require(configPath));
 		}
 	}
 

@@ -7,6 +7,7 @@ describe('Check Activity Requests', function () {
         baseUrl.pathname += 'activity/user/1/FAVORITED/picture/10010';
         var apiUrl = url.format(baseUrl);
         request(apiUrl, function (err, response, body) {
+            console.log(response);
             assert.equal(response.statusCode, 200);
             done();
         });

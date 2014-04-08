@@ -13,8 +13,6 @@ var util = require('util');
 
 module.exports = function(req, res, next) {
 
-    var userId;
-
     if (sails.config.authPolicy.policy) {
         return sails.config.authPolicy.policy(req, res, next);
     }
