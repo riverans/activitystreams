@@ -10,7 +10,7 @@ describe('Test Activity Controller  ', function () {
 
     describe('Test GET Actions', function() {
 
-        it('Should get specfic activity', function (done) {
+        it('GET: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (getSpecificActivity)', function (done) {
             baseUrl.pathname += 'activity/user/1/FAVORITED/picture/10010';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) {
@@ -20,7 +20,7 @@ describe('Test Activity Controller  ', function () {
         });
     });
 
-    describe('Test POST responses', function (){
+    describe('Test POST responses ', function (){
 
         beforeEach(function(done) {
 
@@ -58,7 +58,7 @@ describe('Test Activity Controller  ', function () {
         });
 
 
-        it('should allow authorize user to POST his/her activity', function(done) {
+        it('POST: /activity {activity} (postSpecificActivity)', function(done) {
 
             testUtils.fakeServer({code: 200, respond: {userId: 1121}});
 
@@ -86,7 +86,7 @@ describe('Test Activity Controller  ', function () {
             });
         });
 
-        it('should allow authorize user to DELETE his/her activity', function(done) {
+        it('DELETE: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (deleteSpecificActivity)', function(done) {
             testUtils.fakeServer({code: 200, respond: {userId: 1121}});
 
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/activity/user/1/VERBED/object/1', '');
