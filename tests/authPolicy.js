@@ -84,7 +84,7 @@ describe(' Test Auth Policy', function () {
             });
         });
 
-        it('should reject request with no mmdbsession cookie', function (done) {
+        it('should reject request with no session cookie', function (done) {
             baseUrl.pathname = 'api/v1/activity/user/1/VERBED/object/1';
             apiUrl = url.format(baseUrl);
             request.del(apiUrl, function (err, res, body) {
