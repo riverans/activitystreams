@@ -5,7 +5,20 @@ var http = require('http');
 var testUtils = require('./utils');
 var nock = require('nock');
 
-describe(' Test Auth Policy', function () {
+describe('Test Activity Controller  ', function () {
+
+
+    describe('Test GET Actions', function() {
+
+        it('Should get specfic activity', function (done) {
+            baseUrl.pathname += 'activity/user/1/FAVORITED/picture/10010';
+            var apiUrl = url.format(baseUrl);
+            request(apiUrl, function (err, response, body) {
+                assert.equal(response.statusCode, 200);
+                done();
+            });
+        });
+    });
 
     describe('Test POST responses', function (){
 
@@ -21,7 +34,7 @@ describe(' Test Auth Policy', function () {
             done();
         });
 
-        it('should reject request with no session cookie', function (done) {
+        it('should reject post activity with no session cookie', function (done) {
             baseUrl.pathname += 'activity';
             apiUrl = url.format(baseUrl);
             request.post(apiUrl, function (err, res, body) {
@@ -31,7 +44,7 @@ describe(' Test Auth Policy', function () {
 
         });
 
-        it('should reject unauthroized user ',  function (done) {
+        it('should reject post activity with an unauthroized user ',  function (done) {
 
             testUtils.fakeServer({code: 401, respond: {msg: 'noob'}});
 
@@ -60,9 +73,9 @@ describe(' Test Auth Policy', function () {
         });
     });
 
-    describe('Test DELETE responses', function() {
+    describe('Test DELETE Actions', function() {
 
-        it('should reject unauthroized user', function(done) {
+        it('should reject del activity with an unauthroized user', function(done) {
             testUtils.fakeServer({code: 401, respond: {msg: 'noob'}});
 
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/activity/user/1/VERBED/object/1', '');
@@ -84,7 +97,7 @@ describe(' Test Auth Policy', function () {
             });
         });
 
-        it('should reject request with no session cookie', function (done) {
+        it('should reject del request with no session cookie', function (done) {
             baseUrl.pathname = 'api/v1/activity/user/1/VERBED/object/1';
             apiUrl = url.format(baseUrl);
             request.del(apiUrl, function (err, res, body) {
@@ -92,5 +105,5 @@ describe(' Test Auth Policy', function () {
                 done();
             });
         });
-    })
+    });
 });
