@@ -77,7 +77,6 @@ module.exports = function(req, res, next) {
 
     //basic error handling
     request.on('error', function(err) {
-        console.log(err);
         return res.send(400, 'Bad Request to Auth Service');
     });
 }
