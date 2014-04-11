@@ -7,7 +7,7 @@
  * @docs        :: http://sailsjs.org/#!documentation/policies
  *
  */
-var http = require('http');
+var https = require('https');
 var util = require('util');
 
 module.exports = function(req, res, next) {
@@ -50,11 +50,16 @@ module.exports = function(req, res, next) {
     var options = {
         host: sails.config.authPolicy.endpoint.host,
         port: sails.config.authPolicy.endpoint.port,
-        path : util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie])
+        path : util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie]),
+        secureProtocol: 'SSLv3_method', //'SSLv3_method',
+
     };
 
+    //create new agent
+    options.agent = new https.Agent(options);
+
     //request going out to the endpoint specificed
-    var request = http.get(options, function(response) {
+    var request = https.get(options, function(response) {
 
         //check auth service statusCode
         if(response.statusCode == 404) {
