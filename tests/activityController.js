@@ -28,6 +28,7 @@ describe('Test Activity Controller  ', function () {
             var testEndpoint = {
                 host: 'localhost',
                 port: 6969,
+                path: '/%s',
                 sessionCookie: 'fakeSession'
             };
             sails.config.authPolicy.endpoint = testEndpoint;

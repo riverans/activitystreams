@@ -9,7 +9,7 @@ module.exports = {
         endpoint: {
             host: '',
             port: '',
-            pathname: '',
+            path: '',
 			sessionCookie: '',
         },
 	}

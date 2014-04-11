@@ -9,6 +9,7 @@
  */
 var http = require('http');
 var util = require('util');
+
 module.exports = function(req, res, next) {
 
     /**
@@ -49,11 +50,17 @@ module.exports = function(req, res, next) {
     var options = {
         host: sails.config.authPolicy.endpoint.host,
         port: sails.config.authPolicy.endpoint.port,
-        search: util.format('%s=%s', sessionCookie, req.cookies[sessionCookie])
+        path : util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie])
     };
 
     //request going out to the endpoint specificed
-    http.get(options, function(response) {
+    var request = http.get(options, function(response) {
+
+        //check auth service statusCode
+        if(response.statusCode == 404) {
+            return res.send(404, 'Auth is 404');
+        }
+
         var data = '';
         response.on('data', function(chunk) {
             data += chunk;
@@ -63,7 +70,13 @@ module.exports = function(req, res, next) {
             if (jsonBody.userId) {
                 return next();
             }
-            return res.send(401, 'Not Authorized Noob')
+            return res.send(401, 'Not Authorized Noob!!!!!')
         });
+    });
+
+
+    //basic error handling
+    request.on('error', function(err) {
+        return res.send(400, 'Bad Request to Auth Service');
     });
 }
