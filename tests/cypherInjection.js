@@ -5,15 +5,6 @@ var request = require('request'),
 
 describe('Test MiddleWare Sanitization', function () {
 
-    it('should reject a url with special charcters',  function (done) {
-        baseUrl.pathname += 'object/mmdb_user-(object/';
-        var apiUrl = url.format(baseUrl);
-        request(apiUrl, function (err, response, body) {
-            assert.equal(response.statusCode, 420);
-            done();
-        });
-    });
-
     it('should reject a url with Cypher', function (done) {
         baseUrl.pathname += 'actor/mmdb_user/MATCH/';
         var apiUrl = url.format(baseUrl);
@@ -35,11 +26,11 @@ describe('Test MiddleWare Sanitization', function () {
             body: JSON.stringify({
                 actor: {
                     type: 'user-(o)-(verb)',
-                    user_id: '1'
+                    aid: '1'
                 },
                 object: {
                     type: 'photo RETURN 1 /n MATCH (n) RETURN n',
-                    photo_id: '1 COUNT(X)'
+                    aid: '1 COUNT(X)'
                 },
                 verb: {
                     type: 'FAVORITED'
