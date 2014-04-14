@@ -58,8 +58,10 @@ module.exports = function(req, res, next) {
     //create new agent
     options.agent = new https.Agent(options);
 
+
     //request going out to the endpoint specificed
     var request = https.get(options, function(response) {
+
 
         //check auth service statusCode
         if(response.statusCode == 404) {

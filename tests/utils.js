@@ -1,10 +1,10 @@
 
 var express = require('express');
 var http = require('http');
+var https = require('https');
 var util = require('util');
 
 module.exports = {
-
 
     /**
      * Creates a lightweight express server that mocks http requests
@@ -17,8 +17,10 @@ module.exports = {
 
         respond = JSON.stringify(options.respond);
 
-        var server = express()
-            .use(function(req, res) {
+        var server = express();
+        http.createServer(server);
+
+        server.use(function(req, res) {
                 res.send(options.code, respond);
                 server.close();
             })
@@ -61,18 +63,20 @@ module.exports = {
         var sessionCookie = util.format('%s=%s',
             sails.config.authPolicy.endpoint.sessionCookie, 'fake');
 
-        return {
-            methodhostname: 'localhost',
-            method: method,
-            path: path,
-            port: sails.config.port,
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': json.length,
-                'Cookie': sessionCookie
-                },
-            body:  json
+        var options = {
+                hostname: 'localhost',
+                method: method,
+                path: path,
+                port: sails.config.port,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': json.length,
+                    'Cookie': sessionCookie
+                    },
+                body:  json,
         };
+
+        return options
     },
 
     /**

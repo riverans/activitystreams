@@ -7,6 +7,17 @@ var nock = require('nock');
 
 describe('Test Activity Controller  ', function () {
 
+    before(function(done) {
+        // testEndpoint Auth Policy Setup
+        var testEndpoint = {
+            host: 'localhost',
+            port: 6969,
+            path: '/fakeSession=%s',
+            sessionCookie: 'fakeSession'
+        };
+        sails.config.authPolicy.endpoint = testEndpoint;
+        done();
+    });
 
     describe('Test GET Actions', function() {
 
@@ -22,19 +33,6 @@ describe('Test Activity Controller  ', function () {
 
     describe('Test POST responses ', function (){
 
-        beforeEach(function(done) {
-
-            // testEndpoint Auth Policy Setup
-            var testEndpoint = {
-                host: 'localhost',
-                port: 6969,
-                path: '/%s',
-                sessionCookie: 'fakeSession'
-            };
-            sails.config.authPolicy.endpoint = testEndpoint;
-            done();
-        });
-
         it('should reject post activity with no session cookie', function (done) {
             baseUrl.pathname += 'activity';
             apiUrl = url.format(baseUrl);
@@ -47,7 +45,9 @@ describe('Test Activity Controller  ', function () {
 
         it('should reject post activity with an unauthroized user ',  function (done) {
 
-            testUtils.fakeServer({code: 401, respond: {msg: 'noob'}});
+            var authService = nock('https://localhost:6969')
+                .get('/fakeSession=fake')
+                .reply(401, {});
 
             var postBody = testUtils.createTestJSON();
             var requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', postBody);
@@ -61,7 +61,9 @@ describe('Test Activity Controller  ', function () {
 
         it('POST: /activity {activity} (postSpecificActivity)', function(done) {
 
-            testUtils.fakeServer({code: 200, respond: {userId: 1121}});
+            var authService = nock('https://localhost:6969')
+                .get('/fakeSession=fake')
+                .reply(200, {userId: 1121});
 
             var postBody = testUtils.createTestJSON();
             var requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', postBody);
@@ -77,7 +79,9 @@ describe('Test Activity Controller  ', function () {
     describe('Test DELETE Actions', function() {
 
         it('should reject del activity with an unauthroized user', function(done) {
-            testUtils.fakeServer({code: 401, respond: {msg: 'noob'}});
+            var authService = nock('https://localhost:6969')
+                .get('/fakeSession=fake')
+                .reply(401, {msg: 'noob'});
 
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/activity/user/1/VERBED/object/1', '');
 
@@ -88,7 +92,10 @@ describe('Test Activity Controller  ', function () {
         });
 
         it('DELETE: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (deleteSpecificActivity)', function(done) {
-            testUtils.fakeServer({code: 200, respond: {userId: 1121}});
+
+            var authService = nock('https://localhost:6969')
+                .get('/fakeSession=fake')
+                .reply(200, {userId: 1121});
 
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/activity/user/1/VERBED/object/1', '');
 
