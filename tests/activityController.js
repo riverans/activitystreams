@@ -7,7 +7,7 @@ var nock = require('nock');
 
 describe('Test Activity Controller  ', function () {
 
-    before(function(done) {
+    beforeEach(function(done) {
         // testEndpoint Auth Policy Setup
         var testEndpoint = {
             host: 'localhost',
