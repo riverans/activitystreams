@@ -50,7 +50,6 @@ This document provides a high level understanding of how the Activity Stream wor
 
 
 
-
 ## Activity Stream Spec
 Our activity stream model conforms to the Activity Streams specification found here: http://activitystrea.ms/, where:
 
@@ -250,7 +249,7 @@ Installation
   * `brew versions node`
   * `brew install node --upgrade`
 
-* Debian/Ubuntu (Build from source) - recommended with debian
+* Debian (Build from source) - In Ubuntu you can use system package, see below.
   ```
   sudo apt-get install python g++ make checkinstall
   mkdir ~/src && cd ~/src
@@ -275,6 +274,11 @@ Installation
 * Ubuntu (apt-get) More friendly with ubuntu
   * `sudo apt-get install nodejs`
 
+Note that in some Ubuntu version, nodejs is installed as nodejs and some programs looks for node. In this case, you need to symlink to nodejs:
+```
+sudo ln -s /usr/bin/nodejs /usr/bin/node
+```
+
 # NPM 1.3.14
 * OSX with Homebrew:
   * NPM was recently removed from Homebrew, so manually install `curl https://npmjs.org/install.sh | sh`
@@ -288,10 +292,10 @@ Installation
   * Add to launchctl to make your life easier
   * `neo4j start`
 * Debian/Linux
-  * `tar xzvf neo4j-community.2.0.1-unix.tar.gz`
-  * `mv neo4j-community.2.0.1-unix /etc/neo4j && cd /etc/neo4j`
+  * `tar xzvf neo4j-community.2.0.3-unix.tar.gz`
+  * `mv neo4j-community.2.0.3-unix /etc/neo4j && cd /etc/neo4j`
   * `bin/neo4j-installer`
-  * `sudo service neo4j start`
+  * `sudo service neo4j-service start`
   * Uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
 
 # [Redis](http://redis.io/)
@@ -327,7 +331,33 @@ cd activitystreams
 npm install
 ```
 
-To run your server: `neo4j start` then `sails lift`
+Also clone git@github.com:natgeo/modules-activitystream.git, git@github.com:natgeo/modules-activitysnippet.git and https://github.com/natgeo/sails-neo4j.git
+run npm install in all repos:
+
+```
+cd ~/code/
+git clone git@github.com:natgeo/modules-activitystream.git
+cd modules-activitystream
+npm install
+```
+
+```
+cd ~/code/
+git clone git@github.com:natgeo/modules-activitysnippet.git
+cd modules-activitysnippet
+npm install
+```
+
+```
+cd ~/code/
+git clone git@github.com:natgeo/sails-neo4j.git
+cd sails-neo4j 
+npm install
+```
+
+
+
+To run your server: `neo4j-server start` then `sails lift`
 To view your server, visit http://localhost:9365
 
 
