@@ -1,9 +1,7 @@
 [![Build Status](https://travis-ci.org/natgeo/activitystreams.png)](https://travis-ci.org/natgeo/activitystreams) [![Stories in Ready](https://badge.waffle.io/natgeo/activitystreams.png?label=ready&title=Ready)](http://waffle.io/natgeo/activitystreams)
 
+
 #### Activity Stream Service
-
-
-
 
 ##### Table of Contents
 
@@ -21,44 +19,28 @@
 
 
 
-
-
-
-
-
-
-
 ## Introduction
 
 This document provides a high level understanding of how the Activity Stream works with Neo4j and the broad structure we have defined for interacting with the database.
 
 
 
-
-
 ## Technology choices
-
-
-
-### Node
-
-### Neo4j
-
-### Redis
-
-
-
+- Node
+- Neo4j
+- Redis
 
 
 ## Activity Stream Spec
 Our activity stream model conforms to the Activity Streams specification found here: http://activitystrea.ms/, where:
 
 
-ACTOR -> VERB -> OBJECT -> TARGET
+**ACTOR -> VERB -> OBJECT -> TARGET**
 
-might be implemented, for sake of example, as:
+Might be implemented, for sake of example, as:
 
-mmdb_user -> FAVORITED -> yourshot_photo
+- mmdb_user -> FAVORITED -> yourshot_photo
+
 
 
 ## Graph Structure
@@ -123,6 +105,7 @@ List of Current Verbs:
 There shall be a master list of verbs that will be used within the graph. Users are not allowed to add new verb that are not in the master list.
 
 
+
 ### Activity Service REST API
 
 Get all nodes of type
@@ -162,14 +145,11 @@ Delete an Activity
 
 ### Gate Keeping
 
-
 For users:
 
 	Need a valid mmdb session cookie
 
-
 For batch requests:
-
 
 	api key
 
@@ -192,6 +172,7 @@ For clients who need to establish a signed auth cookie with this service:
       }
     });
   ```
+
 
 
 Installation
@@ -297,6 +278,7 @@ sudo ln -s /usr/bin/nodejs /usr/bin/node
   * `bin/neo4j-installer`
   * `sudo service neo4j-service start`
   * Uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
+* Neo4j Web Interface is at 'http://localhost:7474/browser/'
 
 # [Redis](http://redis.io/)
 * OSX with Homebrew:
@@ -319,7 +301,12 @@ These files are part of the package.json file, so NPM is able to install them al
 # Bundle
 *This takes care of ruby/sass dependencies*
 * `gem install bundler && bundle install`
+* `gem install sass compass`
 
+# Ruby
+```
+sudo apt-get install ruby ruby-dev gcc build-essential
+```
 
 Environment Setup
 =================
@@ -355,10 +342,16 @@ cd sails-neo4j
 npm install
 ```
 
-
+For each one of the mentioned Repos you must run:
+```
+npm install
+bower install
+gem install
+```
 
 To run your server: `neo4j-server start` then `sails lift`
 To view your server, visit http://localhost:9365
+
 
 
 Environment Config Overrides
@@ -369,6 +362,31 @@ development computer (db passwords, etc.) - See http://sailsjs.org/#!documentati
 We take this a step further, so that we can have different 'local' settings
 based on the environment (development or production), and the config/local.js
 file was updated to reflect this.
+
+```
+// file: /activitystreams/config/local.js
+var fs = require('fs'),
+     _ = require('lodash');
+
+module.exports = (function() {
+
+        var localConfig = {
+                environment: process.env.NODE_ENV || 'development',
+                port: process.env.PORT || 1337,
+        };
+
+        var envConfigs = [localConfig.environment + '.js', 'myLocal.js']
+        for(var i=0; i <= envConfigs.length; i++) {
+                configPath = __dirname + '/environments/' + envConfigs[i];
+                if (fs.existsSync(configPath)) {
+                        _.merge(localConfig, require(configPath));
+                }
+        }
+
+        return localConfig;
+}());
+
+```
 
 The environment-specific settings are found in /config/environments/.  The file
 at config/local.js will check the current environment (from process.env.NODE_ENV
@@ -398,10 +416,34 @@ Activity Streams Demo
 A simple demo page for the NatGeo Activity Streams project
 
 
-Install
+/etc/hosts file
 =======
 
-add as.dev.yourhostnamehere.com to your /etc/hosts file
+add as.dev.yourhostnamehere.com to your /etc/hosts file:
+
+```
+# defaults
+127.0.0.1 localhost
+127.0.1.1 activitystream activitystream
+# The following lines are desirable for IPv6 capable hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+# NATGEO
+127.0.0.1       mc.natgeo.vm
+127.0.0.1       mmdb.natgeo.vm
+127.0.0.1       yourshot.natgeo.vm
+127.0.0.1       ys.nationalgeographic.com
+127.0.0.1       mmdb.dev.nationalgeographic.com
+127.0.0.1       localcontent.nationalgeographic.com
+127.0.0.1       mc.dev.nationalgeographic.com
+127.0.0.1       as.dev.nationalgeographic.com
+
+```
 
 Usage
 =====
