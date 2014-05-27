@@ -363,31 +363,6 @@ We take this a step further, so that we can have different 'local' settings
 based on the environment (development or production), and the config/local.js
 file was updated to reflect this.
 
-```
-// file: /activitystreams/config/local.js
-var fs = require('fs'),
-     _ = require('lodash');
-
-module.exports = (function() {
-
-        var localConfig = {
-                environment: process.env.NODE_ENV || 'development',
-                port: process.env.PORT || 1337,
-        };
-
-        var envConfigs = [localConfig.environment + '.js', 'myLocal.js']
-        for(var i=0; i <= envConfigs.length; i++) {
-                configPath = __dirname + '/environments/' + envConfigs[i];
-                if (fs.existsSync(configPath)) {
-                        _.merge(localConfig, require(configPath));
-                }
-        }
-
-        return localConfig;
-}());
-
-```
-
 The environment-specific settings are found in /config/environments/.  The file
 at config/local.js will check the current environment (from process.env.NODE_ENV
 or defaults to 'development'), then load settings from config/environments/<environment>.
@@ -419,31 +394,8 @@ A simple demo page for the NatGeo Activity Streams project
 /etc/hosts file
 =======
 
-add as.dev.yourhostnamehere.com to your /etc/hosts file:
+add as.dev.yourhostnamehere.com to your /etc/hosts file
 
-```
-# defaults
-127.0.0.1 localhost
-127.0.1.1 activitystream activitystream
-# The following lines are desirable for IPv6 capable hosts
-::1 ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-ff02::3 ip6-allhosts
-
-# NATGEO
-127.0.0.1       mc.natgeo.vm
-127.0.0.1       mmdb.natgeo.vm
-127.0.0.1       yourshot.natgeo.vm
-127.0.0.1       ys.nationalgeographic.com
-127.0.0.1       mmdb.dev.nationalgeographic.com
-127.0.0.1       localcontent.nationalgeographic.com
-127.0.0.1       mc.dev.nationalgeographic.com
-127.0.0.1       as.dev.nationalgeographic.com
-
-```
 
 Usage
 =====
