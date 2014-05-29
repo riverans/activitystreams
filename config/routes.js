@@ -66,7 +66,7 @@ module.exports.routes = {
   'get /api/v1/actor/:actor/:actor_id/activities': 'ActorController.getAllActivitiesByActor',
   'get /api/v1/actor/:actor/:actor_id/:verb': 'ActorController.getAllObjectsVerbedByActor',
   'get /api/v1/actor/:actor/:actor_id/:verb/:object': 'ActorController.getSpecificObjectTypeVerbedByActor',
-  'get /api/v1/actor/:actor/:actor_id/:verb/:object/:object_id': 'ActorController.getActivityByActor',
+  'get /api/v1/actor/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.getSpecificActivity',
 
   // Activity streams Object GET
 
@@ -75,7 +75,7 @@ module.exports.routes = {
   'get /api/v1/object/:object/:object_id/activities': 'ObjectController.getAllActivitiesByObject',
   'get /api/v1/object/:object/:object_id/:verb': 'ObjectController.getAllActorsWhoVerbedObject',
   'get /api/v1/object/:object/:object_id/:verb/:actor': 'ObjectController.getSpecificActorTypeWhoVerbedObject',
-  'get /api/v1/object/:object/:object_id/:verb/:actor/:actor_id': 'ObjectController.getActivityByObject',
+  'get /api/v1/object/:object/:object_id/:verb/:actor/:actor_id': 'ActivityController.getSpecificActivity',
 
   /*
   // But what if you want your home page to display
