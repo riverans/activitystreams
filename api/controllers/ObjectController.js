@@ -35,7 +35,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -63,7 +64,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -92,7 +94,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -121,7 +124,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -149,7 +153,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -160,5 +165,32 @@ module.exports = {
 			}
 			res.json(200, {});
 		}
-	}
+	},
+
+	getActivityByObject: function(req, res) {
+		var q,
+			actor_id = req.param('actor_id'),
+			object_id = req.param('object_id');
+		q = [
+			'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
+			'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
+			'RETURN actor,verb,object'
+		];
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+				if (err) {
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
+				}
+					res.json(results);
+				}
+			);
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
+			}
+			res.json(200, {});
+		}
+	},
 };
