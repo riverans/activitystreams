@@ -35,7 +35,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -63,7 +64,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -92,7 +94,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -121,7 +124,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -149,7 +153,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});

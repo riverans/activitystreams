@@ -48,4 +48,14 @@ describe('Check Actor Requests', function () {
 
         });
     });
+
+    it('GET: actor/{appname_model}/{id}/{verb}/{appname_model}/{id} (getActivityByActor)', function(done) {
+        baseUrl.pathname += 'actor/user/1/favorited/picture/1';
+        var apiUrl = url.format(baseUrl);
+        request(apiUrl, function (err, response, body) {
+            assert.equal(response.statusCode, 200);
+            done();
+
+        });
+    });
 });

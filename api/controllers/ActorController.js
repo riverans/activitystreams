@@ -76,13 +76,14 @@ module.exports = {
 
 	getAllActorsOfType: function(req, res) {
 		var q = [
-			'MATCH(actor:' + req.param('actor') + ')',
+			'MATCH (actor:' + req.param('actor') + ')',
 			'RETURN actor'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err); debug
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -139,14 +140,15 @@ module.exports = {
 	getSpecificActor: function(req, res) {
 		var obj = {}, q;
 		q = [
-			'MATCH(actor:' + req.param('actor') + ')',
+			'MATCH (actor:' + req.param('actor') + ')',
 			'WHERE actor.aid="' + req.param('actor_id') + '"',
 			'RETURN actor'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -266,7 +268,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -289,7 +292,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -415,7 +419,8 @@ module.exports = {
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
 				if (err) {
-					return res.json(err);
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
 				}
 				res.json(results);
 			});
@@ -427,5 +432,4 @@ module.exports = {
 			res.json(200, {});
 		}
 	}
-
 };

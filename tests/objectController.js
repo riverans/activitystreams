@@ -48,4 +48,14 @@ describe('Check Object Requests', function () {
 
         });
     });
+
+    it('GET: object/{appname_model}/{id}/{verb}/{appname_model}/{id} (getActivityByObject)', function(done) {
+        baseUrl.pathname += 'object/photo/10010/FAVORITED/user/1';
+        var apiUrl = url.format(baseUrl);
+        request(apiUrl, function (err, response, body) {
+            assert.equal(response.statusCode, 200);
+            done();
+
+        });
+    });
 });
