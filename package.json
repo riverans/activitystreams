@@ -2,7 +2,7 @@
   "name": "activitystreams",
   "private": true,
   "version": "0.0.0",
-  "description": "a Sails application",
+  "description": "Activity Streams App",
   "dependencies": {
     "grunt": "~0.4.1",
     "sails": "^0.9.16",
