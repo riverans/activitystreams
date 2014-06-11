@@ -7,6 +7,7 @@
  * @docs        :: http://sailsjs.org/#!documentation/policies
  *
  */
+var request = require('request');
 var https = require('https');
 var util = require('util');
 
@@ -25,7 +26,7 @@ module.exports = function(req, res, next) {
 
     if (!req.cookies[sessionCookie]) {
 
-        return res.send(401, 'Not Authorized Noob')
+        return res.send(401, 'Not Authorized Noob');
     }
 
     //checks to see if post request contains actor.aid
@@ -48,42 +49,27 @@ module.exports = function(req, res, next) {
 
     // grab the cookie name used to verify a session
     var options = {
-        host: sails.config.authPolicy.endpoint.host,
-        port: sails.config.authPolicy.endpoint.port,
-        path : util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie]),
-        secureProtocol: 'SSLv3_method', //'SSLv3_method',
-
+        url: sails.config.authPolicy.endpoint.host + util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie]),
+        secureProtocol: 'SSLv3_method'
     };
 
-    //create new agent
-    options.agent = new https.Agent(options);
-
-
     //request going out to the endpoint specificed
-    var request = https.get(options, function(response) {
-
+    var reqreq = request.get(options, function(err, response, body) {
 
         //check auth service statusCode
         if(response.statusCode == 404) {
             return res.send(404, 'Auth is 404');
         }
 
-        var data = '';
-        response.on('data', function(chunk) {
-            data += chunk;
-        });
-        response.on('end', function() {
-            var jsonBody = JSON.parse(data);
-            if (jsonBody.userId) {
-                return next();
-            }
-            return res.send(401, 'Not Authorized Noob!!!!!')
-        });
+        var jsonBody = JSON.parse(body);
+        if (jsonBody.userId) {
+            return next();
+        }
+        return res.send(401, 'Not Authorized Noob!!!!!');
     });
-
 
     //basic error handling
-    request.on('error', function(err) {
+    reqreq.on('error', function(err) {
         return res.send(400, 'Bad Request to Auth Service');
     });
-}
+};
