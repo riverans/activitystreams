@@ -2,23 +2,9 @@
 * ActivityController
 *
 * @module      :: Controller
-* @description	:: A set of functions called `actions`.
-*
-*                 Actions contain code telling Sails how to respond to a certain type of request.
-*                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
-*
-*                 You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
-*                 and/or override them with custom routes (`config/routes.js`)
-*
-*                 NOTE: The code you write here supports both HTTP and Socket.io automatically.
-*
-* @docs        :: http://sailsjs.org/#!documentation/controllers
 */
 
 module.exports = {
-
-
-
 
 	/**
 	* Overrides for the settings in `config/controllers.js`
@@ -26,122 +12,49 @@ module.exports = {
 	*/
 	_config: {},
 
-	index: function(req, res) {
-		Actor.adapter.query(
-			[
-				'MATCH (n)',
-				'RETURN n'
-			],{}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
-			}
-		);
-	},
+	/**
+	* Generic Functions 
+	**/
 
-	getAllActorsOfType: function(req, res) {
-		var q = [
-				'MATCH(actor:' + req.param('actor') + ')',
-				'RETURN actor'
-			];
-		Actor.adapter.query(q,{}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
-			}
-		);
-	},
-	getSpecificActor: function(req, res) {
-		var obj = {}, q, key;
-		key = req.param('actor') + '_id';
-		obj[key] = req.param('actor_id');
-		q = [
-			'MATCH(actor:' + req.param('actor') + ')',
-			'WHERE actor.' + key + '="' + req.param('actor_id') + '"',
-			'RETURN actor'
-		];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
-			}
-		);
-	},
-	getAllObjectsVerbedByActor: function(req, res) {
-		var obj = {}, q, key;
-		key = req.param('actor') + '_id';
-		obj[key] = req.param('actor_id');
-		q = [
-				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object)',
-				'WHERE actor.' + key + '="' + obj[key] +'"',
-				'RETURN actor,verb,object'
-			];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
-			}
-		);
-	},
-	getSpecificObjectTypeVerbedByActor: function(req, res) {
-		var obj = {}, q, key;
-		key = req.param('actor') + '_id';
-		obj[key] = req.param('actor_id');
-		q = [
-				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
-				'WHERE actor.' + key + '="' + obj[key] +'"',
-				'RETURN actor,verb,object'
-			];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
-			}
-		);
-	},
 	getSpecificActivity: function(req, res) {
 		var q,
-			actor_key = req.param('actor') + '_id',
 			actor_id = req.param('actor_id'),
-			object_key = req.param('object') + '_id',
 			object_id = req.param('object_id');
 		q = [
-				'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
-				'WHERE actor.' + actor_key + '="' + actor_id +'" AND object.' + object_key + '="' + object_id + '"',
-				'RETURN actor,verb,object'
-			];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
+			'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
+			'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
+			'RETURN actor,verb,object'
+		];
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+				if (err) { 
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
+				}
+					res.json(results);
+				}
+			);
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
-	getAllActivitiesByActor: function(req, res) {
-		var obj = {}, q, key;
-		key = req.param('actor') + '_id';
-		obj[key] = req.param('actor_id');
-		q = [
-				'MATCH (actor:' + req.param('actor') +')-[verb]-(object)',
-				'WHERE actor.' + key + '="' + obj[key] +'"',
-				'RETURN actor,verb,object'
-			];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				res.json(results);
-			}
-		);
-	},
-
 	postSpecificActivity: function(req, res) {
 		var q,
 			actor = req.body.actor,
-			actor_key = actor.type + '_id',
-			actor_id = actor[actor_key],
+			actor_id = actor['aid'],
 			verb = req.body.verb,
 			object = req.body.object,
-			object_key = object.type + '_id',
-			object_id = object[object_key];
+			object_id = object['aid'];
 		q = [
-			'MERGE (actor:' + actor.type + ' { ' + actor_key + ':"' + actor_id + '" })',
+			'MERGE (actor:' + actor.type + ' { aid:"' + actor_id + '", api:"' + actor.api + '" })',
 			'ON CREATE SET actor.created = timestamp()',
 			'ON MATCH SET actor.updated = timestamp()',
 			'WITH actor',
-			'MERGE (object:' + object.type + ' { ' + object_key + ':"' + object_id + '" })',
+			'MERGE (object:' + object.type + ' { aid:"' + object_id + '", api:"' + object.api + '" })',
 			'ON CREATE SET object.created = timestamp()',
 			'ON MATCH SET object.updated = timestamp()',
 			'WITH object, actor',
@@ -150,39 +63,51 @@ module.exports = {
 			'ON MATCH SET verb.updated = timestamp()',
 			'RETURN actor, verb, object'
 		];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				Actor.publishUpdate(actor_id, results[0]);
-				res.json(results);
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+					if (err) {
+						// return res.json(err);
+						res.json(500, { error: 'INVALID REQUEST' });
+					}
+					Activity.publishCreate({ id: actor_id, data: results[0] });
+					res.json(results);
+				}
+			);
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
 			}
-		);
+			res.json(200, {});
+		}
 	},
 
 	deleteSpecificActivity: function(req, res) {
 		var q,
-			actor_key = req.param('actor') + '_id',
 			actor_id = req.param('actor_id'),
-			object_key = req.param('object') + '_id',
 			object_id = req.param('object_id');
 		q = [
-			'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
-			'WHERE actor.' + actor_key + '="' + actor_id +'" AND object.' + object_key + '="' + object_id + '"',
+			'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']->(object:' + req.param('object') +')',
+			'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
 			'DELETE verb',
 			'RETURN actor, object'
 		];
-		Actor.adapter.query(q, {}, function(err, results) {
-				if (err) { return res.json(err); }
-				Actor.publishUpdate(actor_id, results[0]);
-				res.json(results);
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+					if (err) {
+						// return res.json(err);
+						res.json(500, { error: 'INVALID REQUEST' });
+					}
+					Activity.publishUpdate(actor_id, {data: results[0]});
+					res.json(results);
+				}
+			);
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
 			}
-		);
-	},
-
-	subscribe: function(req, res) {
-		var id = [];
-		id.push(req.param('user'));
-		Actor.subscribe(req.socket);
-		Actor.subscribe(req.socket, id);
-		res.send(200);
+			res.json(200, {});
+		}
 	}
 };
