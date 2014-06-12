@@ -10,7 +10,7 @@
     "ejs": "~0.8.4",
     "optimist": "0.3.4",
     "socket.io": "~0.9.16",
-    "sails-neo4j": "~0.1.1",
+    "sails-neo4j": "~0.2.1",
     "lodash": "^2.4.1"
   },
   "devDependencies": {

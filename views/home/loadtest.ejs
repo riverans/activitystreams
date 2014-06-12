@@ -9,15 +9,18 @@
                 rand_user = Math.round(Math.random()*100);
                 rand_photo = Math.round(Math.random()*100);
                 var data = {
-                    actor: { type: 'exampleapp_user', aid: rand_user, api: 'exampleapp_user.api/{rand_user}'}, 
-                    verb: { type: 'FAVORITED' }, 
+                    actor: { type: 'exampleapp_user', aid: rand_user, api: 'exampleapp_user.api/{rand_user}'},
+                    verb: { type: 'FAVORITED' },
                     object: { type: 'exampleapp_photo', aid: rand_photo, api: 'exampleapp_photo.api'}
                 };
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:9365/api/v1/activity',
+                    url: 'http://as.dev.nationalgeographic.com:9365/api/v1/activity',
                     data: data,
-                    dataType: 'json'
+                    dataType: 'json',
+                    xhrFields: {
+                        withCredentials: true
+                    }
                 }).done(function(input) {
                     console.log(input);
                 });
