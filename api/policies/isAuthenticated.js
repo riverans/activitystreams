@@ -55,7 +55,6 @@ module.exports = function(req, res, next) {
 
     //request going out to the endpoint specificed
     var reqreq = request.get(options, function(err, response, body) {
-
         //check auth service statusCode
         if(response.statusCode == 404) {
             return res.send(404, 'Auth is 404');
