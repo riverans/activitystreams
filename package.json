@@ -29,7 +29,10 @@
     "test": "mocha tests/ --reporter=spec"
   },
   "main": "app.js",
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/natgeo/activitystreams.git"
+  },
   "author": "",
   "license": ""
 }
