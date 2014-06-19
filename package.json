@@ -1,6 +1,6 @@
 {
   "name": "activitystreams",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Activity Streams App",
   "dependencies": {
     "grunt": "~0.4.1",
@@ -9,7 +9,7 @@
     "ejs": "~0.8.4",
     "optimist": "0.3.4",
     "socket.io": "~0.9.16",
-    "sails-neo4j": "~0.2.3",
+    "sails-neo4j": "~0.2.4",
     "lodash": "^2.4.1"
   },
   "devDependencies": {
