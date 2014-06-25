@@ -13,7 +13,7 @@ module.exports = {
 	_config: {},
 
 	/**
-	* Generic Functions 
+	* Generic Functions
 	**/
 
 	getSpecificActivity: function(req, res) {
@@ -27,7 +27,7 @@ module.exports = {
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
-				if (err) { 
+				if (err) {
 					// return res.json(err);
 					res.json(500, { error: 'INVALID REQUEST' });
 				}
@@ -45,10 +45,10 @@ module.exports = {
 	postSpecificActivity: function(req, res) {
 		var q,
 			actor = req.body.actor,
-			actor_id = actor['aid'],
+			actor_id = actor.aid,
 			verb = req.body.verb,
 			object = req.body.object,
-			object_id = object['aid'];
+			object_id = object.aid;
 		q = [
 			'MERGE (actor:' + actor.type + ' { aid:"' + actor_id + '", api:"' + actor.api + '" })',
 			'ON CREATE SET actor.created = timestamp()',
