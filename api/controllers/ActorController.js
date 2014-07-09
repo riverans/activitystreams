@@ -161,6 +161,30 @@ module.exports = {
 		}
 	},
 
+	deleteSpecificActor: function(req, res) {
+		var obj = {}, q;
+		q = [
+			'MATCH (actor:' + req.param('actor') + ')',
+			'WHERE actor.aid="' + req.param('actor_id') + '"',
+			'DELETE actor'
+		];
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+				if (err) {
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
+				}
+				res.json(results);
+			});
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
+			}
+			res.json(200, {});
+		}
+	},
+
 	/**
 	###### Actor [GET][/actor/{appname_model}/{appname_model_id}/{verb}]
 	This endpoint will return activities in the db that match the actor and specific verb specified in the params, along with

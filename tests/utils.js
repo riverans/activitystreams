@@ -64,19 +64,19 @@ module.exports = {
             sails.config.authPolicy.endpoint.sessionCookie, 'fake');
 
         var options = {
-                hostname: 'localhost',
-                method: method,
-                path: path,
-                port: sails.config.port,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length': json.length,
-                    'Cookie': sessionCookie
-                    },
-                body:  json,
+            hostname: 'localhost',
+            method: method,
+            path: path,
+            port: sails.config.port,
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': json.length,
+                'Cookie': sessionCookie
+                },
+            body:  json,
         };
 
-        return options
+        return options;
     },
 
     /**
@@ -91,4 +91,4 @@ module.exports = {
         request.end();
         return request;
     },
-}
+};

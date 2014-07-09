@@ -61,6 +61,10 @@ module.exports.routes = {
   'get /api/v1/actor/:actor/:actor_id/:verb/:object': 'ActorController.getSpecificObjectTypeVerbedByActor',
   'get /api/v1/actor/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.getSpecificActivity',
 
+  // Activity Streams Actor DELETE
+  
+  'delete /api/v1/actor/:actor/:actor_id': 'ActorController.deleteSpecificActor',
+
   // Activity streams Object GET
 
   'get /api/v1/object/:object': 'ObjectController.getAllObjectsOfType',
