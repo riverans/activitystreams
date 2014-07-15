@@ -87,7 +87,7 @@ module.exports = {
 	deleteSpecificObject: function(req, res) {
 		var obj = {}, q;
 		q = [
-			'MATCH (object:' + req.param('object') + ')<-[v]-(a)',
+			'MATCH (object:' + req.param('object') + ')-[v]-(a)',
 			'WHERE object.aid="' + req.param('object_id') + '"',
 			'DELETE object, v'
 		];

@@ -169,7 +169,7 @@ module.exports = {
 	deleteSpecificActor: function(req, res) {
 		var obj = {}, q;
 		q = [
-			'MATCH (actor:' + req.param('actor') + ')-[v]->(o)',
+			'MATCH (actor:' + req.param('actor') + ')-[v]-(o)',
 			'WHERE actor.aid="' + req.param('actor_id') + '"',
 			'DELETE actor, v'
 		];
