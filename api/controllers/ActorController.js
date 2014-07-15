@@ -160,7 +160,12 @@ module.exports = {
 			res.json(200, {});
 		}
 	},
-
+	/**
+	 * Delete Specific Actor from graph
+	 * @param  {String} appname_model [The type of actor you want to delete]
+	 * @param  {String} id [The id of the actor you want to delete]
+	 * @return {HTML} 200, 500 [200 OK if the deletion worked, and 500 if there was an error]
+	 */
 	deleteSpecificActor: function(req, res) {
 		var obj = {}, q;
 		q = [

@@ -74,6 +74,10 @@ module.exports.routes = {
   'get /api/v1/object/:object/:object_id/:verb/:actor': 'ObjectController.getSpecificActorTypeWhoVerbedObject',
   'get /api/v1/object/:object/:object_id/:verb/:actor/:actor_id': 'ActivityController.getSpecificActivity',
 
+  // Activity Streams Object DELETE
+  
+  'delete /api/v1/actor/:object/:object_id': 'ObjectController.deleteSpecificObject',
+
   /*
   // But what if you want your home page to display
   // a signup form located at `views/user/signup.ejs`?

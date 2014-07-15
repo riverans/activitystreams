@@ -78,6 +78,37 @@ module.exports = {
 		}
 	},
 
+	/**
+	 * Delete Specific Object from graph
+	 * @param  {String} appname_model [The type of object you want to delete]
+	 * @param  {String} id [The id of the object you want to delete]
+	 * @return {HTML} 200, 500 [200 OK if the deletion worked, and 500 if there was an error]
+	 */
+	deleteSpecificObject: function(req, res) {
+		var obj = {}, q;
+		q = [
+			'MATCH (object:' + req.param('object') + ')',
+			'WHERE object.aid="' + req.param('object_id') + '"',
+			'DELETE object'
+		];
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+				if (err) {
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
+				}
+				res.json(results);
+			});
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
+			}
+			res.json(200, {});
+		}
+	},
+
+
 
 	/**
 	 * Action blueprints:
