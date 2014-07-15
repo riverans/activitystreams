@@ -169,9 +169,9 @@ module.exports = {
 	deleteSpecificActor: function(req, res) {
 		var obj = {}, q;
 		q = [
-			'MATCH (actor:' + req.param('actor') + ')',
+			'MATCH (actor:' + req.param('actor') + ')-[v]->(o)',
 			'WHERE actor.aid="' + req.param('actor_id') + '"',
-			'DELETE actor'
+			'DELETE actor, v'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {

@@ -87,9 +87,9 @@ module.exports = {
 	deleteSpecificObject: function(req, res) {
 		var obj = {}, q;
 		q = [
-			'MATCH (object:' + req.param('object') + ')',
+			'MATCH (object:' + req.param('object') + ')<-[v]-(a)',
 			'WHERE object.aid="' + req.param('object_id') + '"',
-			'DELETE object'
+			'DELETE object, v'
 		];
 		if (process.env.testMode === undefined) {
 			Activity.adapter.query(q, {}, function(err, results) {
