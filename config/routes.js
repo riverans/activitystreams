@@ -76,7 +76,7 @@ module.exports.routes = {
 
   // Activity Streams Object DELETE
   
-  'delete /api/v1/actor/:object/:object_id': 'ObjectController.deleteSpecificObject',
+  'delete /api/v1/object/:object/:object_id': 'ObjectController.deleteSpecificObject',
 
   /*
   // But what if you want your home page to display
