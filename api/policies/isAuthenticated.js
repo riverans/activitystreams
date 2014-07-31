@@ -48,13 +48,21 @@ module.exports = function(req, res, next) {
     }
 
     // grab the cookie name used to verify a session
-    var options = {
-        url: sails.config.authPolicy.endpoint.host + util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie]),
-        secureProtocol: 'SSLv3_method'
-    };
+    var options = {};
 
+    var url = sails.config.authPolicy.endpoint.host +
+            util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie]);
+
+    options.url = url;
+
+    if (sails.config.authPolicy.endpoint.port === 443) {
+        options.secureProtocol = 'SSLv3_method';
+    }
+
+    console.log(options);
     //request going out to the endpoint specificed
     var reqreq = request.get(options, function(err, response, body) {
+        if (err) { console.log(err); }
         //check auth service statusCode
         if(response.statusCode == 404) {
             return res.send(404, 'Auth is 404');

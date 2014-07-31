@@ -290,7 +290,8 @@ module.exports = {
 		var obj = {}, q;
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
-			'WHERE actor.aid="' + req.param('actor_id') + '"',
+			'WHERE actor.aid="' + req.param('actor_id') + '" ',
+			'AND NOT actor.type=object.type',
 			'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
 			'RETURN count(objectCollection) as totalItems, collect(activity) as items'
 		];
@@ -442,6 +443,7 @@ module.exports = {
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
 			'WHERE actor.aid="' + req.param('actor_id') + '"',
+			'AND NOT actor.type=object.type',
 			'WITH type(verb) as verbType, collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
 			'RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items'
 		];
