@@ -160,6 +160,35 @@ module.exports = {
 			res.json(200, {});
 		}
 	},
+	/**
+	 * Delete Specific Actor from graph
+	 * @param  {String} appname_model [The type of actor you want to delete]
+	 * @param  {String} id [The id of the actor you want to delete]
+	 * @return {HTML} 200, 500 [200 OK if the deletion worked, and 500 if there was an error]
+	 */
+	deleteSpecificActor: function(req, res) {
+		var obj = {}, q;
+		q = [
+			'MATCH (actor:' + req.param('actor') + ')-[v]-()',
+			'WHERE actor.aid="' + req.param('actor_id') + '"',
+			'DELETE actor, v'
+		];
+		if (process.env.testMode === undefined) {
+			Activity.adapter.query(q, {}, function(err, results) {
+				if (err) {
+					// return res.json(err);
+					res.json(500, { error: 'INVALID REQUEST' });
+				}
+				res.json(results);
+			});
+		} else {
+			if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+				// Display debug query in console
+				Activity.adapter.query(q, {});
+			}
+			res.json(200, {});
+		}
+	},
 
 	/**
 	###### Actor [GET][/actor/{appname_model}/{appname_model_id}/{verb}]

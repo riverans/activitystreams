@@ -50,12 +50,12 @@ module.exports = {
 			object = req.body.object,
 			object_id = object.aid;
 		q = [
-			'MERGE (actor:' + actor.type + ' { aid:"' + actor_id + '", api:"' + actor.api + '" })',
-			'ON CREATE SET actor.created = timestamp()',
+			'MERGE (actor:' + actor.type + ' { aid:"' + actor_id + '"})',
+			'ON CREATE SET actor.created = timestamp(), actor.api = "' + actor.api + '"',
 			'ON MATCH SET actor.updated = timestamp()',
 			'WITH actor',
-			'MERGE (object:' + object.type + ' { aid:"' + object_id + '", api:"' + object.api + '" })',
-			'ON CREATE SET object.created = timestamp()',
+			'MERGE (object:' + object.type + ' { aid:"' + object_id + '"})',
+			'ON CREATE SET object.created = timestamp(), object.api = "' + object.api + '"',
 			'ON MATCH SET object.updated = timestamp()',
 			'WITH object, actor',
 			'MERGE (actor)-[verb:' + verb.type + ']->(object)',

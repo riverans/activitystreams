@@ -7,7 +7,7 @@ var nock = require('nock');
 
 describe('Test Activity Controller  ', function () {
 
-    beforeEach(function(done) {
+    beforeEach(function (done) {
         // testEndpoint Auth Policy Setup
         var testEndpoint = {
             host: 'https://localhost',
@@ -19,8 +19,7 @@ describe('Test Activity Controller  ', function () {
         done();
     });
 
-    describe('Test GET Actions', function() {
-
+    describe('Test GET Actions', function () {
         it('GET: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (getSpecificActivity)', function (done) {
             baseUrl.pathname += 'activity/user/1/FAVORITED/picture/10010';
             var apiUrl = url.format(baseUrl);
@@ -31,8 +30,7 @@ describe('Test Activity Controller  ', function () {
         });
     });
 
-    describe('Test POST responses ', function (){
-
+    describe('Test POST responses ', function () {
         it('should reject post activity with no session cookie', function (done) {
             baseUrl.pathname += 'activity';
             apiUrl = url.format(baseUrl);
@@ -43,7 +41,7 @@ describe('Test Activity Controller  ', function () {
 
         });
 
-        it('should reject post activity with an unauthroized user',  function (done) {
+        it('should reject post activity with an unauthroized user', function (done) {
 
             var authService = nock('https://localhost')
                 .get('/fakeSession=fake')
@@ -52,7 +50,7 @@ describe('Test Activity Controller  ', function () {
             var postBody = testUtils.createTestJSON();
             var requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', postBody);
 
-            testUtils.makeRequest(requestOptions, function(res){
+            testUtils.makeRequest(requestOptions, function (res) {
                 assert.equal(res.statusCode, 401);
                 authService.done();
                 done();
@@ -60,16 +58,18 @@ describe('Test Activity Controller  ', function () {
         });
 
 
-        it('POST: /activity {activity} (postSpecificActivity)', function(done) {
+        it('POST: /activity {activity} (postSpecificActivity)', function (done) {
 
             var authService = nock('https://localhost')
                 .get('/fakeSession=fake')
-                .reply(200, {userId: 1121});
+                .reply(200, {
+                    userId: 1121
+                });
 
             var postBody = testUtils.createTestJSON();
             var requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', postBody);
 
-            testUtils.makeRequest(requestOptions, function(res){
+            testUtils.makeRequest(requestOptions, function (res) {
                 assert.equal(res.statusCode, 200);
                 authService.done();
                 done();
@@ -78,31 +78,34 @@ describe('Test Activity Controller  ', function () {
         });
     });
 
-    describe('Test DELETE Actions', function() {
+    describe('Test DELETE Actions', function () {
 
-        it('should reject del activity with an unauthroized user', function(done) {
+        it('should reject del activity with an unauthroized user', function (done) {
             var authService = nock('https://localhost')
                 .get('/fakeSession=fake')
-                .reply(401, {msg: 'noob'});
+                .reply(401, {
+                    msg: 'noob'
+                });
 
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/activity/user/1/VERBED/object/1', '');
 
-            testUtils.makeRequest(requestOptions, function(res){
+            testUtils.makeRequest(requestOptions, function (res) {
                 assert.equal(res.statusCode, 401);
                 authService.done();
                 done();
             });
         });
 
-        it('DELETE: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (deleteSpecificActivity)', function(done) {
-
+        it('DELETE: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (deleteSpecificActivity)', function (done) {
             var authService = nock('https://localhost')
                 .get('/fakeSession=fake')
-                .reply(200, {userId: 1121});
+                .reply(200, {
+                    userId: 1121
+                });
 
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/activity/user/1/VERBED/object/1', '');
 
-            testUtils.makeRequest(requestOptions, function(res){
+            testUtils.makeRequest(requestOptions, function (res) {
                 assert.equal(res.statusCode, 200);
                 authService.done();
                 done();
