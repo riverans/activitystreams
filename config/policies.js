@@ -19,15 +19,14 @@ module.exports.policies = {
   '*': true,
 
   ActivityController: {
+      '*': 'isSanitized',
       postSpecificActivity:  ['isSanitized', 'isAuthenticated'],
-      deleteSpecificActivity: ['isSanitized','isAuthenticated'],
-      '*': 'isSanitized'
-
+      deleteSpecificActivity: ['isSanitized','isAuthenticated']
   },
 
   ActorController: {
-      deleteSpecificActor: ['isSanitized', 'isAuthenticated'],
-      '*': 'isSanitized'
+      '*': 'isSanitized',
+      deleteSpecificActor: ['isSanitized', 'isAuthenticated']
    },
 
   ObjectController: {
