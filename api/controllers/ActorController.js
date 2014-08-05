@@ -443,7 +443,7 @@ module.exports = {
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
 			'WHERE actor.aid="' + req.param('actor_id') + '"',
-			'AND NOT actor.type=object.type',
+			//'AND NOT actor.type=object.type',
 			'WITH type(verb) as verbType, collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
 			'RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items'
 		];
