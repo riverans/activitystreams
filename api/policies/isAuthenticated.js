@@ -47,19 +47,24 @@ module.exports = function(req, res, next) {
         }
     }
 
+
+    var host, options;
+    if(sails.config.authPolicy.endpoint.port){
+        host = sails.config.authPolicy.endpoint.host + ':' + sails.config.authPolicy.endpoint.port;
+    }else{
+        host = sails.config.authPolicy.endpoint.host;
+    }
+
     // grab the cookie name used to verify a session
-    var options = {};
-
-    var url = sails.config.authPolicy.endpoint.host +
-            util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie]);
-
-    options.url = url;
+    options = {
+        url: host + util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie]),
+        secureProtocol: 'SSLv3_method'
+    };
 
     if (sails.config.authPolicy.endpoint.port === 443) {
         options.secureProtocol = 'SSLv3_method';
     }
 
-    console.log(options);
     //request going out to the endpoint specificed
     var reqreq = request.get(options, function(err, response, body) {
         if (err) { console.log(err); }
