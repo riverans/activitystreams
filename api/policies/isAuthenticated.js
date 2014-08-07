@@ -49,9 +49,9 @@ module.exports = function(req, res, next) {
 
 
     var host, options;
-    if(sails.config.authPolicy.endpoint.port){
+    if (sails.config.authPolicy.endpoint.port) {
         host = sails.config.authPolicy.endpoint.host + ':' + sails.config.authPolicy.endpoint.port;
-    }else{
+    } else {
         host = sails.config.authPolicy.endpoint.host;
     }
 
