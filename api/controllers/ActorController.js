@@ -291,7 +291,7 @@ module.exports = {
 		q = [
 			'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
 			'WHERE actor.aid="' + req.param('actor_id') + '" ',
-			'AND NOT actor.type=object.type',
+			//'AND NOT actor.type=object.type',
 			'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
 			'RETURN count(objectCollection) as totalItems, collect(activity) as items'
 		];
@@ -437,7 +437,7 @@ module.exports = {
 		]
 	}
 	*/
-	
+
 	getAllActivitiesByActor: function(req, res) {
 		var obj = {}, q;
 		q = [
