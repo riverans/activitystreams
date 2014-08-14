@@ -7,7 +7,9 @@
 
 var sails = require('sails'),
     http = require('http'),
-    express = require('express');
+    express = require('express'),
+    neo4j,
+    neo4jServer;
 
 
 // Set up Nock to intercept traffic to the Neo4j server
@@ -21,17 +23,17 @@ before(function (done) {
     process.env.testMode = true; // enable mock responses from api/controllers/ActivityController.js
     process.env.testModeDebug = false; // cypher queries printed to console
     http.globalAgent.maxSockets = 100;
-    var neo4j = express().use('/db/data/', function(req, res) {
-            res.send(200);
-        }),
-        neo4jServer = http.createServer(neo4j).listen(7474, function() {
-            sails.lift({
-                port: 9365,
-                adapters: {
-                    default: 'neo4j'
-                }
-            }, done);
-        });
+    neo4j = express().use('/db/data/', function(req, res) {
+        res.send(200);
+    });
+    neo4jServer = http.createServer(neo4j).listen(7474, function() {
+        sails.lift({
+            port: 9365,
+            adapters: {
+                default: 'neo4j'
+            }
+        }, done);
+    });
 });
 
 beforeEach(function(done) {
@@ -46,7 +48,8 @@ beforeEach(function(done) {
 });
 
 after(function (done) {
-    sails.lower(done);
+    sails.lower();
+    neo4jServer.close(done);
 });
 
 afterEach(function(done) {
