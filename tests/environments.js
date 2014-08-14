@@ -1,8 +1,7 @@
 var request = require('request'),
     url = require('url'),
     assert = require('assert'),
-    sails = require('sails'),
-    nock = require('nock');
+    sails = require('sails');
 
 /*
  * Notes on this test:

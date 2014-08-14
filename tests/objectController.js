@@ -3,30 +3,19 @@ var request = require('request'),
     assert = require('assert'),
     testUtils = require('./utils'),
     http = require('http'),
-    nock = require('nock');
-
-var authService = nock('https://localhost')
-    .persist()
-    .log(console.log)
-    .get('/fakeSession=fake')
-    .times(10)
-    .reply(401, {
-        msg: 'noob'
-    });
+    server = {};
 
 describe('Test Object Controller  ', function () {
 
     beforeEach(function (done) {
-        nock.restore();
         // testEndpoint Auth Policy Setup
         var testEndpoint = {
-            host: 'https://localhost',
-            port: 443,
+            host: 'http://localhost',
+            port: 6969,
             path: '/fakeSession=%s',
             sessionCookie: 'fakeSession'
         };
         sails.config.authPolicy.endpoint = testEndpoint;
-
         done();
     });
 
@@ -91,50 +80,39 @@ describe('Test Object Controller  ', function () {
     describe('Check Object DELETE Requests', function () {
 
         it('DELETE: object/{appname_model}/{id} (deleteSpecificObject) without a valid session', function (done) {
-            // var authService = nock('https://localhost')
-            //     .get('/fakeSession=fake')
-            //     .reply(401, {
-            //         msg: 'noob'
-            //     });
-            // console.log(authService);
+            server = testUtils.fakeServer({code:401, respond:{}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/object/app_object/1', '');
 
-            testUtils.makeRequest(requestOptions, function (res) {
-                console.log(res);
-                assert.equal(res.statusCode, 401);
-                authService.done();
-                done();
+            server.on("listening", function() {
+                testUtils.makeRequest(requestOptions, function (res) {
+                    assert.equal(res.statusCode, 401);
+                    server.close(done);
+                    //server.on("close", done);
+                });
             });
         });
 
         it('DELETE: object/{appname_model}/{id} (deleteSpecificObject) with a valid session', function (done) {
-            // var authService = nock('https://localhost')
-            //     .get('/fakeSession=fake')
-            //     .reply(200, {
-            //         userId: 1121
-            //     });
+            server = testUtils.fakeServer({code:200, respond:{userId: 1337}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/object/app_object/1', '');
 
-            testUtils.makeRequest(requestOptions, function (res) {
-                assert.equal(res.statusCode, 200);
-                authService.done();
-                done();
+            server.on("listening", function() {
+                testUtils.makeRequest(requestOptions, function (res) {
+                    assert.equal(res.statusCode, 200);
+                    server.close(done);
+                });
             });
         });
 
         it('DELETE: object/{appname_model}/{id} (deleteSpecificObject) when the node doesn\'t exist', function (done) {
-            // var authService = nock('https://localhost')
-            //     .get('/fakeSession=fake')
-            //     .reply(200, {
-            //         userId: 1121
-            //     });
-
+            server = testUtils.fakeServer({code:200, respond:{userId: 1337}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/object/app_object/1', '');
 
-            testUtils.makeRequest(requestOptions, function (res) {
-                assert.equal(res.statusCode, 200);
-                authService.done();
-                done();
+            server.on("listening", function() {
+                testUtils.makeRequest(requestOptions, function (res) {
+                    assert.equal(res.statusCode, 200);
+                    server.close(done);
+                });
             });
         });
     });
