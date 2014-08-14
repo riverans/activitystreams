@@ -47,7 +47,6 @@ beforeEach(function(done) {
 
 after(function (done) {
     sails.lower(done);
-    neo4jServer.close();
 });
 
 afterEach(function(done) {
