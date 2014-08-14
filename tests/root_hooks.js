@@ -19,7 +19,8 @@ var sails = require('sails'),
 // otherwise you will receive Uncaught Error: connect ECONNREFUSED
 var neo4j = express().use('/db/data/', function(req, res) {
         res.send(200);
-    }).listen(7474);
+    }),
+    neo4jServer = http.createServer(neo4j).listen(7474);
 
 before(function (done) {
     process.env.testMode = true; // enable mock responses from api/controllers/ActivityController.js
@@ -46,6 +47,7 @@ beforeEach(function(done) {
 
 after(function (done) {
     sails.lower(done);
+    neo4jServer.close();
 });
 
 afterEach(function(done) {
