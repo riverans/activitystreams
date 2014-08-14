@@ -1,16 +1,25 @@
 {
   "name": "activitystreams",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Activity Streams App",
   "dependencies": {
+    "ejs": "^0.8.8",
+    "express": "^3.16.5",
     "grunt": "~0.4.1",
-    "sails": "^0.9.16",
-    "sails-disk": "~0.9.0",
-    "ejs": "~0.8.4",
-    "optimist": "0.3.4",
-    "socket.io": "~0.9.16",
+    "grunt-contrib-connect": "^0.6.0",
+    "grunt-mocha-test": "^0.9.4",
+    "grunt-shell": "^0.6.4",
+    "load-grunt-tasks": "^0.2.1",
+    "lodash": "^2.4.1",
+    "mocha": "^1.17.1",
+    "nock": "^0.42.3",
+    "optimist": "^0.3.4",
+    "request": "^2.30.0",
+    "sails": "^0.9.17",
+    "sails-disk": "^0.9.3",
     "sails-neo4j": "~0.2.4",
-    "lodash": "^2.4.1"
+    "socket.io": "^0.9.17",
+    "supertest": "^0.10.0"
   },
   "devDependencies": {
     "express": "^3.5.1",
