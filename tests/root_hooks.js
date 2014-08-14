@@ -5,11 +5,9 @@
  *  http://visionmedia.github.io/mocha/#asynchronous-code
  */
 
-var sails = require('sails'),
-    http = require('http'),
-    express = require('express'),
-    neo4j,
-    neo4jServer;
+var nock = require('nock'),
+    sails = require('sails'),
+    http = require('http');
 
 
 // Set up Nock to intercept traffic to the Neo4j server
@@ -19,21 +17,22 @@ var sails = require('sails'),
 // Note that it is possible to run tests against the live database
 // by omitting the use of Nock.  Be sure your server is running
 // otherwise you will receive Uncaught Error: connect ECONNREFUSED
+var neo4j = nock('http://localhost:7474')
+            .get('/db/data/')
+            .reply(200);
+
+
 before(function (done) {
+    http.globalAgent.maxSockets = 100;
     process.env.testMode = true; // enable mock responses from api/controllers/ActivityController.js
     process.env.testModeDebug = false; // cypher queries printed to console
-    http.globalAgent.maxSockets = 100;
-    neo4j = express().use('/db/data/', function(req, res) {
-        res.send(200);
-    });
-    neo4jServer = http.createServer(neo4j).listen(7474, function() {
-        sails.lift({
-            port: 9365,
-            adapters: {
-                default: 'neo4j'
-            }
-        }, done);
-    });
+
+    sails.lift({
+        port: 9365,
+        adapters: {
+            default: 'neo4j'
+        }
+    }, done);
 });
 
 beforeEach(function(done) {
@@ -48,10 +47,11 @@ beforeEach(function(done) {
 });
 
 after(function (done) {
-    sails.lower();
-    neo4jServer.close(done);
+    nock.restore();
+    sails.lower(done);
 });
 
 afterEach(function(done) {
+    nock.cleanAll();
     done();
 });
