@@ -50,7 +50,7 @@ module.exports = function(req, res, next) {
     var options = {
         timeout: 2000,
         url: sails.config.authPolicy.endpoint.host + ":" + sails.config.authPolicy.endpoint.port + util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie]),
-        //secureProtocol: 'SSLv3_method'
+        secureProtocol: 'SSLv3_method'
     };
 
     //request going out to the endpoint specificed
