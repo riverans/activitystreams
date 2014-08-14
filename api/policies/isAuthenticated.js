@@ -37,15 +37,6 @@ module.exports = function(req, res, next) {
         }
     }
 
-    // checks if DEL request contains actor_id in url params
-    //if(req.method === 'DELETE') {
-        //userId = req.param('actor_id') || null;
-
-        //if (userId === null) {
-            //return res.send(400, 'Bad Request');
-        //}
-    //}
-
     // grab the cookie name used to verify a session
     var options = {
         timeout: 2000,
