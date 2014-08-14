@@ -5,8 +5,9 @@
  *  http://visionmedia.github.io/mocha/#asynchronous-code
  */
 
-var nock = require('nock'),
-    sails = require('sails');
+var sails = require('sails'),
+    http = require('http'),
+    express = require('express');
 
 
 // Set up Nock to intercept traffic to the Neo4j server
@@ -16,15 +17,14 @@ var nock = require('nock'),
 // Note that it is possible to run tests against the live database
 // by omitting the use of Nock.  Be sure your server is running
 // otherwise you will receive Uncaught Error: connect ECONNREFUSED
-var neo4j = nock('http://localhost:7474')
-            .get('/db/data/')
-            .reply(200);
-
+var neo4j = express().use('/db/data/', function(req, res) {
+        res.send(200);
+    }).listen(7474);
 
 before(function (done) {
     process.env.testMode = true; // enable mock responses from api/controllers/ActivityController.js
     process.env.testModeDebug = false; // cypher queries printed to console
-
+    http.globalAgent.maxSockets = 100;
     sails.lift({
         port: 9365,
         adapters: {
@@ -45,11 +45,9 @@ beforeEach(function(done) {
 });
 
 after(function (done) {
-    nock.restore();
     sails.lower(done);
 });
 
 afterEach(function(done) {
-    nock.cleanAll();
     done();
 });

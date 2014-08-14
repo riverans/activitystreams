@@ -30,8 +30,9 @@ module.exports.policies = {
    },
 
   ObjectController: {
-       '*': 'isSanitized'
-},
+       '*': 'isSanitized',
+        deleteSpecificObject: ['isSanitized', 'isAuthenticated']
+  },
 
   /*
 	// Here's an example of adding some policies to a controller
