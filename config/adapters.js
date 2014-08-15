@@ -15,7 +15,7 @@ module.exports.adapters = {
         "debug": true,
         "protocol": "http://",
         "port": 7474,
-        "host": "as-stage-neo1.int.ngeo.com",
+        "host": "localhost",
         "base": "/db/data/"
     }
 }

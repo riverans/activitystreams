@@ -78,6 +78,9 @@ module.exports.routes = {
   
   'delete /api/v1/object/:object/:object_id': 'ObjectController.deleteSpecificObject',
 
+  // Activity Streams Proxy GET
+  'get /api/v1/proxy/:actor/:actor_id': 'ProxyController.getProxyActivities',
+
   /*
   // But what if you want your home page to display
   // a signup form located at `views/user/signup.ejs`?
