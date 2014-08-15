@@ -1,4 +1,3 @@
-
 var express = require('express');
 var http = require('http');
 var https = require('https');
@@ -17,15 +16,15 @@ module.exports = {
 
         respond = JSON.stringify(options.respond);
 
-        var server = express();
-        http.createServer(server);
+        var app = express();
+        var server = http.createServer(app);
 
-        server.use(function(req, res) {
-                res.send(options.code, respond);
-                server.close();
-            })
-            .listen(sails.config.authPolicy.endpoint.port);
+        app.use(function(req, res) {
+            res.send(options.code, respond);
+        });
 
+        server.listen(sails.config.authPolicy.endpoint.port);
+        server.timeout = 2000;
         return server;
     },
 

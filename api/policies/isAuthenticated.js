@@ -12,7 +12,6 @@ var https = require('https');
 var util = require('util');
 
 module.exports = function(req, res, next) {
-
     /**
      * This is the generic Auth policy function that well take session Cookie and an endpoint
      * and will send each requset to the endpoint to authentication
@@ -38,16 +37,6 @@ module.exports = function(req, res, next) {
         }
     }
 
-    // checks if DEL request contains actor_id in url params
-    if(req.method === 'DELETE') {
-        userId = req.param('actor_id') || null;
-
-        if (userId === null) {
-            return res.send(400, 'Bad Request');
-        }
-    }
-
-
     var host, options;
     if (sails.config.authPolicy.endpoint.port) {
         host = sails.config.authPolicy.endpoint.host + ':' + sails.config.authPolicy.endpoint.port;
@@ -57,8 +46,7 @@ module.exports = function(req, res, next) {
 
     // grab the cookie name used to verify a session
     options = {
-        url: host + util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie]),
-        secureProtocol: 'SSLv3_method'
+        url: host + util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie])
     };
 
     if (sails.config.authPolicy.endpoint.port === 443) {

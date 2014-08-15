@@ -28,9 +28,9 @@
     "grunt-shell": "~0.6.1",
     "load-grunt-tasks": "~0.2.1",
     "mocha": "~1.17.1",
-    "nock": "^0.42.0",
     "request": "~2.30.0",
-    "supertest": "~0.10.0"
+    "supertest": "~0.10.0",
+    "nock": "^0.44.3"
   },
   "scripts": {
     "start": "node app.js",

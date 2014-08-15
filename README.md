@@ -1,9 +1,7 @@
 [![Build Status](https://travis-ci.org/natgeo/activitystreams.png)](https://travis-ci.org/natgeo/activitystreams) [![Stories in Ready](https://badge.waffle.io/natgeo/activitystreams.png?label=ready&title=Ready)](http://waffle.io/natgeo/activitystreams)
 
+
 #### Activity Stream Service
-
-
-
 
 ##### Table of Contents
 
@@ -21,44 +19,28 @@
 
 
 
-
-
-
-
-
-
-
 ## Introduction
 
 This document provides a high level understanding of how the Activity Stream works with Neo4j and the broad structure we have defined for interacting with the database.
 
 
 
-
-
 ## Technology choices
-
-
-
-### Node
-
-### Neo4j
-
-### Redis
-
-
-
+- Node
+- Neo4j
+- Redis
 
 
 ## Activity Stream Spec
 Our activity stream model conforms to the Activity Streams specification found here: http://activitystrea.ms/, where:
 
 
-ACTOR -> VERB -> OBJECT -> TARGET
+**ACTOR -> VERB -> OBJECT -> TARGET**
 
-might be implemented, for sake of example, as:
+Might be implemented, for sake of example, as:
 
-mmdb_user -> FAVORITED -> yourshot_photo
+- mmdb_user -> FAVORITED -> yourshot_photo
+
 
 
 ## Graph Structure
@@ -123,6 +105,7 @@ List of Current Verbs:
 There shall be a master list of verbs that will be used within the graph. Users are not allowed to add new verb that are not in the master list.
 
 
+
 ### Activity Service REST API
 
 Get all nodes of type
@@ -162,14 +145,11 @@ Delete an Activity
 
 ### Gate Keeping
 
-
 For users:
 
 	Need a valid mmdb session cookie
 
-
 For batch requests:
-
 
 	api key
 
@@ -192,6 +172,7 @@ For clients who need to establish a signed auth cookie with this service:
       }
     });
   ```
+
 
 
 Installation
@@ -297,6 +278,7 @@ sudo ln -s /usr/bin/nodejs /usr/bin/node
   * `bin/neo4j-installer`
   * `sudo service neo4j-service start`
   * Uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
+* Neo4j Web Interface is at 'http://localhost:7474/browser/'
 
 # [Redis](http://redis.io/)
 * OSX with Homebrew:
@@ -319,7 +301,12 @@ These files are part of the package.json file, so NPM is able to install them al
 # Bundle
 *This takes care of ruby/sass dependencies*
 * `gem install bundler && bundle install`
+* `gem install sass compass`
 
+# Ruby
+```
+sudo apt-get install ruby ruby-dev gcc build-essential
+```
 
 Environment Setup
 =================
@@ -355,10 +342,16 @@ cd sails-neo4j
 npm install
 ```
 
-
+For each one of the mentioned Repos you must run:
+```
+npm install
+bower install
+gem install
+```
 
 To run your server: `neo4j-server start` then `sails lift`
 To view your server, visit http://localhost:9365
+
 
 
 Environment Config Overrides
@@ -398,10 +391,11 @@ Activity Streams Demo
 A simple demo page for the NatGeo Activity Streams project
 
 
-Install
+/etc/hosts file
 =======
 
 add as.dev.yourhostnamehere.com to your /etc/hosts file
+
 
 Usage
 =====

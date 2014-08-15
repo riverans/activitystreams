@@ -2,17 +2,15 @@ var request = require('request'),
     url = require('url'),
     assert = require('assert'),
     testUtils = require('./utils'),
-    http = require('http'),
-    nock = require('nock');
+    http = require('http');
 
 describe('Test Actor Controller  ', function () {
 
     beforeEach(function (done) {
-        nock.restore();
         // testEndpoint Auth Policy Setup
         var testEndpoint = {
-            host: 'https://localhost',
-            port: 443,
+            host: 'http://localhost',
+            port: 6969,
             path: '/fakeSession=%s',
             sessionCookie: 'fakeSession'
         };
@@ -81,49 +79,38 @@ describe('Test Actor Controller  ', function () {
     describe('Check Actor DELETE Requests', function () {
 
         it('DELETE: actor/{appname_model}/{id} (deleteSpecificActor) without a valid session', function (done) {
-            var authService = nock('https://localhost')
-                .get('/fakeSession=fake')
-                .reply(401, {
-                    msg: 'noob'
-                });
-
+            server = testUtils.fakeServer({code:401, respond:{}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/user/1', '');
 
-            testUtils.makeRequest(requestOptions, function (res) {
-                assert.equal(res.statusCode, 401);
-                authService.done();
-                done();
+            server.on("listening", function() {
+                testUtils.makeRequest(requestOptions, function (res) {
+                    assert.equal(res.statusCode, 401);
+                    server.close(done);
+                });
             });
         });
 
         it('DELETE: actor/{appname_model}/{id} (deleteSpecificActor) with a valid session', function (done) {
-            var authService = nock('https://localhost')
-                .get('/fakeSession=fake')
-                .reply(200, {
-                    userId: 1121
-                });
+            server = testUtils.fakeServer({code:200, respond:{userId: 1337}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/user/1', '');
 
-            testUtils.makeRequest(requestOptions, function (res) {
-                assert.equal(res.statusCode, 200);
-                authService.done();
-                done();
+            server.on("listening", function() {
+                testUtils.makeRequest(requestOptions, function (res) {
+                    assert.equal(res.statusCode, 200);
+                    server.close(done);
+                });
             });
         });
 
         it('DELETE: actor/{appname_model}/{id} (deleteSpecificActor) when the node doesn\'t exist', function (done) {
-            var authService = nock('https://localhost')
-                .get('/fakeSession=fake')
-                .reply(200, {
-                    userId: 1121
-                });
-
+            server = testUtils.fakeServer({code:200, respond:{userId: 1337}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/user/1', '');
 
-            testUtils.makeRequest(requestOptions, function (res) {
-                assert.equal(res.statusCode, 200);
-                authService.done();
-                done();
+            server.on("listening", function() {
+                testUtils.makeRequest(requestOptions, function (res) {
+                    assert.equal(res.statusCode, 200);
+                    server.close(done);
+                });
             });
         });
     });
