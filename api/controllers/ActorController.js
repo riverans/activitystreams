@@ -451,6 +451,7 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
+                Caching.write(req.url, results);
                 res.json(results);
             });
         } else {
