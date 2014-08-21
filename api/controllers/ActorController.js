@@ -300,7 +300,9 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
+                results = FlattenData(results);
                 res.json(results);
+                Caching.write(req.url, results, 3);
             });
         } else {
             if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
@@ -325,6 +327,7 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
                 res.json(results);
+                Caching.write(req.url, results, 2);
             });
         } else {
             if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
@@ -451,8 +454,9 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
-                Caching.write(req.url, results, 3);
+                results = FlattenData(results);
                 res.json(results);
+                Caching.write(req.url, results, 2);
             });
         } else {
             if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {

@@ -9,14 +9,11 @@ module.exports = function(req, res, next) {
     Caching.read(url, function(err, reply) {
         if (reply) {
             reply = JSON.parse(reply);
-
             if (req.get('if-none-match') && reply.etag && req.get('if-none-match') === reply.etag) {
                 return 304;
             }
-
             return res.send(reply.data);
         }
-
         return next();
     });
 };
