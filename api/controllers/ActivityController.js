@@ -32,7 +32,7 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
                     res.json(results);
-                    Caching.write(req.url, results, 1);
+                    Caching.write(req, results, 1);
                 }
             );
         } else {
@@ -72,6 +72,7 @@ module.exports = {
                     }
                     Activity.publishCreate({ id: actor_id, data: results[0] });
                     res.json(results);
+                    Caching.bust(req, results);
                 }
             );
         } else {
@@ -101,6 +102,7 @@ module.exports = {
                     }
                     Activity.publishUpdate(actor_id, {data: results[0]});
                     res.json(results);
+                    Caching.bust(req, results);
                 }
             );
         } else {

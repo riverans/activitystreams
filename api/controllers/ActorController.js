@@ -86,6 +86,7 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
                 res.json(results);
+                Caching.write(req, results, 5);
             });
         } else {
             if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
@@ -151,6 +152,7 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
                 res.json(results);
+                Caching.write(req, results, 4);
             });
         } else {
             if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
@@ -180,6 +182,7 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
                 res.json(results);
+                Caching.bust(req, []);
             });
         } else {
             if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
@@ -302,7 +305,7 @@ module.exports = {
                 }
                 results = FlattenData(results);
                 res.json(results);
-                Caching.write(req.url, results, 3);
+                Caching.write(req, results, 3);
             });
         } else {
             if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
@@ -327,7 +330,7 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
                 res.json(results);
-                Caching.write(req.url, results, 2);
+                Caching.write(req, results, 2);
             });
         } else {
             if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
@@ -456,7 +459,7 @@ module.exports = {
                 }
                 results = FlattenData(results);
                 res.json(results);
-                Caching.write(req.url, results, 2);
+                Caching.write(req, results, 4);
             });
         } else {
             if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
