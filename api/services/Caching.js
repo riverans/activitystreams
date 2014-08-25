@@ -28,6 +28,7 @@ module.exports = {
      * @param {object} req The request object.
      * @param {object} data The response that should be saved in the cache.
      * @param {integer} depth The depth of the members that should be used for the new key.
+     * @param [string] custom A custom string to use for cache-busting.
      * @return {array} The data that was written.
      * Depth = 1: actor_type/aid.VERB.object_type/aid.
      * Depth = 2: actor_type/aid.VERB.object_type actor_type/.VERB.object_type/aid.
@@ -35,7 +36,7 @@ module.exports = {
      * Depth = 4: actor_type/aid /..object_type/aid.
      * Depth = 5: actor_type /..object_type
      */
-    write: function(req, data, depth) {
+    write: function(req, data, depth, custom) {
         var cacheHash = {
                 data: data,
                 /** Generate a proper ETag for the data. */
@@ -56,7 +57,8 @@ module.exports = {
                  * the members need to look a little different.
                  */
                 inverted: req.route.path.indexOf('/api/v1/object') === 0 ? true : false,
-                req: req
+                req: req,
+                custom: custom
             },
             members = this._generateMembers(options);
 
@@ -132,12 +134,12 @@ module.exports = {
         var bustMembers = {},
             writeMembers = {},
             activity,
+            custom = options.custom || '',
             data = options.data,
             depth = options.depth || 1,
             inverted = options.inverted || false,
             member,
             req = options.req;
-
 
         /** Generate the list of members to invalidate old data and save new data. */
         for (var i = 0; i < data.length; i++) {
@@ -186,6 +188,15 @@ module.exports = {
         }
         /** Sort members in reverse order since lower depths bust more items. */
         bustMembers = Object.keys(bustMembers).sort().reverse();
+        writeMembers = ';' + Object.keys(writeMembers).sort().reverse().join(';');
+        /**
+         * For proxy queries, such as: get all activities of people I follow,
+         * we need to be able to bust cache not only when the object or proxy
+         * changes, but also when the base actor changes. Since this actor is
+         * not in the activities, we need to manually add it using a custom
+         * string.
+         */
+        writeMembers += ';' + custom;
         /**
          * We need this flag to deal with ambiguity in member creation to
          * ensure routes like '/api/v1/actor/:actor/:actor_id' and
@@ -193,7 +204,7 @@ module.exports = {
          * exact members or one's pointer would overwrite the other's and make
          * cache busting unpredictable.
          */
-        writeMembers = ';' + Object.keys(writeMembers).sort().reverse().join(';') + ';' + req.route.path;
+       writeMember += ';' + req.route.path;
 
         return {bustMembers: bustMembers, writeMembers: writeMembers};
     },

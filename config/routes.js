@@ -79,7 +79,7 @@ module.exports.routes = {
   'delete /api/v1/object/:object/:object_id': 'ObjectController.deleteSpecificObject', //Bust
 
   // Activity Streams Proxy GET
-  'get /api/v1/proxy/:actor/:actor_id': 'ProxyController.getProxyActivities',
+  'get /api/v1/proxy/:actor/:actor_id': 'ProxyController.getProxyActivities', //1
 
   /*
   // But what if you want your home page to display
