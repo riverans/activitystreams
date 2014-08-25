@@ -9,141 +9,37 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       "type": "file",
       "data": {
         "language": {
-          "nameMatchers": [".md"],
+          "nameMatchers": [".md", ".markdown", ".mkd", ".mkdn", ".mdown"],
           "commentsOnly": true,
           "name": "Markdown"
         },
-        "sourcePath": "/Users/django/code/activitystreams/README.md",
+        "sourcePath": "/Users/bfonarov/code/activitystreams/README.md",
         "projectPath": "README.md",
         "targetPath": "index",
         "pageTitle": "index",
-        "firstHeader": {
-          "type": "heading",
-          "data": {
-            "level": 1,
-            "title": "VII - Activity Stream Service",
-            "slug": "vii-activity-stream-service",
-            "isFileHeader": true
-          },
-          "depth": 1,
-          "children": [
-            {
-              "type": "heading",
-              "data": {
-                "level": 3,
-                "title": "Table of Contents",
-                "slug": "table-of-contents"
-              },
-              "depth": 3
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Introduction",
-                "slug": "introduction"
-              },
-              "depth": 2
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Technology choices",
-                "slug": "technology-choices"
-              },
-              "depth": 2,
-              "children": [
-                {
-                  "type": "heading",
-                  "data": {
-                    "level": 3,
-                    "title": "Node",
-                    "slug": "node"
-                  },
-                  "depth": 3
-                }, {
-                  "type": "heading",
-                  "data": {
-                    "level": 3,
-                    "title": "Neo4j",
-                    "slug": "neo4j"
-                  },
-                  "depth": 3
-                }, {
-                  "type": "heading",
-                  "data": {
-                    "level": 3,
-                    "title": "Redis",
-                    "slug": "redis"
-                  },
-                  "depth": 3
-                }
-              ]
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Activity Stream Spec",
-                "slug": "activity-stream-spec"
-              },
-              "depth": 2
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Graph Structure",
-                "slug": "graph-structure"
-              },
-              "depth": 2,
-              "children": [
-                {
-                  "type": "heading",
-                  "data": {
-                    "level": 3,
-                    "title": "Node properties",
-                    "slug": "node-properties"
-                  },
-                  "depth": 3
-                }, {
-                  "type": "heading",
-                  "data": {
-                    "level": 3,
-                    "title": "Edges",
-                    "slug": "edges"
-                  },
-                  "depth": 3
-                }, {
-                  "type": "heading",
-                  "data": {
-                    "level": 3,
-                    "title": "Activity Service REST API",
-                    "slug": "activity-service-rest-api"
-                  },
-                  "depth": 3
-                }, {
-                  "type": "heading",
-                  "data": {
-                    "level": 3,
-                    "title": "Gate Keeping",
-                    "slug": "gate-keeping"
-                  },
-                  "depth": 3
-                }
-              ]
-            }
-          ]
-        },
-        "title": "VII - Activity Stream Service"
+        "title": "index"
       },
       "depth": 1,
       "outline": [
         {
           "type": "heading",
           "data": {
-            "level": 3,
-            "title": "Table of Contents",
-            "slug": "table-of-contents"
+            "level": 4,
+            "title": "Activity Stream Service",
+            "slug": "activity-stream-service"
           },
-          "depth": 3
+          "depth": 4,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 5,
+                "title": "Table of Contents",
+                "slug": "table-of-contents"
+              },
+              "depth": 5
+            }
+          ]
         }, {
           "type": "heading",
           "data": {
@@ -159,34 +55,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "Technology choices",
             "slug": "technology-choices"
           },
-          "depth": 2,
-          "children": [
-            {
-              "type": "heading",
-              "data": {
-                "level": 3,
-                "title": "Node",
-                "slug": "node"
-              },
-              "depth": 3
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 3,
-                "title": "Neo4j",
-                "slug": "neo4j"
-              },
-              "depth": 3
-            }, {
-              "type": "heading",
-              "data": {
-                "level": 3,
-                "title": "Redis",
-                "slug": "redis"
-              },
-              "depth": 3
-            }
-          ]
+          "depth": 2
         }, {
           "type": "heading",
           "data": {
@@ -290,10 +159,37 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "heading",
           "data": {
             "level": 1,
+            "title": "Ruby",
+            "slug": "ruby"
+          },
+          "depth": 1
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 1,
             "title": "Environment Setup",
             "slug": "environment-setup"
           },
           "depth": 1
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "Environment Config Overrides",
+            "slug": "environment-config-overrides"
+          },
+          "depth": 1,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 4,
+                "title": "Important:",
+                "slug": "important"
+              },
+              "depth": 4
+            }
+          ]
         }, {
           "type": "heading",
           "data": {
@@ -306,8 +202,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "Install",
-            "slug": "install"
+            "title": "/etc/hosts file",
+            "slug": "etchosts-file"
           },
           "depth": 1
         }, {
@@ -330,16 +226,16 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "KNOWN ISSUES",
-            "slug": "known-issues"
+            "title": "Testing",
+            "slug": "testing"
           },
           "depth": 1
         }, {
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "TODO",
-            "slug": "todo"
+            "title": "KNOWN ISSUES",
+            "slug": "known-issues"
           },
           "depth": 1
         }
@@ -364,7 +260,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/400.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/400.js",
             "projectPath": "config/400.js",
             "targetPath": "config/400",
             "pageTitle": "config/400",
@@ -384,7 +280,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/403.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/403.js",
             "projectPath": "config/403.js",
             "targetPath": "config/403",
             "pageTitle": "config/403",
@@ -404,7 +300,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/404.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/404.js",
             "projectPath": "config/404.js",
             "targetPath": "config/404",
             "pageTitle": "config/404",
@@ -424,7 +320,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/500.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/500.js",
             "projectPath": "config/500.js",
             "targetPath": "config/500",
             "pageTitle": "config/500",
@@ -444,7 +340,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/adapters.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/adapters.js",
             "projectPath": "config/adapters.js",
             "targetPath": "config/adapters",
             "pageTitle": "config/adapters",
@@ -464,7 +360,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/bootstrap.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/bootstrap.js",
             "projectPath": "config/bootstrap.js",
             "targetPath": "config/bootstrap",
             "pageTitle": "config/bootstrap",
@@ -484,7 +380,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/controllers.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/controllers.js",
             "projectPath": "config/controllers.js",
             "targetPath": "config/controllers",
             "pageTitle": "config/controllers",
@@ -504,7 +400,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/cors.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/cors.js",
             "projectPath": "config/cors.js",
             "targetPath": "config/cors",
             "pageTitle": "config/cors",
@@ -524,7 +420,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/csrf.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/csrf.js",
             "projectPath": "config/csrf.js",
             "targetPath": "config/csrf",
             "pageTitle": "config/csrf",
@@ -532,6 +428,56 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           },
           "depth": 2,
           "outline": []
+        }, {
+          "type": "folder",
+          "data": {
+            "path": "config/environments",
+            "title": "environments"
+          },
+          "depth": 2,
+          "children": [
+            {
+              "type": "file",
+              "data": {
+                "language": {
+                  "nameMatchers": [".js"],
+                  "pygmentsLexer": "javascript",
+                  "multiLineComment": ["/*", "*", "*/"],
+                  "singleLineComment": ["//"],
+                  "ignorePrefix": "}",
+                  "foldPrefix": "^",
+                  "name": "JavaScript"
+                },
+                "sourcePath": "/Users/bfonarov/code/activitystreams/config/environments/development.js",
+                "projectPath": "config/environments/development.js",
+                "targetPath": "config/environments/development",
+                "pageTitle": "config/environments/development",
+                "title": "development"
+              },
+              "depth": 3,
+              "outline": []
+            }, {
+              "type": "file",
+              "data": {
+                "language": {
+                  "nameMatchers": [".js"],
+                  "pygmentsLexer": "javascript",
+                  "multiLineComment": ["/*", "*", "*/"],
+                  "singleLineComment": ["//"],
+                  "ignorePrefix": "}",
+                  "foldPrefix": "^",
+                  "name": "JavaScript"
+                },
+                "sourcePath": "/Users/bfonarov/code/activitystreams/config/environments/staging.js",
+                "projectPath": "config/environments/staging.js",
+                "targetPath": "config/environments/staging",
+                "pageTitle": "config/environments/staging",
+                "title": "staging"
+              },
+              "depth": 3,
+              "outline": []
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -544,7 +490,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/i18n.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/i18n.js",
             "projectPath": "config/i18n.js",
             "targetPath": "config/i18n",
             "pageTitle": "config/i18n",
@@ -564,7 +510,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/local.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/local.js",
             "projectPath": "config/local.js",
             "targetPath": "config/local",
             "pageTitle": "config/local",
@@ -584,7 +530,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/log.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/log.js",
             "projectPath": "config/log.js",
             "targetPath": "config/log",
             "pageTitle": "config/log",
@@ -604,7 +550,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/policies.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/policies.js",
             "projectPath": "config/policies.js",
             "targetPath": "config/policies",
             "pageTitle": "config/policies",
@@ -624,7 +570,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/routes.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/routes.js",
             "projectPath": "config/routes.js",
             "targetPath": "config/routes",
             "pageTitle": "config/routes",
@@ -644,7 +590,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/session.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/session.js",
             "projectPath": "config/session.js",
             "targetPath": "config/session",
             "pageTitle": "config/session",
@@ -674,7 +620,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/sockets.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/sockets.js",
             "projectPath": "config/sockets.js",
             "targetPath": "config/sockets",
             "pageTitle": "config/sockets",
@@ -694,7 +640,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/config/views.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/config/views.js",
             "projectPath": "config/views.js",
             "targetPath": "config/views",
             "pageTitle": "config/views",
@@ -724,11 +670,31 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/api/controllers/ActivityController.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/controllers/ActivityController.js",
             "projectPath": "api/controllers/ActivityController.js",
             "targetPath": "controllers/ActivityController",
             "pageTitle": "controllers/ActivityController",
             "title": "ActivityController"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/controllers/ActorController.js",
+            "projectPath": "api/controllers/ActorController.js",
+            "targetPath": "controllers/ActorController",
+            "pageTitle": "controllers/ActorController",
+            "title": "ActorController"
           },
           "depth": 2,
           "outline": [
@@ -736,16 +702,98 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "type": "heading",
               "data": {
                 "level": 6,
-                "title": "Retrieve Entry Point [GET][/api/v1/]",
-                "slug": "retrieve-entry-point-getapiv1"
+                "title": "Actor [GET][/actor/{appname_model}]",
+                "slug": "actor-getactorappname-model"
               },
               "depth": 6
-            }, {
+            }
+          ]
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/controllers/ObjectController.js",
+            "projectPath": "api/controllers/ObjectController.js",
+            "targetPath": "controllers/ObjectController",
+            "pageTitle": "controllers/ObjectController",
+            "title": "ObjectController"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/controllers/ProxyController.js",
+            "projectPath": "api/controllers/ProxyController.js",
+            "targetPath": "controllers/ProxyController",
+            "pageTitle": "controllers/ProxyController",
+            "title": "ProxyController"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/controllers/ReverseProxyController.js",
+            "projectPath": "api/controllers/ReverseProxyController.js",
+            "targetPath": "controllers/ReverseProxyController",
+            "pageTitle": "controllers/ReverseProxyController",
+            "title": "ReverseProxyController"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/controllers/ServiceController.js",
+            "projectPath": "api/controllers/ServiceController.js",
+            "targetPath": "controllers/ServiceController",
+            "pageTitle": "controllers/ServiceController",
+            "title": "ServiceController"
+          },
+          "depth": 2,
+          "outline": [
+            {
               "type": "heading",
               "data": {
                 "level": 6,
-                "title": "Actor [GET][/{appname_model}]",
-                "slug": "actor-getappname-model"
+                "title": "Establish Session Cookie [GET][/api/v1/]",
+                "slug": "establish-session-cookie-getapiv1"
               },
               "depth": 6
             }
@@ -772,11 +820,51 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/api/models/Actor.js",
-            "projectPath": "api/models/Actor.js",
-            "targetPath": "models/Actor",
-            "pageTitle": "models/Actor",
-            "title": "Actor"
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/models/Activity.js",
+            "projectPath": "api/models/Activity.js",
+            "targetPath": "models/Activity",
+            "pageTitle": "models/Activity",
+            "title": "Activity"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/models/Proxy.js",
+            "projectPath": "api/models/Proxy.js",
+            "targetPath": "models/Proxy",
+            "pageTitle": "models/Proxy",
+            "title": "Proxy"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/models/ReverseProxy.js",
+            "projectPath": "api/models/ReverseProxy.js",
+            "targetPath": "models/ReverseProxy",
+            "pageTitle": "models/ReverseProxy",
+            "title": "ReverseProxy"
           },
           "depth": 2,
           "outline": []
@@ -802,11 +890,31 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/Users/django/code/activitystreams/api/policies/isAuthenticated.js",
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/policies/isAuthenticated.js",
             "projectPath": "api/policies/isAuthenticated.js",
             "targetPath": "policies/isAuthenticated",
             "pageTitle": "policies/isAuthenticated",
             "title": "isAuthenticated"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/Users/bfonarov/code/activitystreams/api/policies/isSanitized.js",
+            "projectPath": "api/policies/isSanitized.js",
+            "targetPath": "policies/isSanitized",
+            "pageTitle": "policies/isSanitized",
+            "title": "isSanitized"
           },
           "depth": 2,
           "outline": []

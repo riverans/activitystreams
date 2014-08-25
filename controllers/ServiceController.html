@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head><title>controllers/ServiceController</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/ServiceController"><meta name="groc-project-path" content="api/controllers/ServiceController.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/api/controllers/ServiceController.js">api/controllers/ServiceController.js</a></div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module :: Controller docs :: http://sailsjs.org/#!documentation/controllers</span></p>
+
+<p>ServiceController</p>
+
+<p>:: A set of functions called <code>actions</code>.</p>
+
+<pre><code>            Actions contain code telling Sails how to respond to a certain type of request.
+            (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+
+            You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+            and/or override them with custom routes (`config/routes.js`)
+
+            NOTE: The code you write here supports both HTTP and Socket.io automatically.
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Overrides for the settings in <code>config/controllers.js</code>
+(specific to ServiceController)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">_config</span><span class="o">:</span> <span class="p">{},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h6 id="establish-session-cookie-getapiv1">Establish Session Cookie [GET][/api/v1/]</h6>
+
+<p>Sets an authenticated session cookie if the client does not already have one,
+Existing valid sessions are reestablished.  Only necessary when you need to
+establish a socket connection.</p>
+
+<p>Making an empty JSONP call to this endpoint before establishing your socket
+connection is necessary for clients on 3rd party domains.  Otherwise session
+auth will fail, as the AS service will try to use a cookie of 'undefined'
+during authentication.</p>
+
+<p>The other purpose this empty endpoint serves is so we don't have to convert
+the other API calls to return JSONP, which has some security flaws
+that we don't want to expose.  We still need this endpoint to return JSONP,
+otherwise, the caller will throw a parse error.</p>
+
+<p>Example client call using jQuery:
+    $.ajax({
+        url: 'as.service.com/api/v1/',
+        dataType: 'jsonp',
+        complete: function() {
+        // Establish socket connection
+    }
+});</p>
+
+<p>Allows for </p>
+
+<ul>
+<li><p>Response 200 (application/jsonp)</p></li>
+<li><p>Headers
+HTTP/1.1 200 OK
+X-Powered-By: Sails <sailsjs.org>
+Content-Type: text/javascript; charset=utf-8
+Content-Length: 93
+Date: Fri, 21 Feb 2014 15:33:42 GMT
+Connection: keep-alive</p></li>
+<li><p>Cookies
+sails.sid (HTTP only)</p></li>
+<li><p>Body</p>
+
+<p>{}</p></li>
+</ul>
+
+<p>*</p></div></div><div class="code"><div class="wrapper">  <span class="nx">setCookie</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">jsonp</span><span class="p">({});</span>
+  <span class="p">},</span>
+
+  <span class="nx">subscribe</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">id</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">));</span>
+    <span class="nx">Activity</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">socket</span><span class="p">);</span>
+    <span class="nx">Activity</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">socket</span><span class="p">,</span> <span class="nx">id</span><span class="p">);</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span></div></div></div></div></body></html>

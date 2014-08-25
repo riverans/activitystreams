@@ -1,36 +1,37 @@
 <!DOCTYPE html><html lang="en"><head><title>config/local</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="config/local"><meta name="groc-project-path" content="config/local.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/config/local.js">config/local.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>Local environment settings</p>
 
-<p>While you're developing your app, this config file should include
-any settings specifically for your development computer (db passwords, etc.)
-When you're ready to deploy your app in production, you can use this file
-for configuration options on the server where it will be deployed.</p>
+<p>This config file should include any settings specific to a particular
+environment (development / production).</p>
 
-<p>PLEASE NOTE: 
-    This file is included in your .gitignore, so if you're using git 
-    as a version control solution for your Sails app, keep in mind that
-    this file won't be committed to your repository!</p>
+<p>Note the configuration files located in /config/environments/.  That is where
+environment-specific settings should be placed.  This 'local' configuration
+module simply loads the settings from a file in that directory if one is
+found that matches process.env.NODE_ENV.</p>
 
-<pre><code>Good news is, that means you can specify configuration for your local
-machine in this file without inadvertently committing personal information
-(like database passwords) to the repo.  Plus, this prevents other members
-of your team from commiting their local configuration changes on top of yours.
-</code></pre>
+<p>Also note that, if needed, you can create a file in /config/environments/
+called 'myLocal.js'.  This file is included in .gitignore and will not be
+committed, and should only be used if your particular local development
+environment needs further customizations from what is found in the existing
+'development.js' configuration module.</p>
 
 <p>For more information, check out:
-http://sailsjs.org/#documentation</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>The <code>port</code> setting determines which TCP port your app will be deployed on
-Ports are a transport-layer concept designed to allow many different
-networking applications run at the same time on a single computer.
-More about ports: http://en.wikipedia.org/wiki/Port<em>(computer</em>networking)
-By default, if it's set, Sails uses the <code>PORT</code> environment variable.
-Otherwise it falls back to port 1337.
-In production, you'll probably want to change this setting 
-to 80 (http://) or 443 (https://) if you have an SSL certificate</p></div></div><div class="code"><div class="wrapper">  <span class="nx">port</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">9365</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>The runtime "environment" of your Sails app is either 'development' or 'production'.
-In development, your Sails app will go out of its way to help you
-(for instance you will receive more descriptive error and debugging output)
-In production, Sails configures itself (and its dependencies) to optimize performance.
-You should always put your app in production mode before you deploy it to a server-
-This helps ensure that your Sails app remains stable, performant, and scalable.
-By default, Sails sets its environment using the <code>NODE_ENV</code> environment variable.
-If NODE_ENV is not set, Sails will run in the 'development' environment.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">environment</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">||</span> <span class="s1">&#39;development&#39;</span>
+http://sailsjs.org/#documentation</p></div></div><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">),</span>
+     <span class="nx">_</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;lodash&#39;</span><span class="p">);</span>
 
-<span class="p">};</span></div></div></div></div></body></html>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="kd">var</span> <span class="nx">localConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">environment</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">||</span> <span class="s1">&#39;development&#39;</span><span class="p">,</span>
+    <span class="nx">port</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">1337</span><span class="p">,</span>
+  <span class="p">};</span>
+
+        <span class="kd">var</span> <span class="nx">envConfigs</span> <span class="o">=</span> <span class="p">[</span><span class="nx">localConfig</span><span class="p">.</span><span class="nx">environment</span> <span class="o">+</span> <span class="s1">&#39;.js&#39;</span><span class="p">,</span> <span class="s1">&#39;myLocal.js&#39;</span><span class="p">]</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">envConfigs</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">configPath</span> <span class="o">=</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/environments/&#39;</span> <span class="o">+</span> <span class="nx">envConfigs</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">existsSync</span><span class="p">(</span><span class="nx">configPath</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">localConfig</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="nx">configPath</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nx">localConfig</span><span class="p">;</span>
+<span class="p">}());</span></div></div></div></div></body></html>

@@ -3,9 +3,60 @@
 <p>isAuthenticated</p>
 
 <p>:: Simple policy to allow any authenticated user
-                Assumes that your login action in one of your controllers sets <code>req.session.authenticated = true;</code></p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>User is allowed, proceed to the next policy, 
-or if this is the last policy, the controller</p></div></div><div class="code"><div class="wrapper">  <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">authenticated</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">next</span><span class="p">();</span>
-  <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>User is not allowed
-(default res.forbidden() behavior can be overridden in <code>config/403.js</code>)</p></div></div><div class="code"><div class="wrapper">  <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">forbidden</span><span class="p">(</span><span class="s1">&#39;You are not permitted to perform this action.&#39;</span><span class="p">);</span>
+                Assumes that your login action in one of your controllers sets <code>req.session.authenticated = true;</code></p></div></div><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;https&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>This is the generic Auth policy function that well take session Cookie and an endpoint
+and will send each requset to the endpoint to authentication
+This works like any other sails policy
+http://sailsjs.org/#!documentation/policies</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//grab sessionCooke from config</span>
+    <span class="nx">sessionCookie</span> <span class="o">=</span> <span class="nx">sails</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">authPolicy</span><span class="p">.</span><span class="nx">endpoint</span><span class="p">.</span><span class="nx">sessionCookie</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">req</span><span class="p">.</span><span class="nx">cookies</span><span class="p">[</span><span class="nx">sessionCookie</span><span class="p">])</span> <span class="p">{</span>
+
+        <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s1">&#39;Not Authorized Noob&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//checks to see if post request contains actor.aid</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">method</span> <span class="o">===</span> <span class="s1">&#39;POST&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">userId</span> <span class="o">=</span> <span class="p">((</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">actor</span> <span class="o">||</span> <span class="p">{}).</span><span class="nx">aid</span> <span class="o">||</span> <span class="kc">null</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">userId</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="s1">&#39;Bad Request&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">host</span><span class="p">,</span> <span class="nx">options</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">sails</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">authPolicy</span><span class="p">.</span><span class="nx">endpoint</span><span class="p">.</span><span class="nx">port</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">host</span> <span class="o">=</span> <span class="nx">sails</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">authPolicy</span><span class="p">.</span><span class="nx">endpoint</span><span class="p">.</span><span class="nx">host</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">sails</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">authPolicy</span><span class="p">.</span><span class="nx">endpoint</span><span class="p">.</span><span class="nx">port</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">host</span> <span class="o">=</span> <span class="nx">sails</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">authPolicy</span><span class="p">.</span><span class="nx">endpoint</span><span class="p">.</span><span class="nx">host</span><span class="p">;</span>
+    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>grab the cookie name used to verify a session</p></div></div><div class="code"><div class="wrapper">    <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">url</span><span class="o">:</span> <span class="nx">host</span> <span class="o">+</span> <span class="nx">util</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="nx">sails</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">authPolicy</span><span class="p">.</span><span class="nx">endpoint</span><span class="p">.</span><span class="nx">path</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">cookies</span><span class="p">[</span><span class="nx">sessionCookie</span><span class="p">])</span>
+    <span class="p">};</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">sails</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">authPolicy</span><span class="p">.</span><span class="nx">endpoint</span><span class="p">.</span><span class="nx">port</span> <span class="o">===</span> <span class="mi">443</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="p">.</span><span class="nx">secureProtocol</span> <span class="o">=</span> <span class="s1">&#39;SSLv3_method&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//request going out to the endpoint specificed</span>
+    <span class="kd">var</span> <span class="nx">reqreq</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="p">}</span>
+        <span class="c1">//check auth service statusCode</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">==</span> <span class="mi">404</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s1">&#39;Auth is 404&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kd">var</span> <span class="nx">jsonBody</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">jsonBody</span><span class="p">.</span><span class="nx">userId</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">next</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s1">&#39;Not Authorized Noob!!!!!&#39;</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="c1">//basic error handling</span>
+    <span class="nx">reqreq</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="s1">&#39;Bad Request to Auth Service&#39;</span><span class="p">);</span>
+    <span class="p">});</span>
 <span class="p">};</span></div></div></div></div></body></html>

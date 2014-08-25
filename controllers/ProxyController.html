@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head><title>controllers/ProxyController</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/ProxyController"><meta name="groc-project-path" content="api/controllers/ProxyController.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/api/controllers/ProxyController.js">api/controllers/ProxyController.js</a></div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> docs :: http://sailsjs.org/#!documentation/controllers</span></p>
+
+<p>ProxyController.js </p>
+
+<p>::</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  
+  <span class="nx">getProxyActivities</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">q</span><span class="p">;</span>
+    <span class="nx">q</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s1">&#39;MATCH (a:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)-[v]-&gt;(proxy)-[verb]-&gt;(object)&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;WHERE a.aid=&quot;&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor_id&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;AND NOT a.aid=proxy.aid&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;AND NOT object.type=proxy.type&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;WITH type(verb) as verbType, collect(object) as objectCollection, { actor: proxy, verb: verb, object: object } as activity&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items&#39;</span>
+    <span class="p">];</span>
+
+    <span class="nx">Proxy</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="p">}</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+
+<span class="p">};</span></div></div></div></div></body></html>

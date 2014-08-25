@@ -19,9 +19,8 @@ You can enable flashsockets by adding 'flashsocket' to this list:</p></div></div
   <span class="s1">&#39;xhr-polling&#39;</span><span class="p">,</span>
   <span class="s1">&#39;jsonp-polling&#39;</span>
   <span class="p">],</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Use this option to set the datastore socket.io will use to manage rooms/sockets/subscriptions:
-default: memory</p></div></div><div class="code"><div class="wrapper">  <span class="nx">adapter</span><span class="o">:</span> <span class="s1">&#39;memory&#39;</span><span class="p">,</span>
-
-  </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Node.js (and consequently Sails.js) apps scale horizontally.
+default: memory
+adapter: 'memory',</p></div></div><div class="code"><div class="wrapper">  </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Node.js (and consequently Sails.js) apps scale horizontally.
 It's a powerful, efficient approach, but it involves a tiny bit of planning.
 At scale, you'll want to be able to copy your app onto multiple Sails.js servers
 and throw them behind a load balancer.
@@ -32,12 +31,8 @@ requests (whether HTTP or sockets), since the load balancer will route each requ
 Sails server with the most available resources. However that means that all room/pubsub/socket
 processing and shared memory has to be offloaded to a shared, remote messaging queue (usually Redis)
 Luckily, Socket.io (and consequently Sails.js) apps support Redis for sockets by default.
-To enable a remote redis pubsub server: 
-adapter: 'redis',
-host: '127.0.0.1',
-port: 6379,
-db: 'sails',
-pass: '<redis auth password>'
+To enable a remote redis pubsub server: </p></div></div><div class="code"><div class="wrapper">  <span class="nx">adapter</span><span class="o">:</span> <span class="s1">&#39;redis&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>host: '127.0.0.1',
+port: 6379,</p></div></div><div class="code"><div class="wrapper">  <span class="nx">db</span><span class="o">:</span> <span class="s1">&#39;sails&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>pass: '<redis auth password>'
 Worth mentioning is that, if <code>adapter</code> config is <code>redis</code>, 
 but host/port is left unset, Sails will try to connect to redis 
 running on localhost via port 6379 </p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>authorization</code>
@@ -75,7 +70,8 @@ with your own custom logic by specifying a function, e.g:
   // to report an error, call `cb(err)`
 </code></pre>
 
-<p>}</p></div></div><div class="code"><div class="wrapper">  <span class="nx">authorization</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Match string representing the origins that are allowed to connect to the Socket.IO server</p></div></div><div class="code"><div class="wrapper">  <span class="nx">origins</span><span class="o">:</span> <span class="s1">&#39;*:*&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Should we use heartbeats to check the health of Socket.IO connections?</p></div></div><div class="code"><div class="wrapper">  <span class="nx">heartbeats</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>When client closes connection, the # of seconds to wait before attempting a reconnect.
+<p>}</p></div></div><div class="code"><div class="wrapper">  <span class="nx">authorization</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Match string representing the origins that are allowed to connect to the Socket.IO server</p></div></div><div class="code"><div class="wrapper">  <span class="nx">origins</span><span class="o">:</span> <span class="s1">&#39;*:*&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Should we use heartbeats to check the health of Socket.IO connections?</p></div></div><div class="code"><div class="wrapper">  <span class="nx">heartbeats</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>When client closes connection, the # of seconds to wait before attempting a reconnect.
 This value is sent to the client after a successful handshake.</p></div></div><div class="code"><div class="wrapper">  <span class="s1">&#39;close timeout&#39;</span><span class="o">:</span> <span class="mi">60</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>The # of seconds between heartbeats sent from the client to the server
 This value is sent to the client after a successful handshake.</p></div></div><div class="code"><div class="wrapper">  <span class="s1">&#39;heartbeat timeout&#39;</span><span class="o">:</span> <span class="mi">60</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>The max # of seconds to wait for an expcted heartbeat before declaring the pipe broken
 This number should be less than the <code>heartbeat timeout</code></p></div></div><div class="code"><div class="wrapper">  <span class="s1">&#39;heartbeat interval&#39;</span><span class="o">:</span> <span class="mi">25</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>The maximum duration of one HTTP poll-

@@ -1,0 +1,430 @@
+<!DOCTYPE html><html lang="en"><head><title>controllers/ActorController</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/ActorController"><meta name="groc-project-path" content="api/controllers/ActorController.js"><meta name="groc-github-url" content="https://github.com/natgeo/activitystreams"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/natgeo/activitystreams/blob/master/api/controllers/ActorController.js">api/controllers/ActorController.js</a></div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module :: Controller docs :: http://sailsjs.org/#!documentation/controllers</span></p>
+
+<p>ActorController</p>
+
+<p>:: A set of functions called <code>actions</code>.</p>
+
+<pre><code>            Actions contain code telling Sails how to respond to a certain type of request.
+            (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+
+            You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+            and/or override them with custom routes (`config/routes.js`)
+
+            NOTE: The code you write here supports both HTTP and Socket.io automatically.
+</code></pre></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Overrides for the settings in <code>config/controllers.js</code>
+(specific to ActorController)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">_config</span><span class="o">:</span> <span class="p">{},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h6 id="actor-getactorappname-model">Actor [GET][/actor/{appname_model}]</h6>
+
+<p>An activity is always started by an Actor. The endpoint will return all nodes in the db that fit the appname_model label, represented as an actor.</p>
+
+<p>All actors have the following data:</p>
+
+<ul>
+<li>id (this id is assigned by Neo4j and should not be used)</li>
+</ul>
+
+<p>And within the data property:</p>
+
+<ul>
+<li>created: <em>Timestamp</em></li>
+<li>updated (optional): <em>Timestamp</em></li>
+<li>appname<em>model</em>id: <em>Integer/String</em></li>
+<li>appname<em>model</em>api: <em>URL</em></li>
+<li><p>type: {appname_model}</p></li>
+<li><p>Parameters</p></li>
+<li><p>appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with</p></li>
+<li><p>Model (application/json)</p></li>
+</ul>
+
+<p>JSON representation of an actor node</p>
+
+<ul>
+<li>Example
+[
+    {
+        actor: {
+            id: "17",
+            data: {
+                created: 1388691303471,
+                appname<em>model</em>id: "1",
+                updated: 1388789935187,
+                appname<em>model</em>api: "http://reallycool.api.url/path/1",
+                type: "appname<em>model",
+            },
+        },
+    },
+    {
+        actor: {
+            id: "22",
+            data: {
+                created: 1388691303471,
+                appname</em>model<em>id: "2",
+                updated: 1388789935187,
+                appname</em>model<em>api: "http://reallycool.api.url/path/2",
+                type: "appname</em>model",
+            },
+        },
+    },
+]</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">getAllActorsOfType</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">q</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;MATCH (actor:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;RETURN actor&#39;</span>
+        <span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testMode</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return res.json(err); debug</p></div></div><div class="code"><div class="wrapper">                    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">{</span> <span class="nx">error</span><span class="o">:</span> <span class="s1">&#39;INVALID REQUEST&#39;</span> <span class="p">});</span>
+                <span class="p">}</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">===</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Display debug query in console</p></div></div><div class="code"><div class="wrapper">                <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{});</span>
+            <span class="p">}</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{});</span>
+        <span class="p">}</span>
+    <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h6 id="actorgetactorappname_modelappname_model_id">Actor [GET][/actor/{appname<em>model}/{appname</em>model_id}]</h6>
+
+<p>An activity is always started by an Actor. This endpoint will return the node representing an actor of specific id.</p>
+
+<p>All actors have the following data:</p>
+
+<ul>
+<li>id (this id is assigned by Neo4j and should not be used)</li>
+</ul>
+
+<p>And within the data property:</p>
+
+<ul>
+<li>created: <em>Timestamp</em></li>
+<li>updated (optional): <em>Timestamp</em></li>
+<li>appname<em>model</em>id: <em>Integer/String</em></li>
+<li>appname<em>model</em>api: <em>URL</em></li>
+<li><p>type: {appname_model}</p></li>
+<li><p>Parameters</p></li>
+<li>appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with</li>
+<li><p>appname<em>model</em>id (integer) a number that matches an appropriate id from another applications model</p></li>
+<li><p>Model (application/json)</p></li>
+</ul>
+
+<p>JSON representation of an actor node</p>
+
+<ul>
+<li>Example
+[
+    {
+        actor: {
+            id: "17",
+            data: {
+                created: 1388691303471,
+                appname<em>model</em>id: "1",
+                updated: 1388789935187,
+                appname<em>model</em>api: "http://reallycool.api.url/path/1/",
+                type: "appname_model",
+            },
+        },
+    },
+]</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">getSpecificActor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">q</span><span class="p">;</span>
+        <span class="nx">q</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;MATCH (actor:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;WHERE actor.aid=&quot;&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor_id&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;RETURN actor&#39;</span>
+        <span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testMode</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return res.json(err);</p></div></div><div class="code"><div class="wrapper">                    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">{</span> <span class="nx">error</span><span class="o">:</span> <span class="s1">&#39;INVALID REQUEST&#39;</span> <span class="p">});</span>
+                <span class="p">}</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">===</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Display debug query in console</p></div></div><div class="code"><div class="wrapper">                <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{});</span>
+            <span class="p">}</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{});</span>
+        <span class="p">}</span>
+    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Delete Specific Actor from graph</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>appname_model must be a String.</strong><br/>([The type of actor you want to delete])</p></li>
+<li><p><strong>id must be a String.</strong><br/>([The id of the actor you want to delete])</p></li>
+</ul>
+
+<p><strong>Returns a HTML</strong><br/>(200, 500 [200 OK if the deletion worked, and 500 if there was an error])</p></div></div><div class="code"><div class="wrapper">    <span class="nx">deleteSpecificActor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">q</span><span class="p">;</span>
+        <span class="nx">q</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;MATCH (actor:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)-[v]-()&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;WHERE actor.aid=&quot;&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor_id&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;DELETE actor, v&#39;</span>
+        <span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testMode</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return res.json(err);</p></div></div><div class="code"><div class="wrapper">                    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">{</span> <span class="nx">error</span><span class="o">:</span> <span class="s1">&#39;INVALID REQUEST&#39;</span> <span class="p">});</span>
+                <span class="p">}</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">===</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Display debug query in console</p></div></div><div class="code"><div class="wrapper">                <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{});</span>
+            <span class="p">}</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{});</span>
+        <span class="p">}</span>
+    <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h6 id="actorgetactorappname_modelappname_model_idverb">Actor [GET][/actor/{appname<em>model}/{appname</em>model_id}/{verb}]</h6>
+
+<p>This endpoint will return activities in the db that match the actor and specific verb specified in the params, along with
+a count of the number of activities for this specific verb.</p>
+
+<p>Actor:</p>
+
+<ul>
+<li>id (this id is assigned by Neo4j and should not be used)</li>
+</ul>
+
+<p>And within the data property:</p>
+
+<ul>
+<li>created: <em>Timestamp</em></li>
+<li>updated (optional): <em>Timestamp</em></li>
+<li>appname<em>model</em>id: <em>Integer/String</em></li>
+<li>appname<em>model</em>api: <em>URL</em></li>
+<li><p>type: {appname_model}</p></li>
+<li><p>Parameters</p></li>
+<li>appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with</li>
+<li>appname<em>model</em>id (integer) a number that matches an appropriate id from another applications model</li>
+<li><p>verb (string) where verb is the name of a valid activity type attached to that user</p></li>
+<li><p>Model (application/json)</p></li>
+</ul>
+
+<p>JSON representation of an actor node</p>
+
+<ul>
+<li>Example
+{
+itemsCount: 2,
+items: [
+    {
+        actor: {
+            id: "17",
+            data: {
+                created: 1388691303471,
+                appname<em>model</em>id: "1",
+                updated: 1388789935187,
+                appname<em>model</em>api: "http://reallycool.api.url/path/1/",
+                type: "appname<em>model"
+            }
+        },
+        verb: {
+            id: "50",
+            data: {
+                created: 1388777568757
+            },
+            type: "FAVORITED",
+            start: "17",
+            end: "18"
+        },
+        object: {
+            id: "18",
+            data: {
+                resource</em>type<em>api: "http://reallycool.api.url/path/14055",
+                created: 1388692564273,
+                resource</em>type<em>id: "14055",
+                updated: 1388777568757,
+                type: "resource</em>type"
+            },
+        },
+    },
+    {
+        actor: {
+            id: "17",
+            data: {
+                created: 1388691303471,
+                appname<em>model</em>id: "1",
+                updated: 1388789935187,
+                appname<em>model</em>api: "http://reallycool.api.url/path/1/",
+                type: "appname<em>model"
+            }
+        },
+        verb: {
+            id: "50",
+            data: {
+                created: 1388777568757
+            },
+            type: "FAVORITED",
+            start: "17",
+            end: "19"
+        },
+        object: {
+            id: "19",
+            data: {
+                resource</em>type<em>api: "http://reallycool.api.url/path/16225",
+                created: 1388692564273,
+                resource</em>type<em>id: "16225",
+                updated: 1388777568757,
+                type: "resource</em>type"
+            },
+        },
+    },
+]
+}</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">getAllObjectsVerbedByActor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">q</span><span class="p">;</span>
+        <span class="nx">q</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;MATCH (actor:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)-[verb:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;verb&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]-&gt;(object)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;WHERE actor.aid=&quot;&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor_id&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;RETURN count(objectCollection) as totalItems, collect(activity) as items&#39;</span>
+        <span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testMode</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return res.json(err);</p></div></div><div class="code"><div class="wrapper">                    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">{</span> <span class="nx">error</span><span class="o">:</span> <span class="s1">&#39;INVALID REQUEST&#39;</span> <span class="p">});</span>
+                <span class="p">}</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">===</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Display debug query in console</p></div></div><div class="code"><div class="wrapper">                <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{});</span>
+            <span class="p">}</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{});</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+
+    <span class="nx">getSpecificObjectTypeVerbedByActor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">q</span><span class="p">;</span>
+        <span class="nx">q</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;MATCH (actor:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)-[verb:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;verb&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]-(object:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;WHERE actor.aid=&quot;&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor_id&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;RETURN actor, verb, object&#39;</span>
+        <span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testMode</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return res.json(err);</p></div></div><div class="code"><div class="wrapper">                    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">{</span> <span class="nx">error</span><span class="o">:</span> <span class="s1">&#39;INVALID REQUEST&#39;</span> <span class="p">});</span>
+                <span class="p">}</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">===</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Display debug query in console</p></div></div><div class="code"><div class="wrapper">                <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{});</span>
+            <span class="p">}</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{});</span>
+        <span class="p">}</span>
+    <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h6 id="actorgetactorappname_modelappname_model_idactivities">Actor [GET][/actor/{appname<em>model}/{appname</em>model_id}/activities]</h6>
+
+<p>This endpoint will return all activities in the db that match the actor specified in the params, along with
+a count of the number of activities for this specific actor.</p>
+
+<p>Actor:</p>
+
+<ul>
+<li>id (this id is assigned by Neo4j and should not be used)</li>
+</ul>
+
+<p>And within the data property:</p>
+
+<ul>
+<li>created: <em>Timestamp</em></li>
+<li>updated (optional): <em>Timestamp</em></li>
+<li>appname<em>model</em>id: <em>Integer/String</em></li>
+<li>appname<em>model</em>api: <em>URL</em></li>
+<li><p>type: {appname_model}</p></li>
+<li><p>Parameters</p></li>
+<li>appname_model (string) where appname is the name of the app, and model is the name of the model we are dealing with</li>
+<li><p>appname<em>model</em>id (integer) a number that matches an appropriate id from another applications model</p></li>
+<li><p>Model (application/json)</p></li>
+</ul>
+
+<p>JSON representation of an actor node</p>
+
+<ul>
+<li>Example
+{
+{
+    verb: 'FAVORITED',
+    totalItems: 1,
+    items: {
+        0: {
+            actor: {
+                id: "17",
+                data: {
+                    created: 1388691303471,
+                    appname<em>model</em>id: "1",
+                    updated: 1388789935187,
+                    appname<em>model</em>api: "http://reallycool.api.url/path/1/",
+                    type: "appname<em>model"
+                }
+            },
+            verb: {
+                id: "50",
+                data: {
+                    created: 1388777568757
+                },
+                type: "FAVORITED",
+                start: "17",
+                end: "18"
+            },
+            object: {
+                id: "18",
+                data: {
+                    resource</em>type<em>api: "http://reallycool.api.url/path/14055",
+                    created: 1388692564273,
+                    resource</em>type<em>id: "14055",
+                    updated: 1388777568757,
+                    type: "resource</em>type"
+                },
+            },
+        },
+}
+{
+    type: 'WATCHED',
+    totalItems: 1,
+    items: {
+            actor: {
+                id: "17",
+                data: {
+                    created: 1388691303471,
+                    appname<em>model</em>id: "1",
+                    updated: 1388789935187,
+                    appname<em>model</em>api: "http://reallycool.api.url/path/1/",
+                    type: "appname<em>model"
+                }
+            },
+            verb: {
+                id: "52",
+                data: {
+                    created: 1388777568757
+                },
+                type: "WATCHED",
+                start: "17",
+                end: "22"
+            },
+            object: {
+                id: "22",
+                data: {
+                    resource</em>type<em>api: "http://reallycool.api.url/path/58442",
+                    created: 1388692564273,
+                    resource</em>type<em>id: "58442",
+                    updated: 1388777568757,
+                    type: "resource</em>type"
+                },
+            },
+        },
+    }
+]
+}</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">getAllActivitiesByActor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">q</span><span class="p">;</span>
+        <span class="nx">q</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;MATCH (actor:&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)-[verb]-&gt;(object)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;WHERE actor.aid=&quot;&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="s1">&#39;actor_id&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;WITH type(verb) as verbType, collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items&#39;</span>
+        <span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testMode</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return res.json(err);</p></div></div><div class="code"><div class="wrapper">                    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">{</span> <span class="nx">error</span><span class="o">:</span> <span class="s1">&#39;INVALID REQUEST&#39;</span> <span class="p">});</span>
+                <span class="p">}</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">testModeDebug</span> <span class="o">===</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Display debug query in console</p></div></div><div class="code"><div class="wrapper">                <span class="nx">Activity</span><span class="p">.</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">q</span><span class="p">,</span> <span class="p">{});</span>
+            <span class="p">}</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span></div></div></div></div></body></html>

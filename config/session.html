@@ -8,10 +8,9 @@ to access and auto-save to <code>req.session</code> with Socket.io the same way 
 <p>For more information on configuring the session, check out:
 http://sailsjs.org/#documentation</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">session</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Session secret is automatically generated when your new app is created
 Replace at your own risk in production-- you will invalidate the cookies of your users,
-forcing them to log in again. </p></div></div><div class="code"><div class="wrapper">  <span class="nx">secret</span><span class="o">:</span> <span class="s1">&#39;51a7ec8fbf25b7619272d1c7f47f9cd2&#39;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>In production, uncomment the following lines to set up a shared redis session store
-that can be shared across multiple Sails.js servers
-adapter: 'redis',
-The following values are optional, if no options are set a redis instance running
+forcing them to log in again. 
+secret: '',</p></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>In production, uncomment the following lines to set up a shared redis session store
+that can be shared across multiple Sails.js servers</p></div></div><div class="code"><div class="wrapper">  <span class="nx">adapter</span><span class="o">:</span> <span class="s1">&#39;redis&#39;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>The following values are optional, if no options are set a redis instance running
 on localhost is expected.
 Read more about options at: https://github.com/visionmedia/connect-redis
 host: 'localhost',

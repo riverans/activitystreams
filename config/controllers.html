@@ -46,7 +46,7 @@ With <code>actions</code> enabled, the following blueprint routes would be bound
 <code>DELETE  /email/send/:id?</code></p>
 
 <p><code>actions</code> are enabled by default, and are OK for production-- however,
-you must take great care not to inadvertently expose unsafe controller logic to GET requests.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">actions</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+you must take great care not to inadvertently expose unsafe controller logic to GET requests.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">actions</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 
 
     </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>rest</code></p>
@@ -62,13 +62,13 @@ POST     /boat           -> BoatController.create
 PUT      /boat/:id       -> BoatController.update
 DELETE   /boat/:id       -> BoatController.destroy</p>
 
-<p><code>rest</code> blueprints are enabled by default, and suitable for a production scenario.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">rest</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>shortcuts</code></p>
+<p><code>rest</code> blueprints are enabled by default, and suitable for a production scenario.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">rest</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>shortcuts</code></p>
 
 <p>Shortcut blueprints are simple helpers to provide access to a controller's CRUD methods
 from your browser's URL bar.  When enabled, GET, POST, PUT, and DELETE routes will be generated
 for the controller's<code>find</code>, <code>create</code>, <code>update</code>, and <code>destroy</code> actions.</p>
 
-<p><code>shortcuts</code> are enabled by default, but SHOULD BE DISABLED IN PRODUCTION!!!!!</p></div></div><div class="code"><div class="wrapper">    <span class="nx">shortcuts</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>prefix</code></p>
+<p><code>shortcuts</code> are enabled by default, but SHOULD BE DISABLED IN PRODUCTION!!!!!</p></div></div><div class="code"><div class="wrapper">    <span class="nx">shortcuts</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><code>prefix</code></p>
 
 <p>An optional mount path for all blueprint routes on a controller, including <code>rest</code>, 
 <code>actions</code>, and <code>shortcuts</code>.  This allows you to continue to use blueprints, even if you
