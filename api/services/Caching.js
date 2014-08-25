@@ -30,11 +30,11 @@ module.exports = {
      * @param {integer} depth The depth of the members that should be used for the new key.
      * @param [string] custom A custom string to use for cache-busting.
      * @return {array} The data that was written.
-     * Depth = 1: actor_type/aid.VERB.object_type/aid.
-     * Depth = 2: actor_type/aid.VERB.object_type actor_type/.VERB.object_type/aid.
-     * Depth = 3: actor_type/aid.VERB /.VERB.object_type/aid.
-     * Depth = 4: actor_type/aid /..object_type/aid.
-     * Depth = 5: actor_type /..object_type
+     * Depth = 1: actor_type/aid.VERB.object_type/aid
+     * Depth = 2: actor_type/aid.VERB.object_type/ actor_type/.VERB.object_type/aid
+     * Depth = 3: actor_type/aid.VERB. .VERB.object_type/aid
+     * Depth = 4: actor_type/aid. .object_type/aid
+     * Depth = 5: actor_type/ .object_type
      */
     write: function(req, data, depth, custom) {
         var cacheHash = {
@@ -100,7 +100,7 @@ module.exports = {
             noun = data[0].actor ? 'actor' : 'object';
             bustMember = data[0][noun].data.type + '/' + data[0][noun].data.aid + '.';
             /** Queue up the reads and deletes. */
-            multi.keys('*' + bustMember + '*', function(err, replies) {
+            multi.keys('*[;.]' + bustMember + '[;.]*', function(err, replies) {
                 replies.forEach(function(reply) {
                     multi.del(reply);
                 });
@@ -134,7 +134,7 @@ module.exports = {
         var bustMembers = {},
             writeMembers = {},
             activity,
-            custom = options.custom || '',
+            custom = options.custom,
             data = options.data,
             depth = options.depth || 1,
             inverted = options.inverted || false,
@@ -145,50 +145,52 @@ module.exports = {
         for (var i = 0; i < data.length; i++) {
             activity = data[i];
 
-            /** Depth 5 */
-            member = inverted ? '/..' + activity.object.data.type : activity.actor.data.type;
+            /** Depth 5: .object_type actor_type/ */
+            member = inverted ? '.' + activity.object.data.type : activity.actor.data.type + '/';
             bustMembers[member] = true;
             if (depth > 4) writeMembers[member] = true;
 
-            /** Depth 4 */
-            member = inverted ? member + '/' + activity.object.data.aid + '.' : member + '/' + activity.actor.data.aid;
-            bustMembers[member] = true;
-            if (depth > 3) writeMembers[member] = true;
-
-            /**
-             * Some of our routes and requests are special in that they do not
-             * return activities and instead only return information about
-             * nodes. These need to be treated specially.
-             */
-            if (activity.verb) {
-                /** Depth 3 */
-                member = inverted ? '/.' + activity.verb.type + '.' + member.substr(3) : member + '.' + activity.verb.type;
+            /** Depth 4: .object_type/aid actor_type/aid. */
+            if ((inverted && activity.object.data.aid) || (!inverted && activity.actor.data.aid)) {
+                member = inverted ? member + '/' + activity.object.data.aid : member + activity.actor.data.aid + '.';
                 bustMembers[member] = true;
-                if (depth > 2) writeMembers[member] = true;
+                if (depth > 3) writeMembers[member] = true;
 
-                if ((inverted && activity.actor) || (!inverted && activity.object)) {
-                    /** Depth 2 */
-                    member = inverted ? activity.actor.data.type + member : member + '.' + activity.object.data.type;
+                /**
+                * Some of our routes and requests are special in that they do not
+                * return activities and instead only return information about
+                * nodes. These need to be treated specially.
+                */
+                if (activity.verb) {
+                    /** Depth 3: .VERB.object_type/aid actor_type/aid.VERB. */
+                    member = inverted ? '.' + activity.verb.type + member : member + activity.verb.type + '.';
                     bustMembers[member] = true;
-                    if (depth > 1) writeMembers[member] = true;
+                    if (depth > 2) writeMembers[member] = true;
 
-                    /**
-                     * If we try to get a specific activity that does not exist
-                     * then the activities object/activity will not have an
-                     * aid.
-                     */
-                    if ((inverted && activity.actor.data.aid) || (!inverted && activity.object.data.aid)) {
-                        /** Depth 1 */
-                        member = activity.actor.data.type + '/' + activity.actor.data.aid + '.' + activity.verb.type + '.' + activity.object.data.type + '/' + activity.object.data.aid;
+                    if ((inverted && activity.actor) || (!inverted && activity.object)) {
+                        /** Depth 2: actor_type/.VERB.object_type/aid actor_type/aid.VERB.object_type/ */
+                        member = inverted ? activity.actor.data.type + '/' + member : member + activity.object.data.type + '/';
                         bustMembers[member] = true;
-                        if (depth > 0) writeMembers[member] = true;
+                        if (depth > 1) writeMembers[member] = true;
+
+                        /**
+                        * If we try to get a specific activity that does not exist
+                        * then the activities object/activity will not have an
+                        * aid.
+                        */
+                        if ((inverted && activity.actor.data.aid) || (!inverted && activity.object.data.aid)) {
+                            /** Depth 1: actor_type/aid.VERB.object_type/aid */
+                            member = activity.actor.data.type + '/' + activity.actor.data.aid + '.' + activity.verb.type + '.' + activity.object.data.type + '/' + activity.object.data.aid;
+                            bustMembers[member] = true;
+                            if (depth > 0) writeMembers[member] = true;
+                        }
                     }
                 }
             }
         }
         /** Sort members in reverse order since lower depths bust more items. */
         bustMembers = Object.keys(bustMembers).sort().reverse();
-        writeMembers = ';' + Object.keys(writeMembers).sort().reverse().join(';');
+        writeMembers = ';' + Object.keys(writeMembers).sort().reverse().join(';') + ';';
         /**
          * For proxy queries, such as: get all activities of people I follow,
          * we need to be able to bust cache not only when the object or proxy
@@ -196,7 +198,7 @@ module.exports = {
          * not in the activities, we need to manually add it using a custom
          * string.
          */
-        writeMembers += ';' + custom;
+        writeMembers += custom ? custom + ';' : '';
         /**
          * We need this flag to deal with ambiguity in member creation to
          * ensure routes like '/api/v1/actor/:actor/:actor_id' and
@@ -204,7 +206,7 @@ module.exports = {
          * exact members or one's pointer would overwrite the other's and make
          * cache busting unpredictable.
          */
-       writeMember += ';' + req.route.path;
+       writeMembers += req.route.path;
 
         return {bustMembers: bustMembers, writeMembers: writeMembers};
     },
