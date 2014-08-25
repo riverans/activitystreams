@@ -67,16 +67,16 @@ module.exports.routes = {
 
   // Activity streams Object GET
 
-  'get /api/v1/object/:object': 'ObjectController.getAllObjectsOfType', //Bust
-  'get /api/v1/object/:object/:object_id': 'ObjectController.getSpecificObject',
-  'get /api/v1/object/:object/:object_id/activities': 'ObjectController.getAllActivitiesByObject',
+  'get /api/v1/object/:object': 'ObjectController.getAllObjectsOfType', //5
+  'get /api/v1/object/:object/:object_id': 'ObjectController.getSpecificObject', //4
+  'get /api/v1/object/:object/:object_id/activities': 'ObjectController.getAllActivitiesByObject', //4
   'get /api/v1/object/:object/:object_id/:verb': 'ObjectController.getAllActorsWhoVerbedObject', //3
-  'get /api/v1/object/:object/:object_id/:verb/:actor': 'ObjectController.getSpecificActorTypeWhoVerbedObject',
+  'get /api/v1/object/:object/:object_id/:verb/:actor': 'ObjectController.getSpecificActorTypeWhoVerbedObject', //2
   'get /api/v1/object/:object/:object_id/:verb/:actor/:actor_id': 'ActivityController.getSpecificActivity', //1
 
   // Activity Streams Object DELETE
 
-  'delete /api/v1/object/:object/:object_id': 'ObjectController.deleteSpecificObject',
+  'delete /api/v1/object/:object/:object_id': 'ObjectController.deleteSpecificObject', //Bust
 
   // Activity Streams Proxy GET
   'get /api/v1/proxy/:actor/:actor_id': 'ProxyController.getProxyActivities',

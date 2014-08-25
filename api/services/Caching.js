@@ -11,9 +11,6 @@ client.on("error", function (err) {
 
 module.exports = {
 
-    delete: function(data) {
-
-    },
     read: function(url, callback) {
         /** Select keyspace with routes as primary keys. */
         client.select(1);
@@ -59,16 +56,7 @@ module.exports = {
                  * the members need to look a little different.
                  */
                 inverted: req.route.path.indexOf('/api/v1/object') === 0 ? true : false,
-                /**
-                 * Some of our routes are special in that they do not return
-                 * activities and instead only return information about nodes.
-                 * These need to be treated differently. We also need this flag
-                 * to deal with ambiguity in member creation to ensure routes
-                 * like '/api/v1/actor/:actor/:actor_id' and '/api/v1/actor/:actor/:actor_id/activities'
-                 * do not get the same exact members or one's pointer would
-                 * overwrite the other's and make cache busting unpredictable.
-                 */
-                isNode: req.route.path === '/api/v1/actor/:actor' || req.route.path === '/api/v1/actor/:actor/:actor_id' || req.route.path === '/api/v1/object/:object' || req.route.path === '/api/v1/object/:object/:object_id' ? true : false
+                req: req
             },
             members = this._generateMembers(options);
 
@@ -119,7 +107,7 @@ module.exports = {
             members = this._generateMembers({data: data});
             /** Queue up the reads and deletes. */
             members.bustMembers.forEach(function(bustMember) {
-                multi.keys('*' + bustMember + ';*', function(err, replies) {
+                multi.keys('*;' + bustMember + ';*', function(err, replies) {
                     replies.forEach(function(reply) {
                         multi.del(reply);
                     });
@@ -136,7 +124,7 @@ module.exports = {
     /**
      * Generate the list of members to use for writing and busting.
      * @param {object} options A hash of options to generate members including:
-     * data, depth, inverted, and isNode.
+     * data, depth, and inverted.
      * @return {object} An object containing members suitable for both writing
      * to and busting the cache.
      */
@@ -148,7 +136,7 @@ module.exports = {
             depth = options.depth || 1,
             inverted = options.inverted || false,
             member,
-            isNode = options.isNode || false;
+            req = options.req;
 
 
         /** Generate the list of members to invalidate old data and save new data. */
@@ -165,7 +153,12 @@ module.exports = {
             bustMembers[member] = true;
             if (depth > 3) writeMembers[member] = true;
 
-            if (!isNode) {
+            /**
+             * Some of our routes and requests are special in that they do not
+             * return activities and instead only return information about
+             * nodes. These need to be treated specially.
+             */
+            if (activity.verb) {
                 /** Depth 3 */
                 member = inverted ? '/.' + activity.verb.type + '.' + member.substr(3) : member + '.' + activity.verb.type;
                 bustMembers[member] = true;
@@ -177,16 +170,30 @@ module.exports = {
                     bustMembers[member] = true;
                     if (depth > 1) writeMembers[member] = true;
 
-                    /** Depth 1 */
-                    member = activity.actor.data.type + '/' + activity.actor.data.aid + '.' + activity.verb.type + '.' + activity.object.data.type + '/' + activity.object.data.aid;
-                    bustMembers[member] = true;
-                    if (depth > 0) writeMembers[member] = true;
+                    /**
+                     * If we try to get a specific activity that does not exist
+                     * then the activities object/activity will not have an
+                     * aid.
+                     */
+                    if ((inverted && activity.actor.data.aid) || (!inverted && activity.object.data.aid)) {
+                        /** Depth 1 */
+                        member = activity.actor.data.type + '/' + activity.actor.data.aid + '.' + activity.verb.type + '.' + activity.object.data.type + '/' + activity.object.data.aid;
+                        bustMembers[member] = true;
+                        if (depth > 0) writeMembers[member] = true;
+                    }
                 }
             }
         }
         /** Sort members in reverse order since lower depths bust more items. */
         bustMembers = Object.keys(bustMembers).sort().reverse();
-        writeMembers = Object.keys(writeMembers).sort().reverse().join(';') + ';';
+        /**
+         * We need this flag to deal with ambiguity in member creation to
+         * ensure routes like '/api/v1/actor/:actor/:actor_id' and
+         * '/api/v1/actor/:actor/:actor_id/activities' do not get the same
+         * exact members or one's pointer would overwrite the other's and make
+         * cache busting unpredictable.
+         */
+        writeMembers = ';' + Object.keys(writeMembers).sort().reverse().join(';') + ';' + req.route.path;
 
         return {bustMembers: bustMembers, writeMembers: writeMembers};
     },
