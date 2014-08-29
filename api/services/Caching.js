@@ -3,33 +3,46 @@
 
 var redis = require('redis'),
     client = redis.createClient(),
-    crypto = require('crypto');
+    crypto = require('crypto'),
+    Promise = require('es6-promise').Promise;
 
 client.on("error", function (err) {
     console.log("error event - " + client.host + ":" + client.port + " - " + err);
 });
 
 module.exports = {
+    /**
+     * Read a response from the cache.
+     * @param {string} url The url to fetch.
+     * @return {object} A Promise object that resolves with the cached data.
+     */
+    read: function(url) {
+        /** Standardize all urls to have a trailing slash. */
+        url = (url.substr(-1) !== '/') ? url + '/' : url;
 
-    read: function(url, callback) {
         /** Select keyspace with routes as primary keys. */
         client.select(1);
 
-        /** Attempt to get the requested data and execute the supplied callback. */
-        return client.get(url, function(err, reply) {
-            if (err) {
-                console.log(err);
-            }
-            return callback(err, reply);
+        return new Promise(function(resolve, reject) {
+            /** Attempt to get the requested data and resolve the promise. */
+            client.get(url, function(err, reply) {
+                if (err) {
+                    console.log(err);
+                }
+                if (reply) {
+                    return resolve(reply);
+                }
+                return reject(404);
+            });
         });
     },
     /**
      * Write a response to the cache.
      * @param {object} req The request object.
      * @param {object} data The response that should be saved in the cache.
-     * @param {integer} depth The depth of the members that should be used for the new key.
+     * @param [integer] depth The depth of the members that should be used for the new key.
      * @param [string] custom A custom string to use for cache-busting.
-     * @return {array} The data that was written.
+     * @return {object} A Promise object that resolves with the written data.
      * Depth = 1: actor_type/aid.VERB.object_type/aid
      * Depth = 2: actor_type/aid.VERB.object_type/ actor_type/.VERB.object_type/aid
      * Depth = 3: actor_type/aid.VERB. .VERB.object_type/aid
@@ -62,65 +75,91 @@ module.exports = {
             },
             members = this._generateMembers(options);
 
-        /** Select keyspace with routes as primary keys. */
-        client.select(1);
-        /** Write the data. */
-        client.set(url, JSON.stringify(cacheHash));
+        return new Promise(function(resolve, reject) {
+            /** Select keyspace with routes as primary keys. */
+            client.select(1);
+            /** Write the data. */
+            client.set(url, JSON.stringify(cacheHash));
 
-        /** Select keyspace with members as primary keys. */
-        client.select(2);
-        /** Run up the write. */
-        client.set(members.writeMembers, url);
-
-        return data;
+            /** Select keyspace with members as primary keys. */
+            client.select(2);
+            /** Run the write. */
+            client.set(members.writeMembers, url, function() {
+                resolve(data);
+            });
+        });
     },
 
     /**
      * Bust a cached response and invalidate necessary fields.
      * @param {object} req The request object.
      * @param {object} activities The activities that should be busted.
-     * @return {boolean} False.
+     * @return {object} A Promise that resolves when the bust is done.
      */
     bust: function(req, data) {
         var bustMember,
             members = {},
             multi = client.multi(),
-            noun;
+            noun,
+            url;
 
         data = data.length ? data : this._generateDataFromReq(req);
 
         /** Select keyspace with members as primary keys. */
         client.select(2);
 
-        /**
-         * If we are deleting a node then we will not have a verb. Bust anything
-         * mathing *type/aid.*
-         */
+            /**
+            * If we are deleting a node then we will not have a verb. Bust anything
+            * matching ;type/aid. or .type/aid;
+            */
         if (!data[0].verb) {
-            noun = data[0].actor ? 'actor' : 'object';
-            bustMember = data[0][noun].data.type + '/' + data[0][noun].data.aid + '.';
-            /** Queue up the reads and deletes. */
-            multi.keys('*[;.]' + bustMember + '[;.]*', function(err, replies) {
-                replies.forEach(function(reply) {
-                    multi.del(reply);
-                });
-            });
-        } else {
-            members = this._generateMembers({data: data});
-            /** Queue up the reads and deletes. */
-            members.bustMembers.forEach(function(bustMember) {
-                multi.keys('*;' + bustMember + ';*', function(err, replies) {
-                    replies.forEach(function(reply) {
-                        multi.del(reply);
-                    });
+            return new Promise(function(resolve) {
+                noun = data[0].actor ? 'actor' : 'object';
+                bustMember = data[0][noun].data.type + '/' + data[0][noun].data.aid;
+                /** Queue up the reads and deletes. */
+                client.keys('*[;.]' + bustMember + '[;.]*', function(err, replies) {
+                    if (replies.length) {
+                        return client.mget(replies, function(err, replies2) {
+                            replies.push(function() {
+                                client.select(1);
+                                replies2.push(resolve);
+                                /** Delete the urls after deleting the members. */
+                                client.del.apply(client, replies2);
+                            });
+                            /** Delete the members. */
+                            client.del.apply(client, replies);
+                        });
+                    }
+                    /** If no items were found, then resolve. */
+                    return resolve();
                 });
             });
         }
-
-        /** Run the queue. */
-        multi.exec();
-
-        return false;
+        members = this._generateMembers({data: data, req: req});
+        /** Queue up the reads and deletes. */
+        return members.bustMembers.reduce(function(sequence, bustMember) {
+            return sequence.then(function() {
+                return new Promise(function(resolve) {
+                    client.select(2);
+                    client.keys('*;' + bustMember + ';*', function(err, replies) {
+                        if (replies.length) {
+                            return client.mget(replies, function(err, replies2) {
+                                replies.push(function() {
+                                    client.select(1);
+                                    replies2.push(resolve);
+                                    /** Delete the urls after deleting the members. */
+                                    client.del.apply(client, replies2);
+                                });
+                                /** Delete the members. */
+                                client.del.apply(client, replies);
+                            });
+                        }
+                        /** If no items were found, then resolve. */
+                        return resolve();
+                    });
+                });
+            });
+        }, Promise.resolve());
     },
 
     /**
@@ -145,6 +184,7 @@ module.exports = {
         for (var i = 0; i < data.length; i++) {
             activity = data[i];
 
+            console.log(activity);
             /** Depth 5: .object_type actor_type/ */
             member = inverted ? '.' + activity.object.data.type : activity.actor.data.type + '/';
             bustMembers[member] = true;
@@ -206,7 +246,7 @@ module.exports = {
          * exact members or one's pointer would overwrite the other's and make
          * cache busting unpredictable.
          */
-       writeMembers += req.route.path;
+        writeMembers += req.route.path;
 
         return {bustMembers: bustMembers, writeMembers: writeMembers};
     },

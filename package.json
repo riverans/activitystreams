@@ -21,7 +21,8 @@
     "socket.io": "^0.9.17",
     "supertest": "^0.10.0",
     "redis": "^0.12.1",
-    "hiredis": "^0.1.17"
+    "hiredis": "^0.1.17",
+    "es6-promise": "^1.0.0"
   },
   "devDependencies": {
     "express": "^3.5.1",

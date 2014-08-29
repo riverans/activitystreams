@@ -1,12 +1,12 @@
 /**
- * ProxyController.js 
+ * ProxyController.js
  *
  * @description ::
  * @docs                :: http://sailsjs.org/#!documentation/controllers
  */
 
 module.exports = {
-        
+
     getProxyActivities: function(req, res) {
         var obj = {}, q;
         q = [
@@ -20,9 +20,10 @@ module.exports = {
 
         Proxy.adapter.query(q, {}, function(err, results) {
             if (err) { console.log(err); }
+            results = FlattenData(results);
             res.json(results);
             // Write to the cache and use a custom string.
-            Caching.write(req, results, 1, req.param('actor') + '/' + req.param('actor_id'));
+            Caching.write(req, results, 1, req.param('actor') + '/' + req.param('actor_id') + '.');
         });
     }
 

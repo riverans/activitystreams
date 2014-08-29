@@ -34,6 +34,10 @@ module.exports.policies = {
       deleteSpecificObject: ['isSanitized', 'isAuthenticated']
   },
 
+  ProxyController: {
+      '*': ['isSanitized', 'isCached']
+  },
+
   /*
 	// Here's an example of adding some policies to a controller
 	RabbitController: {

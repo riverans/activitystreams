@@ -3,17 +3,16 @@
 'use strict';
 
 module.exports = function(req, res, next) {
-    /** Standardize all urls to have a trailing slash. */
-    var url = (req.url.substr(-1) !== '/') ? req.url + '/' : req.url;
-
-    Caching.read(url, function(err, reply) {
-        if (reply) {
+    Caching.read(req.url).then(
+        function(reply) {
             reply = JSON.parse(reply);
             if (req.get('if-none-match') && reply.etag && req.get('if-none-match') === reply.etag) {
                 return 304;
             }
             return res.send(reply.data);
-        }
-        return next();
+        },
+        /** If the requested URL is not cached, then forward to the controller. */
+        function() {
+            return next();
     });
 };
