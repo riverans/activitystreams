@@ -3,8 +3,9 @@
 
 var redis = require('redis'),
     client = redis.createClient(),
-    crypto = require('crypto'),
-    Promise = require('es6-promise').Promise;
+    crc32 = require('buffer-crc32'),
+    Promise = require('es6-promise').Promise,
+    sails = require('sails');
 
 client.on("error", function (err) {
     console.log("error event - " + client.host + ":" + client.port + " - " + err);
@@ -50,10 +51,16 @@ module.exports = {
      * Depth = 5: actor_type/ .object_type
      */
     write: function(req, data, depth, custom) {
-        var cacheHash = {
+        var replacer = sails.express.app.get('json replacer'),
+            spaces = sails.express.app.get('json spaces'),
+            cacheHash = {
                 data: data,
-                /** Generate a proper ETag for the data. */
-                etag: crypto.createHash('md5').update(JSON.stringify(data)).digest('hex')
+                /**
+                 * Generate a proper ETag for the data. This method is particular
+                 * to the version of Express (used by Sails) used. Modern experss
+                 * versions use crypto.createHash('md5').update(JSON.stringify(data)).digest('base64')
+                 */
+                etag: '"' + crc32.signed(JSON.stringify(data, replacer, spaces)) + '"'
             },
             /** Normalize the url. */
             url = (req.url.substr(-1) !== '/') ? req.url + '/' : req.url,
@@ -184,7 +191,6 @@ module.exports = {
         for (var i = 0; i < data.length; i++) {
             activity = data[i];
 
-            console.log(activity);
             /** Depth 5: .object_type actor_type/ */
             member = inverted ? '.' + activity.object.data.type : activity.actor.data.type + '/';
             bustMembers[member] = true;

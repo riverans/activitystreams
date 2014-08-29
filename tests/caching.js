@@ -116,12 +116,15 @@ describe('Caching Service', function() {
         });
 
         it('should write the correct etag', function(done) {
-            var crypto = require('crypto');
+            var crc32 = require('buffer-crc32'),
+                replacer = sails.express.app.get('json replacer'),
+                spaces = sails.express.app.get('json spaces');
+
             sails.services.caching.write(req, data);
 
             client.select(1);
             client.get(req.url + '/', function(err, reply) {
-                assert.equal(JSON.parse(reply).etag, crypto.createHash('md5').update(JSON.stringify(data)).digest('hex'));
+                assert.equal(JSON.parse(reply).etag, '"' + crc32.signed(JSON.stringify(data, replacer, spaces)) + '"');
                 done();
             });
         });
