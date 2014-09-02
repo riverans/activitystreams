@@ -344,17 +344,15 @@ describe('Caching Service', function() {
                 var req, members, invertedMembers;
                 req = {route:{path: '/api/v1/actor/:actor/:actor_id/verb/:object/:object_id'}};
                 members = sails.services.caching._generateMembers({data: data, req: req});
-                invertedMembers = sails.services.caching._generateMembers({data: data, req: req, inverted: true});
                 assert(containsMember(members.bustMembers, 'rap_cat/69.RAPPED.meow_meow/1'));
-                assert(containsMember(invertedMembers.bustMembers, 'rap_cat/69.RAPPED.meow_meow/1'));
                 assert(containsMember(members.bustMembers, 'rap_cat/69.RAPPED.meow_meow/'));
-                assert(containsMember(invertedMembers.bustMembers, 'rap_cat/.RAPPED.meow_meow/1'));
+                assert(containsMember(members.bustMembers, 'rap_cat/.RAPPED.meow_meow/1'));
                 assert(containsMember(members.bustMembers, 'rap_cat/69.RAPPED.'));
-                assert(containsMember(invertedMembers.bustMembers, '.RAPPED.meow_meow/1'));
+                assert(containsMember(members.bustMembers, '.RAPPED.meow_meow/1'));
                 assert(containsMember(members.bustMembers, 'rap_cat/69.'));
-                assert(containsMember(invertedMembers.bustMembers, '.meow_meow/1'));
+                assert(containsMember(members.bustMembers, '.meow_meow/1'));
                 assert(containsMember(members.bustMembers, 'rap_cat/'));
-                assert(containsMember(invertedMembers.bustMembers, '.meow_meow'));
+                assert(containsMember(members.bustMembers, '.meow_meow'));
                 done();
             });
             it('should generate write members containing custom member', function(done) {
