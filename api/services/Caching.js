@@ -185,22 +185,28 @@ module.exports = {
             depth = options.depth || 1,
             inverted = options.inverted || false,
             member,
+            invertedMember,
             req = options.req;
 
         /** Generate the list of members to invalidate old data and save new data. */
         for (var i = 0; i < data.length; i++) {
             activity = data[i];
+            invertedMember = member = '';
 
             /** Depth 5: .object_type actor_type/ */
-            member = inverted ? '.' + activity.object.data.type : activity.actor.data.type + '/';
+            if (activity.object) invertedMember = '.' + activity.object.data.type;
+            if (activity.actor) member = activity.actor.data.type + '/';
+            bustMembers[invertedMember] = true;
             bustMembers[member] = true;
-            if (depth > 4) writeMembers[member] = true;
+            if (depth > 4) writeMembers[inverted ? invertedMember : member] = true;
 
             /** Depth 4: .object_type/aid actor_type/aid. */
             if ((inverted && activity.object.data.aid) || (!inverted && activity.actor.data.aid)) {
-                member = inverted ? member + '/' + activity.object.data.aid : member + activity.actor.data.aid + '.';
+                if (activity.object && activity.object.data.aid) invertedMember = invertedMember + '/' + activity.object.data.aid;
+                if (activity.actor && activity.actor.data.aid) member = member + activity.actor.data.aid + '.';
+                bustMembers[invertedMember] = true;
                 bustMembers[member] = true;
-                if (depth > 3) writeMembers[member] = true;
+                if (depth > 3) writeMembers[inverted ? invertedMember : member] = true;
 
                 /**
                 * Some of our routes and requests are special in that they do not
@@ -209,15 +215,19 @@ module.exports = {
                 */
                 if (activity.verb) {
                     /** Depth 3: .VERB.object_type/aid actor_type/aid.VERB. */
-                    member = inverted ? '.' + activity.verb.type + member : member + activity.verb.type + '.';
+                    invertedMember = '.' + activity.verb.type + invertedMember;
+                    member = member + activity.verb.type + '.';
+                    bustMembers[invertedMember] = true;
                     bustMembers[member] = true;
-                    if (depth > 2) writeMembers[member] = true;
+                    if (depth > 2) writeMembers[inverted ? invertedMember : member] = true;
 
                     if ((inverted && activity.actor) || (!inverted && activity.object)) {
                         /** Depth 2: actor_type/.VERB.object_type/aid actor_type/aid.VERB.object_type/ */
-                        member = inverted ? activity.actor.data.type + '/' + member : member + activity.object.data.type + '/';
+                        if (activity.actor) invertedMember = activity.actor.data.type + '/' + invertedMember;
+                        if (activity.object) member = member + activity.object.data.type + '/';
+                        bustMembers[invertedMember] = true;
                         bustMembers[member] = true;
-                        if (depth > 1) writeMembers[member] = true;
+                        if (depth > 1) writeMembers[inverted ? invertedMember : member] = true;
 
                         /**
                         * If we try to get a specific activity that does not exist
