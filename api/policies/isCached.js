@@ -7,7 +7,7 @@ module.exports = function(req, res, next) {
         function(reply) {
             reply = JSON.parse(reply);
             if (req.get('if-none-match') && reply.etag && req.get('if-none-match') === reply.etag) {
-                return 304;
+                return res.send(304);
             }
             return res.send(reply.data);
         },
