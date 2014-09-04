@@ -30,16 +30,9 @@ module.exports.routes = {
 
   // By default, your root route (aka home page) points to a view
   // located at `views/home/index.ejs`
-  // 
+  //
   // (This would also work if you had a file at: `/views/home.ejs`)
 
-  '/loadtest': {
-    view: 'home/loadtest'
-  },
-
-  '/as-demo': {
-    view: 'home/as-demo'
-  },
 
   '/index': {
     view: 'home/index'
@@ -53,29 +46,40 @@ module.exports.routes = {
 
   // Activity streams Activity
   // GET
-  'get /api/v1/activity/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.getSpecificActivity',
+  'get /api/v1/activity/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.getSpecificActivity', //1
   // POST
-  'post /api/v1/activity': 'ActivityController.postSpecificActivity',
+  'post /api/v1/activity': 'ActivityController.postSpecificActivity', //Bust
   // DELETE
-  'delete /api/v1/activity/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.deleteSpecificActivity',
+  'delete /api/v1/activity/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.deleteSpecificActivity', //Bust
 
   // Activity streams Actor GET
 
-  'get /api/v1/actor/:actor': 'ActorController.getAllActorsOfType',
-  'get /api/v1/actor/:actor/:actor_id': 'ActorController.getSpecificActor',
-  'get /api/v1/actor/:actor/:actor_id/activities': 'ActorController.getAllActivitiesByActor',
-  'get /api/v1/actor/:actor/:actor_id/:verb': 'ActorController.getAllObjectsVerbedByActor',
-  'get /api/v1/actor/:actor/:actor_id/:verb/:object': 'ActorController.getSpecificObjectTypeVerbedByActor',
-  'get /api/v1/actor/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.getSpecificActivity',
+  'get /api/v1/actor/:actor': 'ActorController.getAllActorsOfType', //5
+  'get /api/v1/actor/:actor/:actor_id': 'ActorController.getSpecificActor', //4
+  'get /api/v1/actor/:actor/:actor_id/activities': 'ActorController.getAllActivitiesByActor', //4
+  'get /api/v1/actor/:actor/:actor_id/:verb': 'ActorController.getAllObjectsVerbedByActor', //3
+  'get /api/v1/actor/:actor/:actor_id/:verb/:object': 'ActorController.getSpecificObjectTypeVerbedByActor', //2
+  'get /api/v1/actor/:actor/:actor_id/:verb/:object/:object_id': 'ActivityController.getSpecificActivity', //1
+
+  // Activity Streams Actor DELETE
+
+  'delete /api/v1/actor/:actor/:actor_id': 'ActorController.deleteSpecificActor', //Bust
 
   // Activity streams Object GET
 
-  'get /api/v1/object/:object': 'ObjectController.getAllObjectsOfType',
-  'get /api/v1/object/:object/:object_id': 'ObjectController.getSpecificObject',
-  'get /api/v1/object/:object/:object_id/activities': 'ObjectController.getAllActivitiesByObject',
-  'get /api/v1/object/:object/:object_id/:verb': 'ObjectController.getAllActorsWhoVerbedObject',
-  'get /api/v1/object/:object/:object_id/:verb/:actor': 'ObjectController.getSpecificActorTypeWhoVerbedObject',
-  'get /api/v1/object/:object/:object_id/:verb/:actor/:actor_id': 'ActivityController.getSpecificActivity',
+  'get /api/v1/object/:object': 'ObjectController.getAllObjectsOfType', //5
+  'get /api/v1/object/:object/:object_id': 'ObjectController.getSpecificObject', //4
+  'get /api/v1/object/:object/:object_id/activities': 'ObjectController.getAllActivitiesByObject', //4
+  'get /api/v1/object/:object/:object_id/:verb': 'ObjectController.getAllActorsWhoVerbedObject', //3
+  'get /api/v1/object/:object/:object_id/:verb/:actor': 'ObjectController.getSpecificActorTypeWhoVerbedObject', //2
+  'get /api/v1/object/:object/:object_id/:verb/:actor/:actor_id': 'ActivityController.getSpecificActivity', //1
+
+  // Activity Streams Object DELETE
+
+  'delete /api/v1/object/:object/:object_id': 'ObjectController.deleteSpecificObject', //Bust
+
+  // Activity Streams Proxy GET
+  'get /api/v1/proxy/:actor/:actor_id': 'ProxyController.getProxyActivities', //1
 
   /*
   // But what if you want your home page to display
@@ -109,7 +113,7 @@ module.exports.routes = {
   // If you want to set up a route only for one in particular
   // (GET, POST, PUT, DELETE, etc.), just specify the verb before the path.
   // For example, if you have a `UserController` with a `signup` action,
-  // and somewhere else, you're serving a signup form looks like: 
+  // and somewhere else, you're serving a signup form looks like:
   //
   //		<form action="/signup">
   //			<input name="username" type="text"/>
@@ -138,7 +142,7 @@ module.exports.routes = {
 
 
 
-/** 
+/**
  * (3) Action blueprints
  * These routes can be disabled by setting (in `config/controllers.js`):
  * `module.exports.controllers.blueprints.actions = false`
@@ -204,4 +208,3 @@ module.exports.routes = {
  * Finally, if nothing else matched, the default 404 handler is triggered.
  * See `config/404.js` to adjust your app's 404 logic.
  */
- 

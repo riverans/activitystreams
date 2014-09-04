@@ -1,4 +1,3 @@
-
 var express = require('express');
 var http = require('http');
 var https = require('https');
@@ -17,15 +16,15 @@ module.exports = {
 
         respond = JSON.stringify(options.respond);
 
-        var server = express();
-        http.createServer(server);
+        var app = express();
+        var server = http.createServer(app);
 
-        server.use(function(req, res) {
-                res.send(options.code, respond);
-                server.close();
-            })
-            .listen(sails.config.authPolicy.endpoint.port);
+        app.use(function(req, res) {
+            res.send(options.code, respond);
+        });
 
+        server.listen(sails.config.authPolicy.endpoint.port);
+        server.timeout = 2000;
         return server;
     },
 
@@ -64,19 +63,19 @@ module.exports = {
             sails.config.authPolicy.endpoint.sessionCookie, 'fake');
 
         var options = {
-                hostname: 'localhost',
-                method: method,
-                path: path,
-                port: sails.config.port,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length': json.length,
-                    'Cookie': sessionCookie
-                    },
-                body:  json,
+            hostname: 'localhost',
+            method: method,
+            path: path,
+            port: sails.config.port,
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': json.length,
+                'Cookie': sessionCookie
+                },
+            body:  json,
         };
 
-        return options
+        return options;
     },
 
     /**
@@ -91,4 +90,4 @@ module.exports = {
         request.end();
         return request;
     },
-}
+};

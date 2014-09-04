@@ -19,18 +19,24 @@ module.exports.policies = {
   '*': true,
 
   ActivityController: {
+      '*': ['isSanitized', 'isCached'],
       postSpecificActivity:  ['isSanitized', 'isAuthenticated'],
       deleteSpecificActivity: ['isSanitized','isAuthenticated']
-
   },
 
   ActorController: {
-      '*': 'isSanitized'
+      '*': ['isSanitized', 'isCached'],
+      deleteSpecificActor: ['isSanitized', 'isAuthenticated']
    },
 
   ObjectController: {
-       '*': 'isSanitized'
-},
+      '*': ['isSanitized', 'isCached'],
+      deleteSpecificObject: ['isSanitized', 'isAuthenticated']
+  },
+
+  ProxyController: {
+      '*': ['isSanitized', 'isCached']
+  },
 
   /*
 	// Here's an example of adding some policies to a controller

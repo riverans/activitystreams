@@ -6,7 +6,8 @@
  */
 
 var nock = require('nock'),
-    sails = require('sails');
+    sails = require('sails'),
+    http = require('http');
 
 
 // Set up Nock to intercept traffic to the Neo4j server
@@ -22,6 +23,7 @@ var neo4j = nock('http://localhost:7474')
 
 
 before(function (done) {
+    http.globalAgent.maxSockets = 100;
     process.env.testMode = true; // enable mock responses from api/controllers/ActivityController.js
     process.env.testModeDebug = false; // cypher queries printed to console
 
