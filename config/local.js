@@ -26,11 +26,11 @@ module.exports = (function() {
 
 	var localConfig = {
 		environment: process.env.NODE_ENV || 'development',
-		port: process.env.PORT || 1337,
+		port: process.env.PORT || 9365,
 	};
 
-        var envConfigs = [localConfig.environment + '.js', 'myLocal.js']
-        for(var i=0; i <= envConfigs.length; i++) {
+  var envConfigs = [localConfig.environment + '.js', 'myLocal.js'];
+  for(var i=0; i <= envConfigs.length; i++) {
 		configPath = __dirname + '/environments/' + envConfigs[i];
 		if (fs.existsSync(configPath)) {
 			_.merge(localConfig, require(configPath));
