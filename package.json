@@ -1,6 +1,6 @@
 {
   "name": "activitystreams",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Activity Streams App",
   "dependencies": {
     "ejs": "^0.8.8",
