@@ -17,5 +17,9 @@ module.exports.adapters = {
         "port": 7474,
         "host": "localhost",
         "base": "/db/data/"
+    },
+    "redis": {
+        "port": 6379,
+        "host": "localhost",
     }
-}
+};
