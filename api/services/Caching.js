@@ -2,10 +2,11 @@
 'use strict';
 
 var redis = require('redis'),
-    client = redis.createClient(),
+    sails = require('sails'),
     crc32 = require('buffer-crc32'),
-    Promise = require('es6-promise').Promise,
-    sails = require('sails');
+    Promise = require('es6-promise').Promise;
+
+var client = redis.createClient(sails.config.adapters.redis.port, sails.config.adapters.redis.host, {});
 
 client.on("error", function (err) {
     console.log("error event - " + client.host + ":" + client.port + " - " + err);
