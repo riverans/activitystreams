@@ -186,8 +186,12 @@ Make sure you have Neo4j, Redis, Ruby, Bundler, Node, and npm installed.
 That's about it. There are many configuration options you can override and build out, but that's the basic requirement for installation.
 
 
+
 Dependencies
 ============
+
+If you need help installing the dependencies for Neo4j and Redis, go to [JDK, Neo4j, Redis] (https://github.com/natgeo/activitystreams/wiki/JDK,-Neo4j-and-Redis-install)
+
 These files are part of the package.json file, so NPM is able to install them all with one command. `npm install`
 
 * [Neo4j-JS](https://github.com/natgeo/neo4j-js)
