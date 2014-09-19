@@ -1,12 +1,12 @@
 [![Build Status](https://travis-ci.org/natgeo/activitystreams.png)](https://travis-ci.org/natgeo/activitystreams) [![Stories in Ready](https://badge.waffle.io/natgeo/activitystreams.png?label=ready&title=Ready)](http://waffle.io/natgeo/activitystreams)
 
 
-#### Activity Stream Service
+#### Horizon - an Activity Stream Service
 
 ##### Table of Contents
 
 1. Introduction
-2. What is Activity Stream
+2. What's an Activity Stream
 3. What problem is it solving?
 4. Current Situation at Natgeo
 5. Technology and Standared Choices
@@ -39,7 +39,7 @@ Our activity stream model conforms to the Activity Streams specification found h
 
 Might be implemented, for sake of example, as:
 
-- mmdb_user -> FAVORITED -> yourshot_photo
+- your_user -> FAVORITED -> youtube_video
 
 
 
@@ -49,44 +49,41 @@ Nodes have labels, and the naming convention for these labels represents the typ
 
 	{app_name}_{model}
 
-For example, an mmdb User would be
+For example, a LinkedIn user would be
 
-	mmdb_user
+	linkedin_user
 	
-A Yourshot photo would be
+A YouTube video would be
 	
-	yourshot_photo
+	youtube_video
 	
-An ngm article would be
+A National Geographic Magazine article would be
 	
 	ngm_article
 
 
 
-### Node properties
+### Node properties (Graph Nodes)
 
 Nodes currently have the folowing properties
 
-	aid : {int} / {slug} … open ended
+	aid : {stirng}
 	api : {url}
+	type: {app_name}_{model}
 	created: {unix timestamp
 	updated: {unix timestamp}
 	
-Nodes contain a 'type' property so that we can return the label for the node. 
-
-
-
-For example a USER node will have the following:
+For example a LinkedIn user node will have the following:
 
 	aid : 1
-	api: http://exampleapp.com/user/1/
+	api: http://linkedin.com/api/user/1/
 	created: 1388767442091
 	updated: 1389039127283
 	
-A Photo
+A YouTube video
 
-	aid: 11121
-	api: http://example.com/api/v1/photo/14055
+	aid: W73m0imS2bc
+	api: http://youtube.com/api/v?W73m0imS2bc
 	created: 1388767442091
 	updated: 1389039127283
 
@@ -94,64 +91,65 @@ A Photo
 
 ### Edges
 
-Edges represent relationships. They are in all caps and also have timestamps
-
-List of Current Verbs:
-	
-	FAVORITED
-	PLEDGES
-	FOLLOWS
-	
-There shall be a master list of verbs that will be used within the graph. Users are not allowed to add new verb that are not in the master list.
-
-
+Edges represent verbs in the case of activities. They are named in all caps and also have created and updated timestamps; There isn't a limit on what the name can be. At National Geographic, we use FAVORITED, FOLLOWED, UPLOADED and more...
 
 ### Activity Service REST API
 
+The API is abstract, and allows for any node in the graph to take the assumed role of actor, object, target, context etc. - This means that the direction in which an activity occured matters. For instance, supposing a youtube video could favorite something, the activity would then be (actor:youtube_video)-FAVORITED->(object:special_something). Asking the API about activities that the youtube video has done means placing the youtube video in the context of an actor. Whereas asking about activities that have been done on the youtube video means placing the youtube video in the context of an object.
+
+#### Actor Context
+
 Get all nodes of type
 
-	'get /api/v1/:actor' --> /api/v1/mmdb_user
+	'get /api/v1/actor/:actor' --> /api/v1/actor/youtube_user
   
 Get node of specfic id
 
-	'get /api/v1/:actor/:actor_id' --> /api/v1/mmdb_user/1
+	'get /api/v1/actor/:actor/:actor_id' --> /api/v1/actor/youtube_user/1
   
 Get all activites of specifc actor
 
-	'get /api/v1/:actor/:actor_id/activities' -> /api/v1/mmdb_user/1/activities
+	'get /api/v1/actor/:actor/:actor_id/activities' -> /api/v1/actor/youtube_user/1/activities
  
 Get all specific verbed activites of user 
 
-	'get /api/v1/:actor/:actor_id/:verb' -> /api/v1/mmdb_user/1/FAVORITED
+	'get /api/v1/actor/:actor/:actor_id/:verb' -> /api/v1/actor/youtube_user/1/FAVORITED
 	
 Getall activies verb by type of object by user
 
-	'get /api/v1/:actor/:actor_id/:verb/:object' -> api/v1/mmdb_user/1/FAVORITED/yourshot_photo
+	'get /api/v1/actor/:actor/:actor_id/:verb/:object' -> api/v1/actor/youtube_user/1/FAVORITED/flickr_photo
 	
 Get specific activity with user verbed object
 
-	'get /api/v1/:actor/:actor_id/:verb/:object/:object_id' -> api/v1/mmdb_user/FAVORITED/yourshot_photo/1212
+	'get /api/v1/actor/:actor/:actor_id/:verb/:object/:object_id' -> api/v1/actor/youtube_user/FAVORITED/flickr_photo/1212
+
+#### Activity Context
 
 Post an Activity
 
- 	'post /api/v1/activity': 'ActivityController.postSpecificActivity',
+ 	'post /api/v1/activity':
+ 		{
+ 			actor: {
+ 				aid: <string>,
+ 				type: <appname_model>,
+ 				api: <api url>
+ 			},
+ 			verb: <string>,
+ 			object: {
+				aid: <string>,
+				type: <appname_model>,
+				api: <api url>
+ 			}
+ 		}
  
 Delete an Activity
 	
-	'delete /api/v1/:actor/:actor_id/:verb/:object/:object_id' -> 
-	api/v1/mmdb_user/1/Favorited/yourshot_photo/14442
+	'delete /api/v1/activity/:actor/:actor_id/:verb/:object/:object_id' -> 
+	api/v1/youtube_user/1/FAVORITED/flickr_photo/14442
 
 
 
 ### Gate Keeping
-
-For users:
-
-	Need a valid mmdb session cookie
-
-For batch requests:
-
-	api key
 
 For clients who need to establish a signed auth cookie with this service:
  
@@ -173,125 +171,27 @@ For clients who need to establish a signed auth cookie with this service:
     });
   ```
 
+We also have cypher sanitization, an authentication policy and more...
 
 
 Installation
 ============
 
-# Java JDK 1.7
-* Download the [latest 1.7 JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-  * OSX users should just need to open the DMG and run the installer.
-  * Debian
-    * Download the [linux jdk 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-    * `tar -xvf jdk-7u2-linux-x64.tar.gz` (64 bit) or `tar -xvf jdk-7u2-linux-i586.tar.gz` (32 bit)
-    * `sudo mkdir -p /usr/lib/jvm`
-    * `sudo mv ./jdk1.7.0_02 /usr/lib/jvm/jdk1.7.0`
-    * Next run the following:
-      ```
-        sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0/bin/java" 1
-        sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0/bin/javac" 1
-        sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.7.0/bin/javaws" 1
-      ```
+Make sure you have Neo4j, Redis, Ruby, Bundler, Node, and npm installed.
 
-    * Change permissions:
-      ```
-        sudo chmod a+x /usr/bin/java 
-        sudo chmod a+x /usr/bin/javac
-        sudo chmod a+x /usr/bin/javaws
-        sudo chown -R root:root /usr/lib/jvm/jdk1.7.0
-      ```
-      
-    * `sudo update-alternatives --config java`
-    * You will see output similar one below - choose the number of jdk1.7.0 - for example 3 in this list:
-      ```
-        $sudo update-alternatives --config java
-        There are 3 choices for the alternative java (providing /usr/bin/java).
+`
+	npm install activitystreams
+	node ./node_modules/activitystreams/app.js
+`
 
-        Selection Path Priority Status
-        ————————————————————
-        0 /usr/lib/jvm/java-6-openjdk/jre/bin/java 1061 auto mode
-        1 /usr/lib/jvm/java-6-openjdk/jre/bin/java 1061 manual mode
-        2 /usr/lib/jvm/java-6-sun/jre/bin/java 63 manual mode
-        3 /usr/lib/jvm/jdk1.7.0/jre/bin/java 3 manual mode
+That's about it. There are many configuration options you can override and build out, but that's the basic requirement for installation.
 
-        Press enter to keep the current choice[*], or type selection number: 3
-        update-alternatives: using /usr/lib/jvm/jdk1.7.0/jre/bin/java to provide /usr/bin/java (java) in manual mode.
-      ```
-    * `java -version` to chech if you are using the correct version
-    * Repeat for `sudo update-alternatives --config javac` and `sudo update-alternatives --config javaws`
-
-# [Node](http://nodejs.org) 
-
-(Until any of this goes to production we are not version locked, but if you must, we use 0.10.24 locally)
-
-* OSX with Homebrew
-  * `brew update`
-  * `brew tap homebrew/versions`
-  * `brew versions node`
-  * `brew install node --upgrade`
-
-* Debian (Build from source) - In Ubuntu you can use system package, see below.
-  ```
-  sudo apt-get install python g++ make checkinstall
-  mkdir ~/src && cd ~/src
-  wget -N http://nodejs.org/dist/node-latest.tar.gz
-  tar xzvf node-latest.tar.gz && node-v* #(remove the "v" in front of the version number in the dialog)
-  ./configure
-  checkinstall
-  sudo dpkg -i node_*
-  ```
-
-  Note: when you call checkinstall, make sure you edit the version when presented with:
-
-  ```
-  "This package will be built according to these values:
-
-  0 - Maintainer: [ root@debian ] 1 - Summary: [ Node.js v0.10.24 ] 2 - Name: [ node ] 3 - Version: [ v0.10.24 ]"
-  ```
-  Version should be 0.10.24 NOT v0.10.24 otherwise your build will fail.
-
-  From https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
-
-* Ubuntu (apt-get) More friendly with ubuntu
-  * `sudo apt-get install nodejs`
-
-Note that in some Ubuntu version, nodejs is installed as nodejs and some programs looks for node. In this case, you need to symlink to nodejs:
-```
-sudo ln -s /usr/bin/nodejs /usr/bin/node
-```
-
-# NPM 1.3.14
-* OSX with Homebrew:
-  * NPM was recently removed from Homebrew, so manually install `curl https://npmjs.org/install.sh | sh`
-
-# [Neo4j 2.0.1!](http://www.neo4j.org)
-* Download the [Neo4j 2.0](http://www.neo4j.org/download)
-* OSX:
-  * `brew update`
-  * `brew install neo4j`
-  * `neo4j install`
-  * Add to launchctl to make your life easier
-  * `neo4j start`
-* Debian/Linux
-  * `tar xzvf neo4j-community.2.0.3-unix.tar.gz`
-  * `mv neo4j-community.2.0.3-unix /etc/neo4j && cd /etc/neo4j`
-  * `bin/neo4j-installer`
-  * `sudo service neo4j-service start`
-  * Uncomment "org.neo4j.server.webserver.address=0.0.0.0" in /etc/neo4j/conf/neo4j-server.properties for neo4j admin area
-* Neo4j Web Interface is at 'http://localhost:7474/browser/'
-
-# [Redis](http://redis.io/)
-* OSX with Homebrew:
-  * `brew install redis`
-  * `launchctl load ~/Library/LaunchAgents/homebrew.mxcl.redis.plist`
-  * To test that your server is running:  `redis-cli`.  You should be at a prompt "127.0.0.1:6379"
-  * `exit`
 
 Dependencies
 ============
 These files are part of the package.json file, so NPM is able to install them all with one command. `npm install`
 
-* [Neo4j-JS](https://github.com/bretcope/neo4j-js) (this dependency might be swapped out soon)
+* [Neo4j-JS](https://github.com/natgeo/neo4j-js)
 * [Sails.JS](http://sailsjs.org/#!documentation)
 * [Sails-Neo4j](https://github.com/natgeo/sails-neo4j)
 
