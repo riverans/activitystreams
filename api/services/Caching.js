@@ -80,8 +80,9 @@ module.exports = {
                 inverted: req.route.path.indexOf('/api/v1/object') === 0 ? true : false,
                 req: req,
                 custom: custom
-            },
-            members = this._generateMembers(options);
+            };
+            options.flat = FlattenData(options.data);
+            var members = this._generateMembers(options);
 
         return new Promise(function(resolve, reject) {
             /** Select keyspace with routes as primary keys. */
@@ -182,7 +183,8 @@ module.exports = {
             writeMembers = {},
             activity,
             custom = options.custom,
-            data = options.data,
+            // FYI: we only use flattened data to generate the members, but shouldn't store it as the response
+            data = options.data[0].items ? options.flat : options.data,
             depth = options.depth || 1,
             inverted = options.inverted || false,
             member,

@@ -38,7 +38,6 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
-                results = FlattenData(results);
                 res.json(results);
                 Caching.write(req, results, 5);
             });
@@ -163,7 +162,6 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
-                results = FlattenData(results);
                 res.json(results);
                 Caching.write(req, results, 3);
             });
