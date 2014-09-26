@@ -9,7 +9,7 @@ var redis = require('redis'),
 var client = redis.createClient(sails.config.adapters.redis.port, sails.config.adapters.redis.host, {});
 
 client.on("error", function (err) {
-    console.log("error event - " + client.host + ":" + client.port + " - " + err);
+    console.log("Client error event - " + client.host + ":" + client.port + " - " + err);
 });
 
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
             /** Attempt to get the requested data and resolve the promise. */
             client.get(url, function(err, reply) {
                 if (err) {
-                    console.log(err);
+                    console.log("get err:"+err);
                 }
                 if (reply) {
                     return resolve(reply);
