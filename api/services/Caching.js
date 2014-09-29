@@ -8,8 +8,10 @@ var redis = require('redis'),
 
 var client = redis.createClient(sails.config.adapters.redis.port, sails.config.adapters.redis.host, {});
 
+sails.config.cacheActive = true;
+
 client.on("error", function (err) {
-    console.log("Client error event - " + client.host + ":" + client.port + " - " + err);
+    sails.log("Redis error event - " + client.host + ":" + client.port + " - " + err);
 });
 
 module.exports = {
@@ -19,6 +21,7 @@ module.exports = {
      * @return {object} A Promise object that resolves with the cached data.
      */
     read: function(url) {
+
         /** Standardize all urls to have a trailing slash. */
         url = (url.substr(-1) !== '/') ? url + '/' : url;
 
@@ -28,8 +31,10 @@ module.exports = {
         return new Promise(function(resolve, reject) {
             /** Attempt to get the requested data and resolve the promise. */
             client.get(url, function(err, reply) {
+                sails.log("Reply from cache: ", reply);
                 if (err) {
-                    console.log("get err:"+err);
+                    sails.log("Cache read error:", err);
+                    return reject(500);
                 }
                 if (reply) {
                     return resolve(reply);
@@ -52,6 +57,13 @@ module.exports = {
      * Depth = 5: actor_type/ .object_type
      */
     write: function(req, data, depth, custom) {
+        if (!sails.config.cacheActive) {
+            console.log("no cache is activated");
+            return new Promise(function(resolve, reject) {
+                resolve();
+            });
+        }
+
         var replacer = sails.express.app.get('json replacer'),
             spaces = sails.express.app.get('json spaces'),
             cacheHash = {
@@ -71,7 +83,7 @@ module.exports = {
                  * If the data is empty, then we need to generate some data
                  * from the params only for member generation, not for caching,
                  */
-                data: data.length ? data : this._generateDataFromReq(req),
+                data: data || this._generateDataFromReq(req),
                 depth: depth,
                 /**
                  * If we are writing form the point of view of an object then
@@ -112,8 +124,8 @@ module.exports = {
             noun,
             url;
 
-        data = data.length ? data : this._generateDataFromReq(req);
-
+        data = data || this._generateDataFromReq(req);
+        console.log("busting");
         /** Select keyspace with members as primary keys. */
         client.select(2);
 

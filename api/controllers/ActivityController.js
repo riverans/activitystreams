@@ -66,17 +66,15 @@ module.exports = {
         ];
         if (process.env.testMode === undefined) {
             Activity.adapter.query(q, {}, function(err, results) {
-                    if (err) {
-                        // return res.json(err);
-                        res.json(500, { error: 'INVALID REQUEST' });
-                    }
-                    Activity.publishCreate({ id: actor_id, data: results[0] });
-                    res.json(results);
-                    Caching.bust(req, results);
-                }
-            );
+                if (err) {
+                    res.json(500, { error: err, message: 'INVALID REQUEST'});
+                };
+                Activity.publishCreate({ id: actor_id, data: results[0] });
+                res.json(results);
+                Caching.bust(req, results);
+            });
         } else {
-            if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+            if (process.env.testModeDebug === true) {
                 // Display debug query in console
                 Activity.adapter.query(q, {});
             }
@@ -106,7 +104,7 @@ module.exports = {
                 }
             );
         } else {
-            if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
+            if (process.env.testModeDebug === true) {
                 // Display debug query in console
                 Activity.adapter.query(q, {});
             }
