@@ -6,12 +6,30 @@ var redis = require('redis'),
     crc32 = require('buffer-crc32'),
     Promise = require('es6-promise').Promise;
 
+
 var client = redis.createClient(sails.config.adapters.redis.port, sails.config.adapters.redis.host, {});
 
-sails.config.cacheActive = true;
+sails.config.cacheActive = false;
 
-client.on("error", function (err) {
-    sails.log("Redis error event - " + client.host + ":" + client.port + " - " + err);
+client.on('ready', function() {
+    sails.config.cacheActive = true;
+    sails.log('[OK] Redis is up. Connections: ', client.connections);
+});
+
+client.on('end', function() {
+    sails.config.cacheActive = false;
+    sails.log.error('Redis has closed.');
+});
+
+client.on('error', function (err) {
+    if (/ECONNREFUSED/g.test(err)) {
+        sails.log.error('Waiting for redis. Connections:', client.connections);
+        if (sails.config.cacheActive) {
+            sails.config.cacheActive = false;
+        };
+    } else {
+        sails.log.error('Redis error event - ' + client.host + ":" + client.port + " - " + err);
+    }
 });
 
 module.exports = {
@@ -21,6 +39,11 @@ module.exports = {
      * @return {object} A Promise object that resolves with the cached data.
      */
     read: function(url) {
+        if (!sails.config.cacheActive) {
+            return new Promise(function(resolve, reject) {
+                return reject(200);
+            });
+        };
 
         /** Standardize all urls to have a trailing slash. */
         url = (url.substr(-1) !== '/') ? url + '/' : url;
@@ -31,9 +54,9 @@ module.exports = {
         return new Promise(function(resolve, reject) {
             /** Attempt to get the requested data and resolve the promise. */
             client.get(url, function(err, reply) {
-                sails.log("Reply from cache: ", reply);
                 if (err) {
-                    sails.log("Cache read error:", err);
+                    sails.log.error('Error from cache: ', err);
+
                     return reject(500);
                 }
                 if (reply) {
@@ -58,11 +81,15 @@ module.exports = {
      */
     write: function(req, data, depth, custom) {
         if (!sails.config.cacheActive) {
-            console.log("no cache is activated");
+
+            sails.log("Write omit cache.");
+
             return new Promise(function(resolve, reject) {
                 resolve();
             });
-        }
+        };
+
+        sails.log("Caching write.");
 
         var replacer = sails.express.app.get('json replacer'),
             spaces = sails.express.app.get('json spaces'),
@@ -125,7 +152,8 @@ module.exports = {
             url;
 
         data = data || this._generateDataFromReq(req);
-        console.log("busting");
+
+        sails.log('Caching Bust.');
         /** Select keyspace with members as primary keys. */
         client.select(2);
 
