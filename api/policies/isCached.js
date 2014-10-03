@@ -18,11 +18,19 @@ module.exports = function(req, res, next) {
          /** If the requested URL is not cached, then forward to the controller. */
         function(err) {
 
-            if (err === 200) {
-                sails.log.debug('Not caching.');
-            } else {
-                sails.log.error('Cache Error');
-            }
+            switch (err) {
+                case 500 :
+                    sails.log.error('Cache Error.');
+                    break;
+
+                case 404 :
+                    sails.log.debug('Cache not found.');
+                    break;
+
+                case 200 :
+                    sails.log.debug('Not caching.');
+                    break;
+            };
 
             return next();
     });

@@ -16,16 +16,19 @@ sails.config.cacheActive = false;
 * until it comes back
 */
 client.on('ready', function() {
+    sails.config.cacheActive = true;
     sails.log.debug('RedisClient::Events[ready]: [OK] Redis is up. Connections: ', client.connections);
 });
 
 
 client.on('end', function() {
-  sails.log.debug('RedisClient::Events[end]. Connected:', client.connected);
+    sails.config.cacheActive = false;
+    sails.log.debug('RedisClient::Events[end]. Connected:', client.connected);
 });
 
 
 client.on('error', function (err) {
+    sails.config.cacheActive = false;
     sails.log.error('RedisClient::Events[error]: ', err);
     if (/ECONNREFUSED/g.test(err)) {
         client.retry_delay = 5000;
@@ -61,6 +64,7 @@ module.exports = {
                     return reject(500);
                 };
                 if (reply) {
+                    sails.log.debug('Caching read.')
                     return resolve(reply);
                 };
                 return reject(404);
@@ -83,14 +87,14 @@ module.exports = {
     write: function(req, data, depth, custom) {
         if (sails.config.cacheActive === false) {
 
-            sails.log.debug("Write. Ignore cache.");
+            sails.log.debug('Write. Ignore cache.');
 
             return new Promise(function(resolve, reject) {
                 return resolve();
             });
         };
 
-        sails.log("Caching write.");
+        sails.log('Caching write.');
 
         var replacer = sails.express.app.get('json replacer'),
             spaces = sails.express.app.get('json spaces'),
