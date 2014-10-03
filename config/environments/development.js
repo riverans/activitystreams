@@ -7,10 +7,10 @@ module.exports = {
 
         //endpoint configuration ======================================
         endpoint: {
-            host: 'http://mc.dev.nationalgeographic.com',
+            host: '',
             port: 8000,
-            path: '/_membercenter/header/session-auth/?session_id=%s',
-            sessionCookie: 'mmdbsessionid'
+            path: '',
+            sessionCookie: ''
         },
     },
 
@@ -43,6 +43,6 @@ module.exports = {
         db: 0,
         pass: '',
         prefix: 'sess',
-        secret: '94c42bc4439e1fb0fae21bbc85b9f12d04c4177d9f1b9346ccba4dd441dbfd52'
+        secret: ''
     }
 };

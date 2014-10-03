@@ -58,12 +58,11 @@ module.exports = {
             client.get(url, function(err, reply) {
                 if (err) {
                     sails.log.error('Error from cache: ', err);
-
                     return reject(500);
-                }
+                };
                 if (reply) {
                     return resolve(reply);
-                }
+                };
                 return reject(404);
             });
         });
@@ -87,7 +86,7 @@ module.exports = {
             sails.log.debug("Write. Ignore cache.");
 
             return new Promise(function(resolve, reject) {
-                resolve();
+                return resolve();
             });
         };
 
