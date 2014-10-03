@@ -11,26 +11,28 @@ var client = redis.createClient(sails.config.adapters.redis.port, sails.config.a
 
 sails.config.cacheActive = false;
 
+/*
+* If Redis connection ends, catch the error and retry
+* until it comes back
+*/
 client.on('ready', function() {
-    sails.config.cacheActive = true;
-    sails.log('[OK] Redis is up. Connections: ', client.connections);
+    sails.log.debug('RedisClient::Events[ready]: [OK] Redis is up. Connections: ', client.connections);
 });
+
 
 client.on('end', function() {
-    sails.config.cacheActive = false;
-    sails.log.error('Redis has closed.');
+  sails.log.debug('RedisClient::Events[end]. Connected:', client.connected);
 });
 
+
 client.on('error', function (err) {
+    sails.log.error('RedisClient::Events[error]: ', err);
     if (/ECONNREFUSED/g.test(err)) {
-        sails.log.error('Waiting for redis. Connections:', client.connections);
-        if (sails.config.cacheActive) {
-            sails.config.cacheActive = false;
-        };
-    } else {
-        sails.log.error('Redis error event - ' + client.host + ":" + client.port + " - " + err);
+        client.retry_delay = 5000;
+        sails.log.error('Waiting 5s for redis client to come back online. Connections:', client.connections);
     }
 });
+
 
 module.exports = {
     /**
@@ -39,7 +41,7 @@ module.exports = {
      * @return {object} A Promise object that resolves with the cached data.
      */
     read: function(url) {
-        if (!sails.config.cacheActive) {
+        if (sails.config.cacheActive === false) {
             return new Promise(function(resolve, reject) {
                 return reject(200);
             });
@@ -80,9 +82,9 @@ module.exports = {
      * Depth = 5: actor_type/ .object_type
      */
     write: function(req, data, depth, custom) {
-        if (!sails.config.cacheActive) {
+        if (sails.config.cacheActive === false) {
 
-            sails.log("Write omit cache.");
+            sails.log.debug("Write. Ignore cache.");
 
             return new Promise(function(resolve, reject) {
                 resolve();
@@ -153,7 +155,7 @@ module.exports = {
 
         data = data || this._generateDataFromReq(req);
 
-        sails.log('Caching Bust.');
+        sails.log.debug('Caching Bust.');
         /** Select keyspace with members as primary keys. */
         client.select(2);
 

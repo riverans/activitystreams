@@ -7,7 +7,7 @@ module.exports = function(req, res, next) {
         function(reply) {
             reply = JSON.parse(reply);
 
-            sails.log('Reply from cache: ', reply);
+            sails.log.debug('Reply from cache: ', reply);
 
             if (!req.isSocket && req.get('if-none-match') && reply.etag && req.get('if-none-match') === reply.etag) {
                 return res.send(304);
@@ -18,9 +18,9 @@ module.exports = function(req, res, next) {
          /** If the requested URL is not cached, then forward to the controller. */
         function(err) {
 
-            sails.log('Not caching.');
-
-            if (err !== 200) {
+            if (err === 200) {
+                sails.log.debug('Not caching.');
+            } else {
                 sails.log.error('Cache Error');
             }
 
