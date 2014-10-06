@@ -7,18 +7,6 @@ var request = require('request'),
 
 describe('Test Object Controller  ', function () {
 
-    beforeEach(function (done) {
-        // testEndpoint Auth Policy Setup
-        var testEndpoint = {
-            host: 'http://localhost',
-            port: 6969,
-            path: '/fakeSession=%s',
-            sessionCookie: 'fakeSession'
-        };
-        sails.config.authPolicy.endpoint = testEndpoint;
-        done();
-    });
-
     describe('Check Object Requests', function () {
         it('GET: object/{appname_model} (getAllObjectsOfType)', function(done) {
             baseUrl.pathname += 'object/photo';

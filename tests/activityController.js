@@ -6,18 +6,6 @@ var testUtils = require('./utils');
 
 describe('Test Activity Controller  ', function () {
 
-    beforeEach(function (done) {
-        // testEndpoint Auth Policy Setup
-        var testEndpoint = {
-            host: 'http://localhost',
-            port: 6969,
-            path: '/fakeSession=%s',
-            sessionCookie: 'fakeSession'
-        };
-        sails.config.authPolicy.endpoint = testEndpoint;
-        done();
-    });
-
     describe('Test GET Actions', function () {
         it('GET: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (getSpecificActivity)', function (done) {
             baseUrl.pathname += 'activity/user/1/FAVORITED/picture/10010';
@@ -50,6 +38,7 @@ describe('Test Activity Controller  ', function () {
                     server.close(done);
                 });
             });
+
         });
 
 
