@@ -17,13 +17,21 @@ module.exports = {
         respond = JSON.stringify(options.respond);
 
         var app = express();
+        var port = 6969;
         var server = http.createServer(app);
 
         app.use(function(req, res) {
             res.send(options.code, respond);
         });
 
-        server.listen(sails.config.authPolicy.endpoint.port);
+        try {
+            port = sails.config.authPolicy.endpoint.port;
+        } catch (err) {
+            console.warn("sails.config.authPolicy.endpoint.port not initialized!. Using default port 6969...");
+            port = 6969
+        };
+
+        server.listen(port);
         server.timeout = 2000;
         return server;
     },

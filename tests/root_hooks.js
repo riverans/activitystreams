@@ -31,6 +31,16 @@ before(function (done) {
         port: 9365,
         adapters: {
             default: 'neo4j'
+        },
+
+        authPolicy : {
+            // endpoint config
+            endpoint: {
+                host: 'http://localhost',
+                port: 6969,
+                path: '/fakeSession=%s',
+                sessionCookie: 'fakeSession'
+            }
         }
     }, done);
 });

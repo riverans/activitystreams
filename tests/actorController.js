@@ -6,18 +6,6 @@ var request = require('request'),
 
 describe('Test Actor Controller  ', function () {
 
-    beforeEach(function (done) {
-        // testEndpoint Auth Policy Setup
-        var testEndpoint = {
-            host: 'http://localhost',
-            port: 6969,
-            path: '/fakeSession=%s',
-            sessionCookie: 'fakeSession'
-        };
-        sails.config.authPolicy.endpoint = testEndpoint;
-        done();
-    });
-
     describe('Check Actor GET Requests', function () {
         it('GET: actor/{appname_model} (getAllActorsOfType)', function (done) {
             baseUrl.pathname += 'actor/user';
