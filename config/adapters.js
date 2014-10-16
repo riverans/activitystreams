@@ -21,5 +21,9 @@ module.exports.adapters = {
     "redis": {
         "port": 6379,
         "host": "localhost",
+    },
+    "rabbit": {
+        "host": "localhost",
+        "port": 5672
     }
 };

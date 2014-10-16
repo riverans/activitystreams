@@ -70,6 +70,10 @@ module.exports = {
                     res.json(500, { error: err, message: 'INVALID REQUEST'});
                 };
                 Activity.publishCreate({ id: actor_id, data: results[0] });
+
+                // Notify the activity to storm by RabbitMQ messenger
+                RabbitMQ.publish(results);
+
                 res.json(results);
                 Caching.bust(req, results);
             });
