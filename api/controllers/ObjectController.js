@@ -184,7 +184,8 @@ module.exports = {
         q = [
             'MATCH (object:' + req.param('object') + ')<-[verb:' + req.param('verb') + ']-(actor:' + req.param('actor') + ')',
             'WHERE object.aid="' + req.param('object_id') + '"',
-            'RETURN actor,verb,object'
+            'WITH count(actor) as actors, { actor: actor, verb: verb, object: object } as activity',
+            'RETURN count(actors) as totalItems, collect(activity) as items'
         ];
         if (process.env.testMode === undefined) {
             Activity.adapter.query(q, {}, function(err, results) {
