@@ -23,7 +23,11 @@ module.exports.adapters = {
         "host": "localhost",
     },
     "rabbit": {
-        "host": "localhost",
-        "port": 5672
+        "host"  : "localhost",
+        "port"  : 5672,
+        "login" : "guest",
+        "password" : "guest",
+        "authMechanism" : "AMQPLAIN",
+        "vhost"  : "/"
     }
-};
+}
