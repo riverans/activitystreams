@@ -55,16 +55,30 @@ module.exports = function(req, res, next) {
 
     //request going out to the endpoint specificed
     var reqreq = request.get(options, function(err, response, body) {
-        if (err) { console.log(err); }
-        //check auth service statusCode
-        if(response.statusCode == 404) {
-            return res.send(404, 'Auth is 404');
+        if (err) {
+            console.log(err);
         }
 
-        var jsonBody = JSON.parse(body);
-        if (jsonBody.userId) {
-            return next();
+        //check auth service statusCode
+        if (response != null && response.statusCode == 404) {
+            return res.send(404, 'Auth is 404');
+        } else {
+            if (!response) {
+                sails.error("response null at isAuthenticated.");
+            }
         }
+
+        try {
+            var jsonBody = JSON.parse(body);
+
+            if (jsonBody.userId) {
+                return next();
+            }
+        } catch(err) {
+            sails.error(err);
+            return res.send(500, 'INVALID REQUEST');
+        };
+
         return res.send(401, 'Not Authorized Noob!!!!!');
     });
 
