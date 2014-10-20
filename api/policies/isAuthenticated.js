@@ -54,22 +54,35 @@ module.exports = function(req, res, next) {
     }
 
     //request going out to the endpoint specificed
-    var reqreq = request.get(options, function(err, response, body) {
-        if (err) { console.log(err); }
-        //check auth service statusCode
-        if(response.statusCode == 404) {
-            return res.send(404, 'Auth is 404');
+    var reqreq = request.get(options, function(error, response, body) {
+
+        if (error || response == null) {
+            sails.error("Something went worng at isAuthenticated. Make sure response is not null. \n response:", response, "\nError:", error);
+            return res.send(500, 'INTERNAL SERVER ERROR');
         }
 
-        var jsonBody = JSON.parse(body);
-        if (jsonBody.userId) {
-            return next();
+        if (response.statusCode >= 400) {
+            return res.send(response.statusCode, 'BAD REQUEST');
         }
+
+        try {
+            var jsonBody = JSON.parse(body);
+
+            if (jsonBody.userId) {
+                return next();
+            }
+
+        } catch(e) {
+            sails.error('mmdb returns invalid json. ', e);
+            return res.send(400, 'BAD REQUEST');
+        };
+
         return res.send(401, 'Not Authorized Noob!!!!!');
     });
 
     //basic error handling
     reqreq.on('error', function(err) {
+        sails.error('Bad Request to Auth Service.\n',err);
         return res.send(400, 'Bad Request to Auth Service');
     });
 };
