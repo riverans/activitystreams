@@ -57,7 +57,7 @@ module.exports = function(req, res, next) {
     var reqreq = request.get(options, function(error, response, body) {
 
         if (error || response == null) {
-            sails.error("Something went worng at isAuthenticated. Make sure response is not null. \n response:", response, "\nError:", error);
+            sails.log.error("Something went worng at isAuthenticated. Make sure response is not null. \n response:", response, "\nError:", error);
             return res.send(500, 'INTERNAL SERVER ERROR');
         }
 
@@ -73,7 +73,7 @@ module.exports = function(req, res, next) {
             }
 
         } catch(e) {
-            sails.error('mmdb returns invalid json. ', e);
+            sails.log.error('mmdb returns invalid json. ', e);
             return res.send(400, 'BAD REQUEST');
         };
 
@@ -82,7 +82,7 @@ module.exports = function(req, res, next) {
 
     //basic error handling
     reqreq.on('error', function(err) {
-        sails.error('Bad Request to Auth Service.\n',err);
+        sails.log.error('Bad Request to Auth Service.\n',err);
         return res.send(400, 'Bad Request to Auth Service');
     });
 };
