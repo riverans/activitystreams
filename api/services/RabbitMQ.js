@@ -6,44 +6,102 @@ var
     Promise = require('es6-promise').Promise;
 
 
-var createRabbitMQ = function() {
-    return new Promise(function(resolve, reject) {
-        var connection = amqp.createConnection(sails.config.adapters.rabbit, {
-            reconnectBackoffTime: 5000
-        });
+var RabbitClient = function() {
 
-        connection.on('ready', function() {
-            sails.log.debug('RabbitClient::Events[ready]: [OK]. Port:', connection.options.port);
+    this.running = false;
 
-            sails.on('lower',function() {
-                // Flush data on exit
-                connection.close();
-            });
+    // buffer to hold messages in queue until rabbit is ready to dispatch them.
+    this.messages = [];
 
-            return resolve(connection);
-        });
-
-        connection.on('error', function(err) {
-            sails.log.error('RabbitClient::Events[error]:', err);
-            return reject(err, connection);
-        });
-
-        return connection;
-    });
+    return this.connect();
 };
 
-var rabbitClient  = createRabbitMQ();
 
+RabbitClient.prototype = {
 
-module.exports = {
+    connect: function() {
+        var  self = this;
 
-    publish: function(msg) {
-        rabbitClient.then(function(connection) {
-            connection.exchange('horizon', { autoDelete: false, durable: false }, function (exchange) {
-                exchange.publish('horizon', {}, msg, function(status) {
-                    sails.log('publish horizon message:', msg, ' \n status:', status);
+        sails.log.debug("Starting rabbit...");
+
+        this.connection = amqp.createConnection(sails.config.adapters.rabbit, {
+            reconnectBackoffTime: 7000
+        });
+
+        this.connection.on('error', function(err) {
+            sails.log.error('RabbitClient::Events[error]', err);
+            self.connected = false;
+        });
+
+        // Ready event is fired every time on socket connects / reconnect.
+        this.connection.on('ready', function() {
+
+            sails.log.debug('RabbitClient::Events[ready]: [OK]. Port:', self.connection.options.port);
+
+            sails.on('lower', self.onExit);
+
+            self.createExchange({ durable: false })
+                .then(function() {
+                    self.createQueue({ durable: false, confirm: true })
+                        .then(function() {
+                            self.subscribe(self.queue);
+                            self.running = true;
+                            sails.log.debug('RabbitClient is running.');
+                            self.flushMessages();
+                        });
                 });
-            });
         });
-  }
-};
+    },
+
+    createExchange: function(options) {
+        var self = this;
+        sails.log.debug("Creating exchange...");
+
+        return new Promise(function(resolve, reject) {
+            self.exchange = self.connection.exchange('horizon', options, resolve);
+        });
+    },
+
+    createQueue: function(options) {
+        var self = this;
+
+        return new Promise(function(resolve, reject) {
+            self.queue = self.connection.queue('horizon', options, resolve );
+        });
+    },
+
+    onExit: function() {
+        sails.log('Shutting down rabbit.');
+        // Flush data on exit
+        this.connection.close();
+    },
+
+    flushMessages: function() {
+        if (this.messages.length) {
+            this.publish(this.messages.pop());
+        };
+    },
+
+    subscribe: function(queue) {
+        queue.subscribe(function(msg) {
+            console.log("Reading msg: ", msg);
+        });
+        queue.bind(this.exchange.name, 'horizon');
+    },
+
+    publish: function(data) {
+        if (this.running) {
+            this.exchange.publish('horizon', { data: data });
+        } else {
+            this.messages.push(data);
+            sails.log('Rabbit is not ready. Message was saved.');
+        }
+    }
+}
+
+
+var rabbitClient = new RabbitClient();
+
+setTimeout(function() { rabbitClient.publish("Hello World YAAY"); }, 3000);
+
+module.exports = rabbitClient;

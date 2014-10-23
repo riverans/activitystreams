@@ -20,14 +20,14 @@ module.exports.adapters = {
     },
     "redis": {
         "port": 6379,
-        "host": "localhost",
+        "host": "localhost"
     },
     "rabbit": {
-        "host"  : "localhost",
-        "port"  : 5672,
-        "login" : "guest",
-        "password" : "guest",
-        "authMechanism" : "AMQPLAIN",
-        "vhost"  : "/"
+        "host": "localhost",
+        "port": 5672,
+        "login": "guest",
+        "password": "guest",
+        "authMechanism": "AMQPLAIN",
+        "vhost": "/"
     }
 }
