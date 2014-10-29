@@ -256,7 +256,7 @@ describe('Caching Service', function() {
             var data2 = _.cloneDeep(data),
                 req2 = _.cloneDeep(req);
             sails.services.caching.write(req, data);
-            req2.route.path = '/TEST/api/v1/actor/:actor/:actor_id/verb';
+            req2.route.path = '/TEST/api/v1/actor/:actor/:actor_id/:verb';
             req2.url = '/TEST/api/v1/actor/rap_cat/69/RAPPED';
             delete data2[0].object.data.aid;
             sails.services.caching.write(req2, data2, 3);
@@ -499,8 +499,8 @@ describe('Caching Service', function() {
         describe('depth = 3', function() {
             var req, invertedReq, members, invertedMembers, data2, members2, invertedMembers2, members3, invertedMembers3;
             beforeEach(function(done) {
-                req = {route: {path: '/TEST/api/v1/actor/:actor/:actor_id/verb'}};
-                invertedReq = {route: {path: '/TEST/api/v1/object/:object/:object_id/verb'}};
+                req = {route: {path: '/TEST/api/v1/actor/:actor/:actor_id/:verb'}};
+                invertedReq = {route: {path: '/TEST/api/v1/object/:object/:object_id/:verb'}};
                 members = sails.services.caching._generateMembers({data: data, req: req, depth: 3});
                 invertedMembers = sails.services.caching._generateMembers({data: data, req: invertedReq, depth: 3, inverted: true});
                 data2 = _.cloneDeep(data);
@@ -557,7 +557,7 @@ describe('Caching Service', function() {
                 done();
             });
             it('should create unique keys for different routes with same activity', function(done) {
-                req = {route: {path: '/TEST/api/v1/object/:object/:object_id/verb'}};
+                req = {route: {path: '/TEST/api/v1/object/:object/:object_id/:verb'}};
                 var alternateMembers = sails.services.caching._generateMembers({data: data, req: req, depth: 3});
                 assert(members.writeMembers !== invertedMembers.writeMembers);
                 assert(members.writeMembers !== alternateMembers.writeMembers);
