@@ -20,6 +20,6 @@ module.exports.adapters = {
     },
     "redis": {
         "port": 6379,
-        "host": "localhost",
+        "host": "localhost"
     }
-};
+}

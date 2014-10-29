@@ -5,6 +5,17 @@ var request = require('request'),
     http = require('http');
 
 describe('Test Actor Controller  ', function () {
+    before(function(done) {
+        /** Disable caching. */
+        sails.config.cacheEnabled = false;
+        done();
+    });
+
+    after(function(done) {
+        /** Enable caching. */
+        sails.config.cacheEnabled = true;
+        done();
+    });
 
     describe('Check Actor GET Requests', function () {
         it('GET: actor/{appname_model} (getAllActorsOfType)', function (done) {

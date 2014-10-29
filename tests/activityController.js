@@ -5,6 +5,17 @@ var http = require('http');
 var testUtils = require('./utils');
 
 describe('Test Activity Controller  ', function () {
+    before(function(done) {
+        /** Disable caching. */
+        sails.config.cacheEnabled = false;
+        done();
+    });
+
+    after(function(done) {
+        /** Enable caching. */
+        sails.config.cacheEnabled = true;
+        done();
+    });
 
     describe('Test GET Actions', function () {
         it('GET: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (getSpecificActivity)', function (done) {
