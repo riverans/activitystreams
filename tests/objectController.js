@@ -6,6 +6,17 @@ var request = require('request'),
     server = {};
 
 describe('Test Object Controller  ', function () {
+    before(function(done) {
+        /** Disable caching. */
+        sails.config.cacheEnabled = false;
+        done();
+    });
+
+    after(function(done) {
+        /** Enable caching. */
+        sails.config.cacheEnabled = true;
+        done();
+    });
 
     describe('Check Object Requests', function () {
         it('GET: object/{appname_model} (getAllObjectsOfType)', function(done) {
