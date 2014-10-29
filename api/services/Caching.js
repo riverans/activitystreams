@@ -9,26 +9,26 @@ var redis = require('redis'),
 
 var client = redis.createClient(sails.config.adapters.redis.port, sails.config.adapters.redis.host, {});
 
-sails.config.cacheActive = false;
+var cacheConnected = false;
 
 /*
 * If Redis connection ends, catch the error and retry
 * until it comes back
 */
 client.on('ready', function() {
-    sails.config.cacheActive = true;
+    cacheConnected = true;
     sails.log.debug('RedisClient::Events[ready]: [OK] Redis is up. Connections: ', client.connections);
 });
 
 
 client.on('end', function() {
-    sails.config.cacheActive = false;
+    cacheConnected = false;
     sails.log.debug('RedisClient::Events[end]. Connected:', client.connected);
 });
 
 
 client.on('error', function (err) {
-    sails.config.cacheActive = false;
+    cacheConnected = false;
     sails.log.error('RedisClient::Events[error]: ', err);
     if (/ECONNREFUSED/g.test(err)) {
         client.retry_delay = 5000;
@@ -44,7 +44,7 @@ module.exports = {
      * @returns {object} A Promise object that resolves with the cached data.
      */
     read: function(url) {
-        if (sails.config.cacheActive === false) {
+        if (cacheConnected === false || sails.config.cacheEnabled === false) {
             return new Promise(function(resolve, reject) {
                 return reject(200);
             });
@@ -84,12 +84,11 @@ module.exports = {
      * Depth = 5: actor_type/ .object_type
      */
     write: function(req, data, depth, custom) {
-        if (sails.config.cacheActive === false) {
-
+        if (cacheConnected === false || sails.config.cacheEnabled === false) {
             return new Promise(function(resolve, reject) {
                 return resolve();
             });
-        };
+        }
 
         var replacer = sails.express.app.get('json replacer'),
             spaces = sails.express.app.get('json spaces'),
@@ -144,6 +143,12 @@ module.exports = {
      * @returns {object} A Promise that resolves when the bust is done.
      */
     bust: function(req, data) {
+        if (cacheConnected === false || sails.config.cacheEnabled === false) {
+            return new Promise(function(resolve, reject) {
+                return resolve();
+            });
+        }
+
         var bustMember,
             members = {},
             multi = client.multi(),
@@ -155,10 +160,10 @@ module.exports = {
         /** Select keyspace with members as primary keys. */
         client.select(2);
 
-            /**
-            * If we are deleting a node then we will not have a verb. Bust anything
-            * matching ;type/aid. or .type/aid;
-            */
+        /**
+          * If we are deleting a node then we will not have a verb. Bust anything
+          * matching ;type/aid. or .type/aid;
+          */
         if (!data[0].verb) {
             return new Promise(function(resolve) {
                 noun = data[0].actor ? 'actor' : 'object';
@@ -377,6 +382,12 @@ module.exports = {
          * request
          */
         if (!data) return this._generateDataFromReq(req);
+
+        /**
+         * If the data is an empty array, e.g. the activity controller found
+         * no matching activities, then create data rfom the request.
+         */
+        if (!data.length) return this._generateDataFromReq(req);
 
         /**
          * If the data contains `items` attributes, then flatten if the list is

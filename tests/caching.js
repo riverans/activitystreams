@@ -55,10 +55,22 @@ describe('Caching Service', function() {
             };
 
         /** Flush old routes from redis. */
-        client.select(1);
-        client.keys('/TEST/*', function(err, replies) {
-            replies.push(cb);
-            client.del.apply(client, replies);
+        client.select(2);
+        client.keys('*/TEST/*', function(err, replies) {
+            if (replies.length) {
+                return client.mget(replies, function(err, replies2) {
+                    replies.push(function() {
+                        client.select(1);
+                        replies2.push(cb);
+                        /** Delete the urls after deleting the members. */
+                        client.del.apply(client, replies2);
+                    });
+                    /** Delete the members. */
+                    client.del.apply(client, replies);
+                });
+            }
+            /** If no items were found, then resolve. */
+            return cb();
         });
     });
 
@@ -71,17 +83,29 @@ describe('Caching Service', function() {
                 };
 
             req = {
-                route:{
-                    path: '/api/v1/actor/:actor/:actor_id/verb/:object/:object_id'
+                route: {
+                    path: '/TEST/api/v1/actor/:actor/:actor_id/:verb/:object/:object_id'
                 },
-                url: '/TEST/actor/rap_cat/69/RAPPED/meow_meow/1'
+                url: '/TEST/api/v1/actor/rap_cat/69/RAPPED/meow_meow/1'
             };
 
             /** Flush old routes from redis. */
-            client.select(1);
-            client.keys('/TEST/*', function(err, replies) {
-                replies.push(cb);
-                client.del.apply(client, replies);
+            client.select(2);
+            client.keys('*/TEST/*', function(err, replies) {
+                if (replies.length) {
+                    return client.mget(replies, function(err, replies2) {
+                        replies.push(function() {
+                            client.select(1);
+                            replies2.push(cb);
+                            /** Delete the urls after deleting the members. */
+                            client.del.apply(client, replies2);
+                        });
+                        /** Delete the members. */
+                        client.del.apply(client, replies);
+                    });
+                }
+                /** If no items were found, then resolve. */
+                return cb();
             });
         });
 
@@ -149,22 +173,34 @@ describe('Caching Service', function() {
                 };
 
             req = {
-                route:{
-                    path: '/api/v1/actor/:actor/:actor_id/verb/:object/:object_id'
+                route: {
+                    path: '/TEST/api/v1/actor/:actor/:actor_id/:verb/:object/:object_id'
                 },
-                url: '/TEST/actor/rap_cat/69/RAPPED/meow_meow/1'
+                url: '/TEST/api/v1/actor/rap_cat/69/RAPPED/meow_meow/1'
             };
 
             /** Flush old routes from redis. */
-            client.select(1);
-            client.keys('/TEST/*', function(err, replies) {
-                replies.push(cb);
-                client.del.apply(client, replies);
+            client.select(2);
+            client.keys('*/TEST/*', function(err, replies) {
+                if (replies.length) {
+                    return client.mget(replies, function(err, replies2) {
+                        replies.push(function() {
+                            client.select(1);
+                            replies2.push(cb);
+                            /** Delete the urls after deleting the members. */
+                            client.del.apply(client, replies2);
+                        });
+                        /** Delete the members. */
+                        client.del.apply(client, replies);
+                    });
+                }
+                /** If no items were found, then resolve. */
+                return cb();
             });
         });
 
         it('should bust custom member', function(done) {
-            req.route.path = '/api/v1/proxy/:actor/:actor_id';
+            req.route.path = '/TEST/api/v1/proxy/:actor/:actor_id';
             req.url = '/TEST/api/v1/proxy/mc_kingkitty/1';
 
             sails.services.caching.write(req, data, 1, 'mc_kingkitty/1.');
@@ -197,7 +233,7 @@ describe('Caching Service', function() {
             var data2 = _.cloneDeep(data),
                 req2 = _.cloneDeep(req);
             sails.services.caching.write(req, data);
-            req2.route.path = '/api/v1/actor/:actor/:actor_id/verb/:object';
+            req2.route.path = '/TEST/api/v1/actor/:actor/:actor_id/:verb/:object';
             req2.url = '/TEST/api/v1/actor/rap_cat/69/RAPPED/meow_meow';
             delete data2[0].object.data.aid;
             sails.services.caching.write(req2, data2, 2);
@@ -220,7 +256,7 @@ describe('Caching Service', function() {
             var data2 = _.cloneDeep(data),
                 req2 = _.cloneDeep(req);
             sails.services.caching.write(req, data);
-            req2.route.path = '/api/v1/actor/:actor/:actor_id/verb';
+            req2.route.path = '/TEST/api/v1/actor/:actor/:actor_id/verb';
             req2.url = '/TEST/api/v1/actor/rap_cat/69/RAPPED';
             delete data2[0].object.data.aid;
             sails.services.caching.write(req2, data2, 3);
@@ -243,7 +279,7 @@ describe('Caching Service', function() {
             var data2 = _.cloneDeep(data),
                 req2 = _.cloneDeep(req);
             sails.services.caching.write(req, data);
-            req2.route.path = '/api/v1/actor/:actor/:actor_id';
+            req2.route.path = '/TEST/api/v1/actor/:actor/:actor_id';
             req2.url = '/TEST/api/v1/actor/rap_cat/69';
             delete data2[0].object.data.aid;
             sails.services.caching.write(req2, data2, 4);
@@ -266,7 +302,7 @@ describe('Caching Service', function() {
             var data2 = _.cloneDeep(data),
                 req2 = _.cloneDeep(req);
             sails.services.caching.write(req, data);
-            req2.route.path = '/api/v1/actor/:actor';
+            req2.route.path = '/TEST/api/v1/actor/:actor';
             req2.url = '/TEST/api/v1/actor/rap_cat';
             delete data2[0].object.data.aid;
             sails.services.caching.write(req2, data2, 5);
@@ -295,17 +331,29 @@ describe('Caching Service', function() {
                 };
 
             req = {
-                route:{
-                    path: '/api/v1/actor/:actor/:actor_id/verb/:object/:object_id'
+                route: {
+                    path: '/TEST/api/v1/actor/:actor/:actor_id/:verb/:object/:object_id'
                 },
-                url: '/TEST/actor/rap_cat/69/RAPPED/meow_meow/1'
+                url: '/TEST/api/v1/actor/rap_cat/69/RAPPED/meow_meow/1'
             };
 
             /** Flush old routes from redis. */
-            client.select(1);
-            client.keys('/TEST/*', function(err, replies) {
-                replies.push(cb);
-                client.del.apply(client, replies);
+            client.select(2);
+            client.keys('*/TEST/*', function(err, replies) {
+                if (replies.length) {
+                    return client.mget(replies, function(err, replies2) {
+                        replies.push(function() {
+                            client.select(1);
+                            replies2.push(cb);
+                            /** Delete the urls after deleting the members. */
+                            client.del.apply(client, replies2);
+                        });
+                        /** Delete the members. */
+                        client.del.apply(client, replies);
+                    });
+                }
+                /** If no items were found, then resolve. */
+                return cb();
             });
         });
 
@@ -342,7 +390,7 @@ describe('Caching Service', function() {
         describe('all depths', function() {
             it('should generate proper bust members', function(done) {
                 var req, members, invertedMembers;
-                req = {route:{path: '/api/v1/actor/:actor/:actor_id/verb/:object/:object_id'}};
+                req = {route: {path: '/TEST/api/v1/actor/:actor/:actor_id/:verb/:object/:object_id'}};
                 members = sails.services.caching._generateMembers({data: data, req: req});
                 assert(containsMember(members.bustMembers, 'rap_cat/69.RAPPED.meow_meow/1'));
                 assert(containsMember(members.bustMembers, 'rap_cat/69.RAPPED.meow_meow/'));
@@ -357,7 +405,7 @@ describe('Caching Service', function() {
             });
             it('should generate write members containing custom member', function(done) {
                 var req, members, invertedMembers;
-                req = {route:{path: '/api/v1/actor/:actor/:actor_id/verb/:object/:object_id'}};
+                req = {route: {path: '/TEST/api/v1/actor/:actor/:actor_id/:verb/:object/:object_id'}};
                 members = sails.services.caching._generateMembers({data: data, req: req, custom: 'youknowhe\'sphat'});
                 assert(~members.writeMembers.indexOf('youknowhe\'sphat'));
                 assert(!~members.bustMembers.indexOf('youknowhe\'sphat'));
@@ -365,7 +413,7 @@ describe('Caching Service', function() {
             });
             it('should generate write members containing the path', function(done) {
                 var req, members, invertedMembers;
-                req = {route:{path: '/api/v1/actor/:actor/:actor_id/verb/:object/:object_id'}};
+                req = {route: {path: '/TEST/api/v1/actor/:actor/:actor_id/:verb/:object/:object_id'}};
                 members = sails.services.caching._generateMembers({data: data, req: req});
                 assert(~members.writeMembers.indexOf(req.route.path));
                 assert(!~members.bustMembers.indexOf(req.route.path));
@@ -375,7 +423,7 @@ describe('Caching Service', function() {
         describe('depth = 1', function() {
             var req, members, invertedMembers;
             beforeEach(function(done) {
-                req = {route:{path: '/api/v1/actor/:actor/:actor_id/verb/:object/:object_id'}};
+                req = {route: {path: '/TEST/api/v1/actor/:actor/:actor_id/:verb/:object/:object_id'}};
                 members = sails.services.caching._generateMembers({data: data, req: req, depth: 1});
                 invertedMembers = sails.services.caching._generateMembers({data: data, req: req, depth: 1, inverted: true});
                 done();
@@ -394,7 +442,7 @@ describe('Caching Service', function() {
                 done();
             });
             it('should create unique keys for different routes with same activity', function(done) {
-                req = {route:{path: '/api/v1/object/:object/:object_id/verb/:actor/:actor_id'}};
+                req = {route: {path: '/TEST/api/v1/object/:object/:object_id/:verb/:actor/:actor_id'}};
                 var members2 = sails.services.caching._generateMembers({data: data, req: req, depth: 1});
                 assert(members.writeMembers !== members2.writeMembers);
                 done();
@@ -403,8 +451,8 @@ describe('Caching Service', function() {
         describe('depth = 2', function() {
             var req, invertedReq, members, invertedMembers, data2, members2, invertedMembers2;
             beforeEach(function(done) {
-                req = {route:{path: '/api/v1/actor/:actor/:actor_id/verb/:object'}};
-                invertedReq = {route:{path: '/api/v1/object/:object/:object_id/verb/:actor'}};
+                req = {route: {path: '/TEST/api/v1/actor/:actor/:actor_id/:verb/:object'}};
+                invertedReq = {route: {path: '/TEST/api/v1/object/:object/:object_id/:verb/:actor'}};
                 members = sails.services.caching._generateMembers({data: data, req: req, depth: 2});
                 invertedMembers = sails.services.caching._generateMembers({data: data, req: invertedReq, depth: 2, inverted: true});
                 data2 = _.cloneDeep(data);
@@ -440,7 +488,7 @@ describe('Caching Service', function() {
                 done();
             });
             it('should create unique keys for different routes with same activity', function(done) {
-                req = {route:{path: '/api/v1/object/:object/:object_id/verb/:actor'}};
+                req = {route: {path: '/TEST/api/v1/object/:object/:object_id/:verb/:actor'}};
                 var alternateMembers = sails.services.caching._generateMembers({data: data, req: req, depth: 2});
                 assert(members.writeMembers !== invertedMembers.writeMembers);
                 assert(members.writeMembers !== alternateMembers.writeMembers);
@@ -451,8 +499,8 @@ describe('Caching Service', function() {
         describe('depth = 3', function() {
             var req, invertedReq, members, invertedMembers, data2, members2, invertedMembers2, members3, invertedMembers3;
             beforeEach(function(done) {
-                req = {route:{path: '/api/v1/actor/:actor/:actor_id/verb'}};
-                invertedReq = {route:{path: '/api/v1/object/:object/:object_id/verb'}};
+                req = {route: {path: '/TEST/api/v1/actor/:actor/:actor_id/verb'}};
+                invertedReq = {route: {path: '/TEST/api/v1/object/:object/:object_id/verb'}};
                 members = sails.services.caching._generateMembers({data: data, req: req, depth: 3});
                 invertedMembers = sails.services.caching._generateMembers({data: data, req: invertedReq, depth: 3, inverted: true});
                 data2 = _.cloneDeep(data);
@@ -509,7 +557,7 @@ describe('Caching Service', function() {
                 done();
             });
             it('should create unique keys for different routes with same activity', function(done) {
-                req = {route:{path: '/api/v1/object/:object/:object_id/verb'}};
+                req = {route: {path: '/TEST/api/v1/object/:object/:object_id/verb'}};
                 var alternateMembers = sails.services.caching._generateMembers({data: data, req: req, depth: 3});
                 assert(members.writeMembers !== invertedMembers.writeMembers);
                 assert(members.writeMembers !== alternateMembers.writeMembers);
@@ -520,8 +568,8 @@ describe('Caching Service', function() {
         describe('depth = 4', function() {
             var req, invertedReq, members, invertedMembers, data2, members2, invertedMembers2, members3, invertedMembers3, members4, invertedMembers4;
             beforeEach(function(done) {
-                req = {route:{path: '/api/v1/actor/:actor/:actor_id'}};
-                invertedReq = {route:{path: '/api/v1/object/:object/:object_id'}};
+                req = {route: {path: '/TEST/api/v1/actor/:actor/:actor_id'}};
+                invertedReq = {route: {path: '/TEST/api/v1/object/:object/:object_id'}};
                 members = sails.services.caching._generateMembers({data: data, req: req, depth: 4});
                 invertedMembers = sails.services.caching._generateMembers({data: data, req: invertedReq, depth: 4, inverted: true});
                 data2 = _.cloneDeep(data);
@@ -601,7 +649,7 @@ describe('Caching Service', function() {
                 done();
             });
             it('should create unique keys for different routes with same activity', function(done) {
-                req = {route:{path: '/api/v1/object/:object/:object_id'}};
+                req = {route: {path: '/TEST/api/v1/object/:object/:object_id'}};
                 var alternateMembers = sails.services.caching._generateMembers({data: data, req: req, depth: 4});
                 assert(members.writeMembers !== invertedMembers.writeMembers);
                 assert(members.writeMembers !== alternateMembers.writeMembers);
@@ -612,8 +660,8 @@ describe('Caching Service', function() {
         describe('depth = 5', function() {
             var req, invertedReq, members, invertedMembers, data2, members2, invertedMembers2, members3, invertedMembers3, members4, invertedMembers4, members5, invertedMembers5;
             beforeEach(function(done) {
-                req = {route:{path: '/api/v1/actor/:actor'}};
-                invertedReq = {route:{path: '/api/v1/object/:object'}};
+                req = {route: {path: '/TEST/api/v1/actor/:actor'}};
+                invertedReq = {route: {path: '/TEST/api/v1/object/:object'}};
                 members = sails.services.caching._generateMembers({data: data, req: req, depth: 5});
                 invertedMembers = sails.services.caching._generateMembers({data: data, req: invertedReq, depth: 5, inverted: true});
                 data2 = _.cloneDeep(data);
@@ -722,11 +770,87 @@ describe('Caching Service', function() {
                 done();
             });
             it('should create unique keys for different routes with same activity', function(done) {
-                req = {route:{path: '/api/v1/object/:object/:object_id'}};
+                req = {route: {path: '/TEST/api/v1/object/:object/:object_id'}};
                 var alternateMembers = sails.services.caching._generateMembers({data: data, req: req, depth: 4});
                 assert(members.writeMembers !== invertedMembers.writeMembers);
                 assert(members.writeMembers !== alternateMembers.writeMembers);
                 assert(invertedMembers.writeMembers !== alternateMembers.writeMembers);
+                done();
+            });
+        });
+    });
+
+    describe('Check _data method', function() {
+        var req,
+            activity = {actor: {data: {aid: 69, type: 'rap_cat'}}, verb: {type: 'RAPPED'}, object: {data: {aid: 1, type: 'meow_meow'}}};
+
+        beforeEach(function(done) {
+            req = {
+                route: {
+                    path: '/TEST/api/v1/actor/:actor/:actor_id/:verb/:object/:object_id'
+                },
+                url: '/TEST/api/v1/actor/rap_cat/69/RAPPED/meow_meow/1',
+                param: function(key) {
+                    return this.params[key];
+                },
+                params: {
+                    actor: 'rap_cat',
+                    actor_id: 69,
+                    verb: 'RAPPED',
+                    object: 'meow_meow',
+                    object_id: 1
+                }
+            };
+            return done();
+        });
+
+        describe('no data', function() {
+            it('should generate activity data', function(done) {
+                var data = sails.services.caching._data(req);
+                assert(Array.isArray(data));
+                assert(data.length === 1);
+                assert.deepEqual(activity, data[0]);
+                done();
+            });
+            it('should generate bustable data', function(done) {
+                var options = {data: sails.services.caching._data(req), req: req},
+                    members = sails.services.caching._generateMembers(options);
+
+                assert(canBeDeletedBy(members.writeMembers, 'rap_cat/69.RAPPED.meow_meow/1'));
+                done();
+            });
+        });
+
+        describe('empty array', function() {
+            it('should generate activity data', function(done) {
+                var data = sails.services.caching._data(req, []);
+                assert(Array.isArray(data));
+                assert(data.length === 1);
+                assert.deepEqual(activity, data[0]);
+                done();
+            });
+            it('should generate bustable data', function(done) {
+                var options = {data: sails.services.caching._data(req), req: req},
+                    members = sails.services.caching._generateMembers(options);
+
+                assert(canBeDeletedBy(members.writeMembers, 'rap_cat/69.RAPPED.meow_meow/1'));
+                done();
+            });
+        });
+
+        describe('array with empty items', function() {
+            it('should generate activity data', function(done) {
+                var data = sails.services.caching._data(req, [{items:[], totalItems:{}}]);
+                assert(Array.isArray(data));
+                assert(data.length === 1);
+                assert.deepEqual(activity, data[0]);
+                done();
+            });
+            it('should generate bustable data', function(done) {
+                var options = {data: sails.services.caching._data(req), req: req},
+                    members = sails.services.caching._generateMembers(options);
+
+                assert(canBeDeletedBy(members.writeMembers, 'rap_cat/69.RAPPED.meow_meow/1'));
                 done();
             });
         });
