@@ -1,39 +1,32 @@
 /*jslint node: true */
 'use strict';
 
-var redis = require('redis'),
+var
+    client = require('./redisWrapper'),
     sails = require('sails'),
     crc32 = require('buffer-crc32'),
     Promise = require('es6-promise').Promise;
 
 
-var client = redis.createClient(sails.config.adapters.redis.port, sails.config.adapters.redis.host, {});
+var
+    cacheConnected = false,
+    hasToFlushCache = false;
 
-var cacheConnected = false;
 
-/*
-* If Redis connection ends, catch the error and retry
-* until it comes back
-*/
 client.on('ready', function() {
-    cacheConnected = true;
-    sails.log.debug('RedisClient::Events[ready]: [OK] Redis is up. Connections: ', client.connections);
+    if (hasToFlushCache) {
+        // flush cache
+        // This block is not usefull yet until sails solve the issue with redis
+        // Unable to parse HTTP body :: 'Redis connection gone from close event.'
+    }
+    cacheConnected = !hasToFlushCache;
+    sails.log.debug('RedisClient::Events[caching]. ', cacheConnected);
 });
-
 
 client.on('end', function() {
     cacheConnected = false;
-    sails.log.debug('RedisClient::Events[end]. Connected:', client.connected);
-});
-
-
-client.on('error', function (err) {
-    cacheConnected = false;
-    sails.log.error('RedisClient::Events[error]: ', err);
-    if (/ECONNREFUSED/g.test(err)) {
-        client.retry_delay = 5000;
-        sails.log.error('Waiting 5s for redis client to come back online. Connections:', client.connections);
-    }
+    hasToFlushCache = true;
+    sails.log.debug('RedisClient::Events[disconnect].  :(');
 });
 
 
@@ -44,6 +37,7 @@ module.exports = {
      * @returns {object} A Promise object that resolves with the cached data.
      */
     read: function(url) {
+        console.log('read, cache?', cacheConnected);
         if (cacheConnected === false || sails.config.cacheEnabled === false) {
             return new Promise(function(resolve, reject) {
                 return reject(200);

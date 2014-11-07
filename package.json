@@ -45,6 +45,7 @@
     "type": "git",
     "url": "git://github.com/natgeo/activitystreams.git"
   },
+  "engines" : { "node" : ">=0.8" },
   "author": "",
   "license": ""
 }
