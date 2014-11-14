@@ -34,29 +34,6 @@ client.on('idle', function() {
 });
 
 client.on('error', function(e) {
-    // sails.log.error('RedisClient::Events[error]: ', e);
-    if (/ECONNREFUSED/g.test(e)) {
-
-    }
+    var msg = (/ECONNREFUSED/g.test(e)) ? 'Could not connect to redis service.' : e;
+    sails.log.error('RedisClient::Events[error]: ', msg);
 });
-
-// We avoid the uncaught exception spam.
-redis.RedisClient.prototype.on_error = function (msg) {
-    var message = "Redis connection to " + this.address + " failed - " + msg;
-
-    if (this.closing) {
-        return;
-    }
-
-    if (exports.debug_mode) {
-        console.warn(message);
-    }
-
-    this.flush_and_error(message);
-
-    this.connected = false;
-    this.ready = false;
-
-    sails.log.error('Critical error. ', message);
-    //this.connection_gone("error");
-}

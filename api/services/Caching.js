@@ -37,7 +37,6 @@ module.exports = {
      * @returns {object} A Promise object that resolves with the cached data.
      */
     read: function(url) {
-        console.log('read, cache?', cacheConnected);
         if (cacheConnected === false || sails.config.cacheEnabled === false) {
             return new Promise(function(resolve, reject) {
                 return reject(200);
