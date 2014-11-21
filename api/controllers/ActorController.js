@@ -444,9 +444,7 @@ module.exports = {
     */
 
     getAllActivitiesByActor: function(req, res) {
-        var obj = {}, q, limit, offset=0,
-            limit = ('limit' in req.query) ? Number(req.query.limit) : 50,
-            offset = ('offset' in req.query) ? Number(req.query.offset) : 1;
+        var obj = {}, q;
 
         q = [
             'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
@@ -461,19 +459,9 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
 
-                var init = (offset-1) * limit,
-                    end = init + limit,
-                    reduced = {},
-                    key;
-
-                if ('items' in results[0]){
-                    for (var i = init; i < end; i++) {
-                        key = i.toString();
-                        if(key in results[0].items){
-                            reduced[key] = results[0].items[key]
-                        }
-                    };
-                    results[0].items = reduced;
+                for(var k=0; k < results.length; k++) {
+                    if('items' in results[k])
+                    results[k].items = Pagination.paginate(req.query, results[k].items);
                 }
 
                 res.json(results);
