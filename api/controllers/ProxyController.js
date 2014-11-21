@@ -20,7 +20,12 @@ module.exports = {
 
         Proxy.adapter.query(q, {}, function(err, results) {
             if (err) { console.log(err); }
-            results = FlattenData(results);
+
+            for(var k=0; k < results.length; k++) {
+                if('items' in results[k])
+                    results[k].items = Pagination.paginate(req.query, results[k].items);
+            }
+
             res.json(results);
             // Write to the cache and use a custom string.
             Caching.write(req, results, 1, req.param('actor') + '/' + req.param('actor_id') + '.');

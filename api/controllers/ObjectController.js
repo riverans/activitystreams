@@ -38,6 +38,7 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
+                results = Pagination.paginate(req.query, results);
                 res.json(results);
                 Caching.write(req, results, 5);
             });
@@ -131,6 +132,13 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
+
+                for(var k=0; k < results.length; k++) {
+                    if('items' in results[k]) {
+                        results[k].items = Pagination.paginate(req.query, results[k].items);
+                    }
+                }
+
                 res.json(results);
                 Caching.write(req, results, 4);
             });
@@ -162,6 +170,13 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
+
+                for(var k=0; k < results.length; k++) {
+                    if('items' in results[k]) {
+                        results[k].items = Pagination.paginate(req.query, results[k].items);
+                    }
+                }
+
                 res.json(results);
                 Caching.write(req, results, 3);
             });
@@ -193,6 +208,13 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
+
+                for(var k=0; k < results.length; k++) {
+                    if('items' in results[k]) {
+                        results[k].items = Pagination.paginate(req.query, results[k].items);
+                    }
+                }
+
                 res.json(results);
                 Caching.write(req, results, 2);
             });
