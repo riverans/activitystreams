@@ -308,8 +308,9 @@ module.exports = {
                 }
 
                 for(var k=0; k < results.length; k++) {
-                    if('items' in results[k])
+                    if('items' in results[k]) {
                         results[k].items = Pagination.paginate(req.query, results[k].items);
+                    }
                 }
 
                 res.json(results);
