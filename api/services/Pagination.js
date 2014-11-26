@@ -5,6 +5,9 @@
  * Given a query and an array of items, returns a subset of those items
  * matching the limit and the page given in the query.
  * @param {object} query - with keys 'limit', 'offset' and 'page'
+ *     'limit' is the maximum number of item per page,
+ *     'offset' is the number of the first item of the list to respond.
+ *     'page' is the current page to list.
  * @param {(array|object)} items - an Array of items or an object where keys are numbers '1', '2', ...
  * @returns {(array|object)}
  */
