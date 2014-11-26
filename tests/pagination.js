@@ -80,4 +80,28 @@ describe('Pagination', function() {
         });
     });
 
+    describe('When I ask for an offset bigger than the number of items', function() {
+        it('The resulting list should not contain any items', function (done) {
+            var reduced_items,
+                items = {
+                    '0': {'aid': 1},
+                    '1': {'aid': 2},
+                    '2': {'aid': 3},
+                    '3': {'aid': 4}
+                };
+            reduced_items = sails.services.pagination({'offset': 3, 'limit': 2}, items);
+            expect(reduced_items).to.be.empty();
+
+            items = [
+                {'aid': 1},
+                {'aid': 2},
+                {'aid': 3},
+                {'aid': 4}
+            ];
+            reduced_items = sails.services.pagination({'offset': 3, 'limit': 2}, items);
+            expect(reduced_items).to.be.empty();
+            done();
+        });
+    });
+
 });
