@@ -21,10 +21,11 @@ module.exports = {
         Proxy.adapter.query(q, {}, function(err, results) {
             if (err) { console.log(err); }
 
-            for(var k=0; k < results.length; k++) {
-                if('items' in results[k])
-                    results[k].items = Pagination.paginate(req.query, results[k].items);
-            }
+            results.forEach(function(result) {
+                if (result.hasOwnProperty('items')) {
+                    result.items = Pagination(req.query, result.items);
+                }
+            });
 
             res.json(results);
             // Write to the cache and use a custom string.

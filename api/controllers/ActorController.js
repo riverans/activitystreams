@@ -86,7 +86,7 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
 
-                results = Pagination.paginate(req.query, results);
+                results = Pagination(req.query, results);
 
                 res.json(results);
                 Caching.write(req, results, 5);
@@ -307,10 +307,8 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
 
-                for(var k=0; k < results.length; k++) {
-                    if('items' in results[k]) {
-                        results[k].items = Pagination.paginate(req.query, results[k].items);
-                    }
+                if (results.length && results[0].hasOwnProperty('items')) {
+                    results[0].items = Pagination(req.query, results[0].items);
                 }
 
                 res.json(results);
@@ -340,9 +338,8 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
 
-                for(var k=0; k < results.length; k++) {
-                    if('items' in results[k])
-                        results[k].items = Pagination.paginate(req.query, results[k].items);
+                if (results.length && results[0].hasOwnProperty('items')) {
+                    results[0].items = Pagination(req.query, results[0].items);
                 }
 
                 res.json(results);
@@ -475,10 +472,11 @@ module.exports = {
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
 
-                for(var k=0; k < results.length; k++) {
-                    if('items' in results[k])
-                    results[k].items = Pagination.paginate(req.query, results[k].items);
-                }
+                results.forEach(function(result) {
+                    if (result.hasOwnProperty('items')) {
+                        result.items = Pagination(req.query, result.items);
+                    }
+                });
 
                 res.json(results);
                 Caching.write(req, results, 4);
