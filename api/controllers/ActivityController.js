@@ -100,7 +100,7 @@ module.exports = {
                     }
                     Activity.publishUpdate(actor_id, {data: results[0]});
                     res.json(results);
-                    Caching.bust(req, results);
+                    Caching.bust(req);
                 }
             );
         } else {
