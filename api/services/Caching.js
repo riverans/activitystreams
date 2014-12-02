@@ -394,7 +394,7 @@ module.exports = {
          * not empty, otherwise generate data from the request.
          */
         if (data[0].totalItems) {
-            if (data[0].totalItems > 0) return this._flattenData(data);
+            if (data[0].totalItems > 0 && data[0].items.length) return this._flattenData(data);
             return this._generateDataFromReq(req);
         }
 
