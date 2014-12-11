@@ -84,6 +84,12 @@ module.exports = {
 
     deleteSpecificActivity: function(req, res) {
         var q,
+            verb = {
+                "data": {
+                    "deleted" : new Date().getTime()
+                },
+                "type" : req.param('verb')
+            },
             actor_id = req.param('actor_id'),
             object_id = req.param('object_id');
         q = [
@@ -98,6 +104,7 @@ module.exports = {
                         // return res.json(err);
                         res.json(500, { error: 'INVALID REQUEST' });
                     }
+                    results[0].verb = verb;
                     Activity.publishUpdate(actor_id, {data: results[0]});
                     res.json(results);
                     Caching.bust(req);
