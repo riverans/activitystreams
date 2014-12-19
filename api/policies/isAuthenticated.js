@@ -68,12 +68,12 @@ module.exports = function(req, res, next) {
         try {
             var jsonBody = JSON.parse(body);
 
-            if (jsonBody.userId) {
+            if (jsonBody.userId && (String(jsonBody.userId) === userId)) {
                 return next();
             }
 
         } catch(e) {
-            sails.log.error('mmdb returns invalid json. ', e);
+            sails.log.error('Auth Service returns invalid json. ', e);
             return res.send(400, 'BAD REQUEST');
         };
 
