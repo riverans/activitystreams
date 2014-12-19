@@ -28,8 +28,8 @@ module.exports = {
             port = sails.config.authPolicy.endpoint.port;
         } catch (err) {
             console.warn("sails.config.authPolicy.endpoint.port not initialized!. Using default port 6969...");
-            port = 6969
-        };
+            port = 6969;
+        }
 
         server.listen(port);
         server.timeout = 2000;
@@ -45,7 +45,7 @@ module.exports = {
         return JSON.stringify({
             actor: {
                 type: 'user',
-                aid: 1
+                aid: '1'
             },
             object: {
                 type: 'photo',

@@ -1,6 +1,7 @@
 var request = require('request'),
     url = require('url'),
-    assert = require('assert');
+    assert = require('assert'),
+    testUtils = require('./utils');
 
 
 describe('Test MiddleWare Sanitization', function () {
@@ -17,13 +18,8 @@ describe('Test MiddleWare Sanitization', function () {
 
 
     it('Should reject a POST with Cypher', function (done) {
-        baseUrl.pathname += 'activity';
-        var apiUrl = url.format(baseUrl);
-
-        reqOptions = {
-            url: apiUrl,
-            method: 'POST',
-            body: JSON.stringify({
+        server = testUtils.fakeServer({code:420, respond:{userId: 1}});
+        var postBody = JSON.stringify({
                 actor: {
                     type: 'user-(o)-(verb)',
                     aid: '1'
@@ -35,11 +31,15 @@ describe('Test MiddleWare Sanitization', function () {
                 verb: {
                     type: 'FAVORITED'
                 }
-            })
-        };
-        request.post(reqOptions, function (err, response, body) {
-            assert.equal(response.statusCode, 420);
-            done();
+            }),
+            requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', postBody);
+
+        server.on("listening", function() {
+            testUtils.makeRequest(requestOptions, function (res) {
+                assert.equal(res.statusCode, 420);
+                server.close(done);
+            });
         });
+
     });
 });

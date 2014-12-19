@@ -37,7 +37,7 @@ describe('Test Actor Controller  ', function () {
         });
 
         it('GET: actor/{appname_model}/{id}/activities (getAllActivitiesByActor)', function (done) {
-            baseUrl.pathname += 'actor/user/1/activites';
+            baseUrl.pathname += 'actor/user/1/activities';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) {
                 assert.equal(response.statusCode, 200);
@@ -55,7 +55,7 @@ describe('Test Actor Controller  ', function () {
         });
 
         it('GET: actor/{appname_model}/{id}/{verb}/{appname_model} (getSpecificObjectTypeVerbedByActor)', function (done) {
-            baseUrl.pathname += 'actor/user/1/favorited/picture';
+            baseUrl.pathname += 'actor/user/1/FAVORITED/picture';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) {
                 assert.equal(response.statusCode, 200);
@@ -65,7 +65,7 @@ describe('Test Actor Controller  ', function () {
         });
 
         it('GET: actor/{appname_model}/{id}/{verb}/{appname_model}/{id} (getActivityByActor)', function (done) {
-            baseUrl.pathname += 'actor/user/1/favorited/picture/1';
+            baseUrl.pathname += 'actor/user/1/FAVORITED/picture/1';
             var apiUrl = url.format(baseUrl);
             request(apiUrl, function (err, response, body) {
                 assert.equal(response.statusCode, 200);
@@ -90,7 +90,7 @@ describe('Test Actor Controller  ', function () {
         });
 
         it('DELETE: actor/{appname_model}/{id} (deleteSpecificActor) with a valid session', function (done) {
-            server = testUtils.fakeServer({code:200, respond:{userId: 1337}});
+            server = testUtils.fakeServer({code:200, respond:{userId: 1}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/user/1', '');
 
             server.on("listening", function() {
@@ -102,7 +102,7 @@ describe('Test Actor Controller  ', function () {
         });
 
         it('DELETE: actor/{appname_model}/{id} (deleteSpecificActor) when the node doesn\'t exist', function (done) {
-            server = testUtils.fakeServer({code:200, respond:{userId: 1337}});
+            server = testUtils.fakeServer({code:200, respond:{userId: 1}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/user/1', '');
 
             server.on("listening", function() {
