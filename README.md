@@ -306,12 +306,6 @@ A simple demo page for the NatGeo Activity Streams project
 add as.dev.yourhostnamehere.com to your /etc/hosts file
 
 
-Usage
-=====
-Access the demo at http://as.dev.yourhostnamehere.com:9365/as-demo.  If you are not
-on the as.dev.yourhostnamehere.com domain, then the header controls will not display.
-
-
 Sample Demo Script
 ==================
 1. Access the page: http://as.dev.yourhostnamehere.com:6935/as-demo.html
