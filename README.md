@@ -185,9 +185,10 @@ Installation
 
 Make sure you have Neo4j, Redis, Ruby, Bundler, Node, and npm installed.
 
-	npm install activitystreams
-	node ./node_modules/activitystreams/app.js
-
+	npm install --localapp activitystreams
+	cd activitystreams
+	npm install 
+	node app.js
 
 That's about it. There are many configuration options you can override and build out, but that's the basic requirement for installation.
 
