@@ -21,9 +21,9 @@ module.exports = {
             actor_id = req.param('actor_id'),
             object_id = req.param('object_id');
         q = [
-            'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
-            'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
-            'RETURN actor,verb,object'
+            'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +'), (target)',
+            'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '" AND HAS(verb.target_id) AND target.aid = verb.target_id',
+            'RETURN actor,verb,object,target'
         ];
         if (process.env.testMode === undefined) {
             Activity.adapter.query(q, {}, function(err, results) {
@@ -49,7 +49,20 @@ module.exports = {
             actor_id = actor.aid,
             verb = req.body.verb,
             object = req.body.object,
-            object_id = object.aid;
+            object_id = object.aid,
+            target,
+            target_query = '';
+
+        if (req.body.target !== undefined) {
+            target = req.body.target;
+            target_query = [
+                'ON CREATE SET verb.target_id = "' + target.aid + '"',
+                'MERGE (target:' + target.type + ' { aid:"' + target.aid + '"})',
+                'ON CREATE SET target.created = timestamp(), target.api = "' + target.api + '", target.type = "' + target.type + '"',
+                'ON MATCH SET target.updated = timestamp()',
+            ]
+        }
+
         q = [
             'MERGE (actor:' + actor.type + ' { aid:"' + actor_id + '"})',
             'ON CREATE SET actor.created = timestamp(), actor.api = "' + actor.api + '", actor.type = "' + actor.type + '"',
@@ -62,7 +75,8 @@ module.exports = {
             'MERGE (actor)-[verb:' + verb.type + ']->(object)',
             'ON CREATE SET verb.created = timestamp()',
             'ON MATCH SET verb.updated = timestamp()',
-            'RETURN actor, verb, object'
+            target_query,
+            'RETURN actor, verb, object' + (target_query !== '' ? ', target' : '')
         ];
         if (process.env.testMode === undefined) {
             Activity.adapter.query(q, {}, function(err, results) {

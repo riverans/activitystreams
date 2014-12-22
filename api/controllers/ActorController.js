@@ -295,9 +295,9 @@ module.exports = {
     getAllObjectsVerbedByActor: function(req, res) {
         var obj = {}, q;
         q = [
-            'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
-            'WHERE actor.aid="' + req.param('actor_id') + '" ',
-            'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
+            'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object), (target)',
+            'WHERE actor.aid="' + req.param('actor_id') + '" AND HAS(verb.target_id) AND target.aid = verb.target_id',
+            'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object, target: target } as activity',
             'RETURN count(objectCollection) as totalItems, collect(activity) as items'
         ];
         if (process.env.testMode === undefined) {
