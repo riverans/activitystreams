@@ -3,6 +3,12 @@
 
 #### Horizon - an Activity Stream Service
 
+ActivityStreams is a REST service in order to create, serve and store all the social activities performed by the users.
+
+The ecosystem of ActivityStreams is also composed by the following repos:
+- [modules-activitysnippet](https://github.com/natgeo/modules-activitysnippet): In order to facilitate the creation of new activities in a website.
+- [modules-activitystream](https://github.com/natgeo/modules-activitystream): In order to integrate the visualization of the activities in a website.
+
 ##### Table of Contents
 
 1. Introduction
