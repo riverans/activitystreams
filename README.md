@@ -9,6 +9,8 @@ The ecosystem of ActivityStreams is also composed by the following repos:
 - [modules-activitysnippet](https://github.com/natgeo/modules-activitysnippet): In order to facilitate the creation of new activities in a website.
 - [modules-activitystream](https://github.com/natgeo/modules-activitystream): In order to integrate the visualization of the activities in a website.
 
+Consider reading [Environment setup](https://github.com/natgeo/activitystreams/blob/doc/README.md#environment-setup) to get everything running
+
 ##### Table of Contents
 
 1. Introduction
@@ -220,31 +222,42 @@ sudo apt-get install ruby ruby-dev gcc build-essential
 
 Environment Setup
 =================
+Assuming you satisfied all the [dependencies](https://github.com/natgeo/activitystreams/blob/doc/README.md#dependencies) required to install the project:
+
+Install the REST service.
 ```
 mkdir ~/code/activitystreams
 cd ~/code/activitystreams
 git clone git@github.com:natgeo/activitystreams.git .
-cd activitystreams
 npm install
+node app.js
 ```
+Edit ```/etc/hosts``` and add (as.dev.nationalgeographic.com) to your hosts
 
-Also clone git@github.com:natgeo/modules-activitystream.git, git@github.com:natgeo/modules-activitysnippet.git and https://github.com/natgeo/sails-neo4j.git
-run npm install in all repos:
+Open (http://as.dev.nationalgeographic.com:9365) in your browser to make sure the service is running.
 
+Open another CLI window and install  [modules-activitystream](http://github.com/natgeo/modules-activitystream)
 ```
 cd ~/code/
 git clone git@github.com:natgeo/modules-activitystream.git
 cd modules-activitystream
+cp app/scripts/localconfig.coffee.example app/scripts/localconfig.coffee
 npm install
+bower install
 ```
+Try it, by running ```grunt serve```. Then open a new browser window (http://as.dev.nationalgeographic.com:9000/) with an empty page since you don't have any activities yet.
 
+Install  [modules-activitysnippet](http://github.com/natgeo/modules-activitysnippet)
 ```
 cd ~/code/
 git clone git@github.com:natgeo/modules-activitysnippet.git
 cd modules-activitysnippet
 npm install
+bower install
 ```
 
+
+Optionally you can install [sails-neo4j](http://github.com/natgeo/sails-neo4j) which is required for development reasons, but is already included as a dependency in Activitystream service.
 ```
 cd ~/code/
 git clone git@github.com:natgeo/sails-neo4j.git
