@@ -222,7 +222,7 @@ sudo apt-get install ruby ruby-dev gcc build-essential
 
 Environment Setup
 =================
-Assuming you satisfied all the [dependencies](https://github.com/natgeo/activitystreams/blob/doc/README.md#dependencies) required to install the project:
+Assuming you satisfied all the [dependencies](https://github.com/natgeo/activitystreams/blob/doc/README.md#dependencies) required to install the project, and you have redis and neo4j running:
 
 Install the REST service.
 ```
@@ -232,7 +232,7 @@ git clone git@github.com:natgeo/activitystreams.git .
 npm install
 node app.js
 ```
-Edit ```/etc/hosts``` and add (as.dev.nationalgeographic.com) to your hosts
+Edit ```/etc/hosts``` and add (as.dev.nationalgeographic.com) to your hosts.
 
 Open (http://as.dev.nationalgeographic.com:9365) in your browser to make sure the service is running.
 
@@ -244,8 +244,9 @@ cd modules-activitystream
 cp app/scripts/localconfig.coffee.example app/scripts/localconfig.coffee
 npm install
 bower install
+gem install
 ```
-Try it, by running ```grunt serve```. Then open a new browser window (http://as.dev.nationalgeographic.com:9000/) with an empty page since you don't have any activities yet.
+Try it, by running ```grunt serve```. Then open a new browser window (http://as.dev.nationalgeographic.com:9000/) will show an empty page since you don't have any activities yet.
 
 Install  [modules-activitysnippet](http://github.com/natgeo/modules-activitysnippet)
 ```
@@ -254,8 +255,8 @@ git clone git@github.com:natgeo/modules-activitysnippet.git
 cd modules-activitysnippet
 npm install
 bower install
+gem install
 ```
-
 
 Optionally you can install [sails-neo4j](http://github.com/natgeo/sails-neo4j) which is required for development reasons, but is already included as a dependency in Activitystream service.
 ```
@@ -264,18 +265,6 @@ git clone git@github.com:natgeo/sails-neo4j.git
 cd sails-neo4j 
 npm install
 ```
-
-For each one of the mentioned Repos you must run:
-```
-npm install
-bower install
-gem install
-```
-
-To run your server: `neo4j-server start` then `sails lift`
-To view your server, visit http://localhost:9365
-
-
 
 Environment Config Overrides
 ============================
