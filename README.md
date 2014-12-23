@@ -222,7 +222,7 @@ sudo apt-get install ruby ruby-dev gcc build-essential
 
 Environment Setup
 =================
-Assuming you satisfied all the [dependencies](https://github.com/natgeo/activitystreams/blob/doc/README.md#dependencies) required to install the project, and you have redis and neo4j running:
+Assuming you satisfied all the [dependencies](https://github.com/natgeo/activitystreams/wiki/JDK,-Neo4j-and-Redis-install) required to install the project, and you have redis and neo4j running:
 
 Install the REST service.
 ```
