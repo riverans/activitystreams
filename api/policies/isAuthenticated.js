@@ -36,6 +36,13 @@ module.exports = function(req, res, next) {
             return res.send(400, 'Bad Request');
         }
     }
+    else if (req.method === 'DELETE') {
+        userId = (req.param('actor_id') || null);
+
+        if (userId === null) {
+            return res.send(400, 'Bad Request');
+        }
+    }
 
     var host, options;
     if (sails.config.authPolicy.endpoint.port) {
@@ -68,12 +75,12 @@ module.exports = function(req, res, next) {
         try {
             var jsonBody = JSON.parse(body);
 
-            if (jsonBody.userId) {
+            if (jsonBody.userId && (String(jsonBody.userId) === userId)) {
                 return next();
             }
 
         } catch(e) {
-            sails.log.error('mmdb returns invalid json. ', e);
+            sails.log.error('Auth Service returns invalid json. ', e);
             return res.send(400, 'BAD REQUEST');
         };
 
