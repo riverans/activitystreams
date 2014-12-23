@@ -50,21 +50,8 @@ describe('Test Activity Controller  ', function () {
             });
         });
 
-        it('should reject post activity with a wrong verb', function (done) {
-            server = testUtils.fakeServer({code:420, respond:{}});
-            var postBody = JSON.parse(testUtils.createTestJSON());
-            postBody.verb.type = "WRONG";
-            var requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', JSON.stringify(postBody));
-            server.on("listening", function() {
-                testUtils.makeRequest(requestOptions, function (res) {
-                    assert.equal(res.statusCode, 420);
-                    server.close(done);
-                });
-            });
-        });
-
        it('should reject post activity with an actor id different from the user id registered', function (done) {
-            server = testUtils.fakeServer({code:401, respond:{userId: 12}});
+            server = testUtils.fakeServer({code:200, respond:{userId: 12}});
             var postBody = testUtils.createTestJSON();
             var requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', postBody);
             server.on("listening", function() {
@@ -96,18 +83,6 @@ describe('Test Activity Controller  ', function () {
             server.on("listening", function() {
                 testUtils.makeRequest(requestOptions, function (res) {
                     assert.equal(res.statusCode, 401);
-                    server.close(done);
-                });
-            });
-        });
-
-        it('should reject del request with wrong verb', function (done) {
-            server = testUtils.fakeServer({code:420, respond:{userId: 1}});
-            var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/activity/user/1/VERBED/object/1', '');
-
-            server.on("listening", function() {
-                testUtils.makeRequest(requestOptions, function (res) {
-                    assert.equal(res.statusCode, 420);
                     server.close(done);
                 });
             });

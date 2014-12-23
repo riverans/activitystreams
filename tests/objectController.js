@@ -78,13 +78,13 @@ describe('Test Object Controller  ', function () {
 
     describe('Check Object DELETE Requests', function () {
 
-        it('DELETE: object/{appname_model}/{id} (deleteSpecificObject) without a valid session', function (done) {
-            server = testUtils.fakeServer({code:403, respond:{}});
+        it('DELETE: object/{appname_model}/{id} (400) without a valid session', function (done) {
+            server = testUtils.fakeServer({code:400, respond:{}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/object/app_object/1', '');
 
             server.on("listening", function() {
                 testUtils.makeRequest(requestOptions, function (res) {
-                    assert.equal(res.statusCode, 403);
+                    assert.equal(res.statusCode, 400);
                     server.close(done);
                     //server.on("close", done);
                 });
@@ -92,24 +92,24 @@ describe('Test Object Controller  ', function () {
         });
 
         it('DELETE: object/{appname_model}/{id} (deleteSpecificObject) with a valid session', function (done) {
-            server = testUtils.fakeServer({code:403, respond:{userId: 1337}});
+            server = testUtils.fakeServer({code:200, respond:{userId: 1}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/object/app_object/1', '');
 
             server.on("listening", function() {
                 testUtils.makeRequest(requestOptions, function (res) {
-                    assert.equal(res.statusCode, 403);
+                    assert.equal(res.statusCode, 400);
                     server.close(done);
                 });
             });
         });
 
         it('DELETE: object/{appname_model}/{id} (deleteSpecificObject) when the node doesn\'t exist', function (done) {
-            server = testUtils.fakeServer({code:403, respond:{userId: 1337}});
+            server = testUtils.fakeServer({code:200, respond:{userId: 1}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/object/app_object/1', '');
 
             server.on("listening", function() {
                 testUtils.makeRequest(requestOptions, function (res) {
-                    assert.equal(res.statusCode, 403);
+                    assert.equal(res.statusCode, 400);
                     server.close(done);
                 });
             });

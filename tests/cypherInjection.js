@@ -18,7 +18,7 @@ describe('Test MiddleWare Sanitization', function () {
 
 
     it('Should reject a POST with Cypher', function (done) {
-        server = testUtils.fakeServer({code:420, respond:{userId: 1}});
+        server = testUtils.fakeServer({code:200, respond:{userId: 1}});
         var postBody = JSON.stringify({
                 actor: {
                     type: 'user-(o)-(verb)',
