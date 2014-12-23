@@ -21,7 +21,7 @@ module.exports = {
             actor_id = req.param('actor_id'),
             object_id = req.param('object_id');
         q = [
-            'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
+            'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']->(object:' + req.param('object') +')',
             'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
             'RETURN actor,verb,object'
         ];
