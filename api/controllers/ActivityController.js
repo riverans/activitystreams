@@ -74,10 +74,10 @@ module.exports = {
             'WITH object, actor',
             'MERGE (actor)-[verb:' + verb.type + ']->(object)',
             'ON CREATE SET verb.created = timestamp()',
-            'ON MATCH SET verb.updated = timestamp()',
-            target_query,
-            'RETURN actor, verb, object' + (target_query !== '' ? ', target' : '')
-        ];
+            'ON MATCH SET verb.updated = timestamp()']
+            .concat(target_query)
+            .concat(['RETURN actor, verb, object' + (target_query !== '' ? ', target' : '')]);
+
         if (process.env.testMode === undefined) {
             Activity.adapter.query(q, {}, function(err, results) {
                 if (err) {
