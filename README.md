@@ -207,18 +207,6 @@ These files are part of the package.json file, so NPM is able to install them al
 * [Sails.JS](http://sailsjs.org/#!documentation)
 * [Sails-Neo4j](https://github.com/natgeo/sails-neo4j)
 
-# Maven
-* `brew install maven`
-
-# Bundle
-*This takes care of ruby/sass dependencies*
-* `gem install bundler && bundle install`
-* `gem install sass compass`
-
-# Ruby
-```
-sudo apt-get install ruby ruby-dev gcc build-essential
-```
 
 Environment Setup
 =================
