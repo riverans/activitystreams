@@ -218,9 +218,11 @@ mkdir ~/code/activitystreams
 cd ~/code/activitystreams
 git clone git@github.com:natgeo/activitystreams.git .
 npm install
+node setup.js development
 node app.js
 ```
 Edit ```/etc/hosts``` and add (as.dev.nationalgeographic.com) to your hosts.
+
 
 Open (http://as.dev.nationalgeographic.com:9365) in your browser to make sure the service is running.
 
