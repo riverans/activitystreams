@@ -186,6 +186,7 @@ Installation
 ============
 
 Make sure you have Neo4j, Redis, Ruby, Bundler, Node, and npm installed.
+This is the basic installation of the service. If you want to install the whole ecosystem checkout [Environment Setup](https://github.com/natgeo/activitystreams/blob/doc/README.md#environment-setup)
 
 	npm install --localapp activitystreams
 	cd activitystreams
