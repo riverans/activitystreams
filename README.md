@@ -219,7 +219,6 @@ mkdir ~/code/activitystreams
 cd ~/code/activitystreams
 git clone git@github.com:natgeo/activitystreams.git .
 npm install
-node setup.js development
 node app.js
 ```
 Edit ```/etc/hosts``` and add (as.dev.nationalgeographic.com) to your hosts.
@@ -235,7 +234,7 @@ cd modules-activitystream
 cp app/scripts/localconfig.coffee.example app/scripts/localconfig.coffee
 npm install
 bower install
-gem install
+bundle install
 ```
 Try it, by running ```grunt serve```. Then open a new browser window (http://as.dev.nationalgeographic.com:9000/) will show an empty page since you don't have any activities yet.
 
@@ -246,7 +245,7 @@ git clone git@github.com:natgeo/modules-activitysnippet.git
 cd modules-activitysnippet
 npm install
 bower install
-gem install
+bundle install
 ```
 
 Optionally you can install [sails-neo4j](http://github.com/natgeo/sails-neo4j) which is required for development reasons, but is already included as a dependency in Activitystream service.
