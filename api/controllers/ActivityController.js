@@ -21,8 +21,10 @@ module.exports = {
             actor_id = req.param('actor_id'),
             object_id = req.param('object_id');
         q = [
-            'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +'), (target)',
-            'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '" AND HAS(verb.target_id) AND target.aid = verb.target_id',
+            'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
+            'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
+            'OPTIONAL MATCH (target)',
+            'WHERE HAS(verb.target_id) AND target.aid = verb.target_id',
             'RETURN actor,verb,object,target'
         ];
         if (process.env.testMode === undefined) {
