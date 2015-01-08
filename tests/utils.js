@@ -44,12 +44,12 @@ module.exports = {
 
         return JSON.stringify({
             actor: {
-                type: 'user',
+                type: 'test_actor',
                 aid: '1'
             },
             object: {
-                type: 'photo',
-                photo_id: '1'
+                type: 'test_object',
+                aid: '1'
             },
             verb: {
                 type: 'FAVORITED'
