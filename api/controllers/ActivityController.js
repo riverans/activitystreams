@@ -24,7 +24,7 @@ module.exports = {
             'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
             'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
             'OPTIONAL MATCH (target)',
-            'WHERE HAS(verb.target_id) AND target.aid = verb.target_id',
+            'WHERE HAS(verb.target_id) AND target.aid = verb.target_id AND target.created = verb.created',
             'RETURN actor,verb,object,target'
         ];
         if (process.env.testMode === undefined) {
@@ -33,10 +33,9 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
-                    res.json(results);
-                    Caching.write(req, results, 1);
-                }
-            );
+                res.json(results);
+                Caching.write(req, results, 1);
+            });
         } else {
             if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
                 // Display debug query in console
@@ -62,7 +61,7 @@ module.exports = {
                 'MERGE (target:' + target.type + ' { aid:"' + target.aid + '"})',
                 'ON CREATE SET target.created = timestamp(), target.api = "' + target.api + '", target.type = "' + target.type + '"',
                 'ON MATCH SET target.updated = timestamp()',
-            ]
+            ];
         }
 
         q = [
@@ -84,7 +83,7 @@ module.exports = {
             Activity.adapter.query(q, {}, function(err, results) {
                 if (err) {
                     res.json(500, { error: err, message: 'INVALID REQUEST'});
-                };
+                }
                 Activity.publishCreate({ id: actor_id, data: results[0] });
                 res.json(results);
                 Caching.bust(req, results);

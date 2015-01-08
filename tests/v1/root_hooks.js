@@ -24,7 +24,7 @@ var nock = require('nock'),
 
 before(function (done) {
     http.globalAgent.maxSockets = 100;
-    // process.env.testMode = true; // enable mock responses from api/controllers/ActivityController.js
+  //  process.env.testMode = undefined; // enable mock responses from api/controllers/ActivityController.js
     process.env.testModeDebug = false; // cypher queries printed to console
 
     sails.lift({
@@ -34,7 +34,8 @@ before(function (done) {
                 protocol: 'http://',
                 port: 7474,
                 host: 'localhost',
-                base: '/db/data/'
+                base: '/db/data/',
+                debug: false
             }
         },
 

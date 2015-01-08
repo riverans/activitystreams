@@ -57,6 +57,31 @@ module.exports = {
         });
     },
 
+    /**
+     * A test WROTE Activity in a Json string format
+     * @return {string} returns A test Activity in a Json string format
+     */
+    createTestTargetJSON: function() {
+
+        return JSON.stringify({
+            actor: {
+                type: 'test_actor',
+                aid: '1'
+            },
+            object: {
+                type: 'test_object',
+                aid: '1'
+            },
+            target: {
+                type: 'test_target',
+                aid: '2'
+            },
+            verb: {
+                type: 'WROTE'
+            }
+        });
+    },
+
 
     /**
      * Creates request options hash which will be used to make a request to a mock server
