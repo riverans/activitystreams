@@ -9,22 +9,8 @@ var nock = require('nock'),
     sails = require('sails'),
     http = require('http');
 
-
-// Set up Nock to intercept traffic to the Neo4j server
-// Must match the server defined in config/adapters.js -or- in
-// node_modules/sails-neo4j/lib/adapter.js
-//
-// Note that it is possible to run tests against the live database
-// by omitting the use of Nock.  Be sure your server is running
-// otherwise you will receive Uncaught Error: connect ECONNREFUSED
-// var neo4j = nock('http://localhost:7474')
-//             .get('/db/data/')
-//             .reply(200);
-
-
 before(function (done) {
     http.globalAgent.maxSockets = 100;
-  //  process.env.testMode = undefined; // enable mock responses from api/controllers/ActivityController.js
     process.env.testModeDebug = false; // cypher queries printed to console
 
     sails.lift({
@@ -63,11 +49,9 @@ beforeEach(function(done) {
 });
 
 after(function (done) {
-    // nock.restore();
     sails.lower(done);
 });
 
 afterEach(function(done) {
-    // nock.cleanAll();
     done();
 });

@@ -23,8 +23,8 @@ module.exports = {
         q = [
             'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
             'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
-            'OPTIONAL MATCH (target)',
-            'WHERE HAS(verb.target_id) AND target.aid = verb.target_id AND target.created = verb.created',
+            'OPTIONAL MATCH (target {type : verb.target_type})',
+            'WHERE HAS(verb.target_id) AND target.aid = verb.target_id',
             'RETURN actor,verb,object,target'
         ];
         if (process.env.testMode === undefined) {
@@ -57,7 +57,7 @@ module.exports = {
         if (req.body.target !== undefined) {
             target = req.body.target;
             target_query = [
-                'ON CREATE SET verb.target_id = "' + target.aid + '"',
+                'ON CREATE SET verb.target_id = "' + target.aid + '", verb.target_type = "' + target.type + '"',
                 'MERGE (target:' + target.type + ' { aid:"' + target.aid + '"})',
                 'ON CREATE SET target.created = timestamp(), target.api = "' + target.api + '", target.type = "' + target.type + '"',
                 'ON MATCH SET target.updated = timestamp()',

@@ -32,7 +32,7 @@ module.exports = {
         }
 
         server.listen(port);
-        server.timeout = 2000;
+        server.timeout = 4000;
         return server;
     },
 

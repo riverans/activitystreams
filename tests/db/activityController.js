@@ -71,9 +71,10 @@ describe('Test Activity Controller  ', function () {
                         assert.strictEqual(bodyResponse.actor.data.type,bodyPOST.actor.type);
                         assert.strictEqual(bodyResponse.object.data.type,bodyPOST.object.type);
                         assert.strictEqual(bodyResponse.verb.type,bodyPOST.verb.type);
-                        assert.ok(bodyResponse.actor.id);
-                        assert.ok(bodyResponse.object.id);
-                        assert.ok(bodyResponse.verb.id);
+                        assert.ok(!bodyResponse.target);
+                        assert.ok(bodyResponse.actor);
+                        assert.ok(bodyResponse.object);
+                        assert.ok(bodyResponse.verb);
                         server.close(done);
                     });
                 });
@@ -102,7 +103,7 @@ describe('Test Activity Controller  ', function () {
                         assert.ok(bodyResponse.actor);
                         assert.ok(bodyResponse.object);
                         assert.ok(bodyResponse.verb);
-                        assert.ok(bodyResponse.target);
+                        assert.ok(bodyResponse.target.id);
                         server.close(done);
                     });
                 });
@@ -122,6 +123,7 @@ describe('Test Activity Controller  ', function () {
                 assert.ok(bodyResponse[0].actor);
                 assert.ok(bodyResponse[0].verb);
                 assert.ok(bodyResponse[0].object);
+                assert.ok(!bodyResponse[0].target.id);
                 done();
             });
         });
@@ -137,7 +139,7 @@ describe('Test Activity Controller  ', function () {
                 assert.ok(bodyResponse[0].actor);
                 assert.ok(bodyResponse[0].verb);
                 assert.ok(bodyResponse[0].object);
-                assert.ok(bodyResponse[0].target);
+                assert.ok(bodyResponse[0].target.id);
                 done();
             });
         });
