@@ -39,7 +39,8 @@
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test": "mocha tests/ --reporter=spec"
+    "test": "mocha tests/ --reporter=spec",
+    "testDB": "mocha tests/db/ --reporter=spec --timeout 20000"
   },
   "main": "app.js",
   "repository": {

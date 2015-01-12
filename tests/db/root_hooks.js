@@ -52,6 +52,3 @@ after(function (done) {
     sails.lower(done);
 });
 
-afterEach(function(done) {
-    done();
-});

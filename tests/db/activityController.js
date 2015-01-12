@@ -120,9 +120,11 @@ describe('Test Activity Controller  ', function () {
 
                 assert.equal(response.statusCode, 200);
                 assert.strictEqual(bodyResponse.length,1);
-                assert.ok(bodyResponse[0].actor);
-                assert.ok(bodyResponse[0].verb);
-                assert.ok(bodyResponse[0].object);
+                assert.equal(bodyResponse[0].actor.data.type,"test_actor");
+                assert.equal(bodyResponse[0].actor.data.aid,1);
+                assert.equal(bodyResponse[0].verb.type,"FAVORITED");
+                assert.equal(bodyResponse[0].object.data.type,"test_object");
+                assert.equal(bodyResponse[0].object.data.aid,1);
                 assert.ok(!bodyResponse[0].target.id);
                 done();
             });
@@ -136,10 +138,14 @@ describe('Test Activity Controller  ', function () {
 
                 assert.equal(response.statusCode, 200);
                 assert.strictEqual(bodyResponse.length,1);
-                assert.ok(bodyResponse[0].actor);
-                assert.ok(bodyResponse[0].verb);
-                assert.ok(bodyResponse[0].object);
-                assert.ok(bodyResponse[0].target.id);
+                assert.equal(bodyResponse[0].actor.data.type,"test_actor");
+                assert.equal(bodyResponse[0].actor.data.aid,1);
+                assert.equal(bodyResponse[0].verb.type,"WROTE");
+                assert.equal(bodyResponse[0].verb.data.target_id,bodyResponse[0].target.data.aid);
+                assert.equal(bodyResponse[0].verb.data.target_type,bodyResponse[0].target.data.type);
+                assert.equal(bodyResponse[0].object.data.type,"test_object");
+                assert.equal(bodyResponse[0].object.data.aid,1);
+
                 done();
             });
         });

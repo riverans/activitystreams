@@ -176,7 +176,7 @@ module.exports = {
         q = [
             'MATCH (actor:' + req.param('actor') + ')',
             'WHERE actor.aid="' + req.param('actor_id') + '"',
-            'OPTIONAL MATCH (actor:', + req.param('actor') + ')-[v]-()',
+            'OPTIONAL MATCH (actor:' + req.param('actor') + ')-[v]-()',
             'DELETE actor, v'
         ];
         if (process.env.testMode === undefined) {
@@ -185,7 +185,6 @@ module.exports = {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
                 }
-                console.log(results);
                 res.json(results);
                 Caching.bust(req, []);
             });
@@ -298,8 +297,9 @@ module.exports = {
         var obj = {}, q;
         q = [
             'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']->(object)',
+            'WHERE actor.aid="' + req.param('actor_id') + '"',
             'OPTIONAL MATCH (target {type : verb.target_type})',
-            'WHERE actor.aid="' + req.param('actor_id') + '" AND HAS(verb.target_id) AND target.aid = verb.target_id',
+            'WHERE HAS(verb.target_id) AND target.aid = verb.target_id',
             'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object, target: target } as activity',
             'RETURN count(objectCollection) as totalItems, collect(activity) as items'
         ];
@@ -331,7 +331,9 @@ module.exports = {
         q = [
             'MATCH (actor:' + req.param('actor') + ')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') + ')',
             'WHERE actor.aid="' + req.param('actor_id') + '"',
-            'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
+            'OPTIONAL MATCH (target {type : verb.target_type})',
+            'WHERE HAS(verb.target_id) AND target.aid = verb.target_id',
+            'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object, target: target } as activity',
             'RETURN count(objectCollection) as totalItems, collect(activity) as items'
         ];
         if (process.env.testMode === undefined) {
@@ -465,7 +467,9 @@ module.exports = {
         q = [
             'MATCH (actor:' + req.param('actor') + ')-[verb]->(object)',
             'WHERE actor.aid="' + req.param('actor_id') + '"',
-            'WITH type(verb) as verbType, collect(object) as objectCollection, { actor: actor, verb: verb, object: object } as activity',
+            'OPTIONAL MATCH (target {type : verb.target_type})',
+            'WHERE HAS(verb.target_id) AND target.aid = verb.target_id',
+            'WITH type(verb) as verbType, collect(object) as objectCollection, { actor: actor, verb: verb, object: object, target: target } as activity',
             'RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items'
         ];
         if (process.env.testMode === undefined) {
