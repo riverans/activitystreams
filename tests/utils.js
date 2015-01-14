@@ -74,7 +74,7 @@ module.exports = {
             },
             target: {
                 type: 'test_target',
-                aid: '2'
+                aid: '1'
             },
             verb: {
                 type: 'WROTE'

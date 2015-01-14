@@ -21,7 +21,7 @@ module.exports = {
             actor_id = req.param('actor_id'),
             object_id = req.param('object_id');
         q = [
-            'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']-(object:' + req.param('object') +')',
+            'MATCH (actor:' + req.param('actor') +')-[verb:' + req.param('verb') + ']->(object:' + req.param('object') +')',
             'WHERE actor.aid="' + actor_id +'" AND object.aid="' + object_id + '"',
             'OPTIONAL MATCH (target {type : verb.target_type})',
             'WHERE HAS(verb.target_id) AND target.aid = verb.target_id',
@@ -52,7 +52,7 @@ module.exports = {
             object = req.body.object,
             object_id = object.aid,
             target,
-            target_query = '';
+            target_query = [];
 
         if (req.body.target !== undefined) {
             target = req.body.target;
@@ -77,7 +77,7 @@ module.exports = {
             'ON CREATE SET verb.created = timestamp()',
             'ON MATCH SET verb.updated = timestamp()']
             .concat(target_query)
-            .concat(['RETURN actor, verb, object' + (target_query !== '' ? ', target' : '')]);
+            .concat(['RETURN actor, verb, object' + (target_query.length !== 0 ? ', target' : '')]);
 
         if (process.env.testMode === undefined) {
             Activity.adapter.query(q, {}, function(err, results) {

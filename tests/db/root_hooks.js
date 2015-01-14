@@ -7,7 +7,9 @@
 
 var nock = require('nock'),
     sails = require('sails'),
-    http = require('http');
+    http = require('http'),
+    assert = require('assert'),
+    testUtils = require('../utils');
 
 before(function (done) {
     http.globalAgent.maxSockets = 100;
@@ -49,6 +51,25 @@ beforeEach(function(done) {
 });
 
 after(function (done) {
-    sails.lower(done);
+    server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+    var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/test_actor/1', '');
+
+    server.on("listening", function() {
+        testUtils.makeRequest(requestOptions, function (res) {
+            assert.equal(res.statusCode, 200);
+
+            var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/test_object/1', '');
+            testUtils.makeRequest(requestOptions, function (res) {
+                assert.equal(res.statusCode, 200);
+
+                var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/test_target/1', '');
+                testUtils.makeRequest(requestOptions, function (res) {
+                    assert.equal(res.statusCode, 200);
+                    server.close();
+                    sails.lower(done);
+                });
+            });
+        });
+    });
 });
 

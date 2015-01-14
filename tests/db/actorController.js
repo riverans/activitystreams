@@ -41,7 +41,7 @@ describe('Test Actor Controller  ', function () {
                 var bodyResponse = JSON.parse(body)[0];
 
                 assert.equal(response.statusCode, 200);
-                assert.equal(bodyResponse.actor.data.type,"test_actor");
+                assert.equal(bodyResponse.actor.data.type, "test_actor");
                 done();
             });
         });
@@ -53,8 +53,8 @@ describe('Test Actor Controller  ', function () {
                 var bodyResponse = JSON.parse(body)[0];
 
                 assert.equal(response.statusCode, 200);
-                assert.equal(bodyResponse.actor.data.type,"test_actor");
-                assert.equal(bodyResponse.actor.data.aid,1);
+                assert.equal(bodyResponse.actor.data.type, "test_actor");
+                assert.equal(bodyResponse.actor.data.aid, 1);
                 done();
             });
         });
@@ -67,18 +67,18 @@ describe('Test Actor Controller  ', function () {
 
                 assert.equal(response.statusCode, 200);
                 assert.equal(bodyResponse.length, 2);
-                assert.equal(bodyResponse[0].verb,"FAVORITED");
-                assert.equal(bodyResponse[0].totalItems,1);
-                assert.equal(bodyResponse[0].items[0].actor.data.type,"test_actor");
-                assert.equal(bodyResponse[0].items[0].actor.data.aid,1);
-                assert.equal(bodyResponse[0].items[0].verb.type,"FAVORITED");
+                assert.equal(bodyResponse[0].verb, "FAVORITED");
+                assert.equal(bodyResponse[0].totalItems, 1);
+                assert.equal(bodyResponse[0].items[0].actor.data.type, "test_actor");
+                assert.equal(bodyResponse[0].items[0].actor.data.aid, 1);
+                assert.equal(bodyResponse[0].items[0].verb.type, "FAVORITED");
                 assert.ok(bodyResponse[0].items[0].object);
                 assert.ok(!bodyResponse[0].items[0].target.id);
-                assert.equal(bodyResponse[1].verb,"WROTE");
-                assert.equal(bodyResponse[1].totalItems,1);
-                assert.equal(bodyResponse[1].items[0].actor.data.type,"test_actor");
-                assert.equal(bodyResponse[1].items[0].actor.data.aid,1);
-                assert.equal(bodyResponse[1].items[0].verb.type,"WROTE");
+                assert.equal(bodyResponse[1].verb, "WROTE");
+                assert.equal(bodyResponse[1].totalItems, 1);
+                assert.equal(bodyResponse[1].items[0].actor.data.type, "test_actor");
+                assert.equal(bodyResponse[1].items[0].actor.data.aid, 1);
+                assert.equal(bodyResponse[1].items[0].verb.type, "WROTE");
                 assert.ok(bodyResponse[1].items[0].object);
                 assert.ok(bodyResponse[1].items[0].target.id);
                 done();
@@ -92,10 +92,10 @@ describe('Test Actor Controller  ', function () {
                 var bodyResponse = JSON.parse(body)[0];
 
                 assert.equal(response.statusCode, 200);
-                assert.equal(bodyResponse.totalItems,1);
-                assert.equal(bodyResponse.items[0].actor.data.type,"test_actor");
-                assert.equal(bodyResponse.items[0].actor.data.aid,1);
-                assert.equal(bodyResponse.items[0].verb.type,"FAVORITED");
+                assert.equal(bodyResponse.totalItems, 1);
+                assert.equal(bodyResponse.items[0].actor.data.type, "test_actor");
+                assert.equal(bodyResponse.items[0].actor.data.aid, 1);
+                assert.equal(bodyResponse.items[0].verb.type, "FAVORITED");
                 assert.ok(bodyResponse.items[0].object);
                 assert.ok(!bodyResponse.items[0].target.id);
                 done();
@@ -109,11 +109,11 @@ describe('Test Actor Controller  ', function () {
                 var bodyResponse = JSON.parse(body)[0];
 
                 assert.equal(response.statusCode, 200);
-                assert.equal(bodyResponse.totalItems,1);
-                assert.equal(bodyResponse.items[0].actor.data.type,"test_actor");
-                assert.equal(bodyResponse.items[0].actor.data.aid,1);
-                assert.equal(bodyResponse.items[0].verb.type,"FAVORITED");
-                assert.equal(bodyResponse.items[0].object.data.type,"test_object");
+                assert.equal(bodyResponse.totalItems, 1);
+                assert.equal(bodyResponse.items[0].actor.data.type, "test_actor");
+                assert.equal(bodyResponse.items[0].actor.data.aid, 1);
+                assert.equal(bodyResponse.items[0].verb.type, "FAVORITED");
+                assert.equal(bodyResponse.items[0].object.data.type, "test_object");
                 assert.ok(!bodyResponse.items[0].target.id);
                 done();
 
@@ -127,11 +127,11 @@ describe('Test Actor Controller  ', function () {
                 var bodyResponse = JSON.parse(body)[0];
 
                 assert.equal(response.statusCode, 200);
-                assert.equal(bodyResponse.totalItems,1);
-                assert.equal(bodyResponse.items[0].actor.data.type,"test_actor");
-                assert.equal(bodyResponse.items[0].actor.data.aid,1);
-                assert.equal(bodyResponse.items[0].verb.type,"WROTE");
-                assert.equal(bodyResponse.items[0].object.data.type,"test_object");
+                assert.equal(bodyResponse.totalItems, 1);
+                assert.equal(bodyResponse.items[0].actor.data.type, "test_actor");
+                assert.equal(bodyResponse.items[0].actor.data.aid, 1);
+                assert.equal(bodyResponse.items[0].verb.type, "WROTE");
+                assert.equal(bodyResponse.items[0].object.data.type, "test_object");
                 assert.ok(bodyResponse.items[0].target.id);
                 done();
 
@@ -145,7 +145,7 @@ describe('Test Actor Controller  ', function () {
                 var bodyResponse = JSON.parse(body);
 
                 assert.equal(response.statusCode, 200);
-                assert.strictEqual(bodyResponse.length,1);
+                assert.strictEqual(bodyResponse.length, 1);
                 assert.ok(bodyResponse[0].actor);
                 assert.ok(bodyResponse[0].verb);
                 assert.ok(bodyResponse[0].object);
@@ -157,19 +157,6 @@ describe('Test Actor Controller  ', function () {
     });
 
     describe('Check Actor DELETE Requests', function () {
-
-        it('DELETE: actor/{appname_model}/{id} (deleteSpecificActor) without a valid session', function (done) {
-            server = testUtils.fakeServer({code:401, respond:{}});
-            var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/user/1', '');
-
-            server.on("listening", function() {
-                testUtils.makeRequest(requestOptions, function (res) {
-                    assert.equal(res.statusCode, 401);
-                    server.close(done);
-                });
-            });
-        });
-
         it('DELETE: actor/{appname_model}/{id} (deleteSpecificActor) with a valid session', function (done) {
             server = testUtils.fakeServer({code:200, respond:{userId: 1}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/test_actor/1', '');
