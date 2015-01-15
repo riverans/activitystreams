@@ -18,13 +18,7 @@ before(function (done) {
     sails.lift({
         port: 9365,
         adapters: {
-            neo4j: {
-                protocol: 'http://',
-                port: 7474,
-                host: 'localhost',
-                base: '/db/data/',
-                debug: false
-            }
+            default: 'neo4j'
         },
 
         authPolicy : {

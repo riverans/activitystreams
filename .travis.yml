@@ -1,9 +1,12 @@
 language: node_js
 node_js:
   - "0.10"
+before_install:
+- "./ci/start_neo4j_server.sh"
 services:
   - redis-server
-  - neo4j
+jdk:
+- openjdk7
 notifications:
   hipchat:
     rooms:
