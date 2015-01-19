@@ -7,24 +7,12 @@
 
 var nock = require('nock'),
     sails = require('sails'),
-    http = require('http');
-
-
-// Set up Nock to intercept traffic to the Neo4j server
-// Must match the server defined in config/adapters.js -or- in
-// node_modules/sails-neo4j/lib/adapter.js
-//
-// Note that it is possible to run tests against the live database
-// by omitting the use of Nock.  Be sure your server is running
-// otherwise you will receive Uncaught Error: connect ECONNREFUSED
-var neo4j = nock('http://localhost:7474')
-            .get('/db/data/')
-            .reply(200);
-
+    http = require('http'),
+    assert = require('assert'),
+    testUtils = require('./utils');
 
 before(function (done) {
     http.globalAgent.maxSockets = 100;
-    process.env.testMode = true; // enable mock responses from api/controllers/ActivityController.js
     process.env.testModeDebug = false; // cypher queries printed to console
 
     sails.lift({
@@ -57,11 +45,25 @@ beforeEach(function(done) {
 });
 
 after(function (done) {
-    nock.restore();
-    sails.lower(done);
+    server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+    var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/test_actor/1', '');
+
+    server.on("listening", function() {
+        testUtils.makeRequest(requestOptions, function (res) {
+            assert.equal(res.statusCode, 200);
+
+            var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/test_object/1', '');
+            testUtils.makeRequest(requestOptions, function (res) {
+                assert.equal(res.statusCode, 200);
+
+                var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/test_target/1', '');
+                testUtils.makeRequest(requestOptions, function (res) {
+                    assert.equal(res.statusCode, 200);
+                    server.close();
+                    sails.lower(done);
+                });
+            });
+        });
+    });
 });
 
-afterEach(function(done) {
-    nock.cleanAll();
-    done();
-});
