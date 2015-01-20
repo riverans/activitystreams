@@ -3,6 +3,14 @@
 
 #### Horizon - an Activity Stream Service
 
+ActivityStreams is a REST service in order to create, serve and store all the social activities performed by the users.
+
+The ecosystem of ActivityStreams is also composed by the following repos:
+- [modules-activitysnippet](https://github.com/natgeo/modules-activitysnippet): In order to facilitate the creation of new activities in a website.
+- [modules-activitystream](https://github.com/natgeo/modules-activitystream): In order to integrate the visualization of the activities in a website.
+
+Consider reading [Environment setup](https://github.com/natgeo/activitystreams/blob/doc/README.md#environment-setup) to get everything running
+
 ##### Table of Contents
 
 1. Introduction
@@ -178,10 +186,12 @@ Installation
 ============
 
 Make sure you have Neo4j, Redis, Ruby, Bundler, Node, and npm installed.
+This is the basic installation of the service. If you want to install the whole ecosystem checkout [Environment Setup](https://github.com/natgeo/activitystreams/blob/doc/README.md#environment-setup)
 
-	npm install activitystreams
-	node ./node_modules/activitystreams/app.js
-
+	npm install --localapp activitystreams
+	cd activitystreams
+	npm install 
+	node app.js
 
 That's about it. There are many configuration options you can override and build out, but that's the basic requirement for installation.
 
@@ -198,64 +208,53 @@ These files are part of the package.json file, so NPM is able to install them al
 * [Sails.JS](http://sailsjs.org/#!documentation)
 * [Sails-Neo4j](https://github.com/natgeo/sails-neo4j)
 
-# Maven
-* `brew install maven`
-
-# Bundle
-*This takes care of ruby/sass dependencies*
-* `gem install bundler && bundle install`
-* `gem install sass compass`
-
-# Ruby
-```
-sudo apt-get install ruby ruby-dev gcc build-essential
-```
 
 Environment Setup
 =================
+Assuming you satisfied all the [dependencies](https://github.com/natgeo/activitystreams/wiki/JDK,-Neo4j-and-Redis-install) required to install the project, and you have redis and neo4j running:
+
+Install the REST service.
 ```
 mkdir ~/code/activitystreams
 cd ~/code/activitystreams
 git clone git@github.com:natgeo/activitystreams.git .
-cd activitystreams
 npm install
+node app.js
 ```
+Edit ```/etc/hosts``` and add (as.dev.nationalgeographic.com) to your hosts.
 
-Also clone git@github.com:natgeo/modules-activitystream.git, git@github.com:natgeo/modules-activitysnippet.git and https://github.com/natgeo/sails-neo4j.git
-run npm install in all repos:
 
+Open (http://as.dev.nationalgeographic.com:9365) in your browser to make sure the service is running.
+
+Open another CLI window and install  [modules-activitystream](http://github.com/natgeo/modules-activitystream)
 ```
 cd ~/code/
 git clone git@github.com:natgeo/modules-activitystream.git
 cd modules-activitystream
+cp app/scripts/localconfig.coffee.example app/scripts/localconfig.coffee
 npm install
+bower install
+bundle install
 ```
+Try it, by running ```grunt serve```. Then open a new browser window (http://as.dev.nationalgeographic.com:9000/) will show an empty page since you don't have any activities yet.
 
+Install  [modules-activitysnippet](http://github.com/natgeo/modules-activitysnippet)
 ```
 cd ~/code/
 git clone git@github.com:natgeo/modules-activitysnippet.git
 cd modules-activitysnippet
 npm install
+bower install
+bundle install
 ```
 
+Optionally you can install [sails-neo4j](http://github.com/natgeo/sails-neo4j) which is required for development reasons, but is already included as a dependency in Activitystream service.
 ```
 cd ~/code/
 git clone git@github.com:natgeo/sails-neo4j.git
 cd sails-neo4j 
 npm install
 ```
-
-For each one of the mentioned Repos you must run:
-```
-npm install
-bower install
-gem install
-```
-
-To run your server: `neo4j-server start` then `sails lift`
-To view your server, visit http://localhost:9365
-
-
 
 Environment Config Overrides
 ============================
@@ -300,18 +299,9 @@ A simple demo page for the NatGeo Activity Streams project
 add as.dev.yourhostnamehere.com to your /etc/hosts file
 
 
-Usage
-=====
-A local instance of MMDB is also required for signing in and favoriting an image.  Clone the MMDB
-repo, run through the installer, and run it on port 8000.  This sails server should be running as well.
-
-Access the demo at http://as.nationalgeographic.com:9365/as-demo.  If you are not
-on the .nationalgeographic.com domain, then the header controls will not display.
-
-
 Sample Demo Script
 ==================
-1. Access the page: http://as.nationalgeographic.com:6935/as-demo.html
+1. Access the page: http://as.dev.yourhostnamehere.com:6935/as-demo.html
 2. Click on a heart underneath a page.  You should see an alert that tells you to log in.
 3. Log in with a known account.
 4. Click on a heart underneath a picture.  It should turn from black to pink.
