@@ -124,30 +124,4 @@ describe('Test Authorization', function () {
             });
         });
     });
-
-    describe('Object controller', function () {
-        describe('Test DELETE Actions', function () {
-            it('DELETE: object/{appname_model}/{id} (400) without a valid session', function (done) {
-                server = testUtils.fakeServer({code:400, respond:{}});
-                var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/object/app_object/1', '');
-
-                server.on("listening", function() {
-                    testUtils.makeRequest(requestOptions, function (res) {
-                        assert.equal(res.statusCode, 400);
-                        server.close(done);
-                    });
-                });
-            });
-
-            it('should reject del request with no session cookie', function (done) {
-                baseUrl.pathname = 'api/v1/object/app_object/1';
-                apiUrl = url.format(baseUrl);
-                request.del(apiUrl, function (err, res, body) {
-                    assert.equal(res.statusCode, 401);
-                    done();
-                });
-            });
-        });
-    });
-
 });
