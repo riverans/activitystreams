@@ -5,8 +5,7 @@
  *  http://visionmedia.github.io/mocha/#asynchronous-code
  */
 
-var nock = require('nock'),
-    sails = require('sails'),
+var sails = require('sails'),
     http = require('http'),
     assert = require('assert'),
     testUtils = require('./utils');
