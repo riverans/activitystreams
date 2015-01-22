@@ -32,23 +32,15 @@ module.exports = {
             'MATCH(object:' + req.param('object') + ')',
             'RETURN object'
         ];
-        if (process.env.testMode === undefined) {
-            Activity.adapter.query(q, {}, function(err, results) {
-                if (err) {
-                    // return res.json(err);
-                    res.json(500, { error: 'INVALID REQUEST' });
-                }
-                results = Pagination(req.query, results);
-                res.json(results);
-                Caching.write(req, results, 5);
-            });
-        } else {
-            if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
-                // Display debug query in console
-                Activity.adapter.query(q, {});
+
+        Activity.adapter.query(q, {}, function(err, results) {
+            if (err) {
+                res.json(500, { error: 'INVALID REQUEST' });
             }
-            res.json(200, {});
-        }
+            results = Pagination(req.query, results);
+            res.json(results);
+            Caching.write(req, results, 5);
+        });
     },
 
 
@@ -63,22 +55,14 @@ module.exports = {
             'WHERE object.aid="' + req.param('object_id') + '"',
             'RETURN object'
         ];
-        if (process.env.testMode === undefined) {
-            Activity.adapter.query(q, {}, function(err, results) {
-                if (err) {
-                    // return res.json(err);
-                    res.json(500, { error: 'INVALID REQUEST' });
-                }
-                res.json(results);
-                Caching.write(req, results, 4);
-            });
-        } else {
-            if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
-                // Display debug query in console
-                Activity.adapter.query(q, {});
+
+        Activity.adapter.query(q, {}, function(err, results) {
+            if (err) {
+                res.json(500, { error: 'INVALID REQUEST' });
             }
-            res.json(200, {});
-        }
+            res.json(results);
+            Caching.write(req, results, 4);
+        });
     },
 
     /**
@@ -94,22 +78,14 @@ module.exports = {
             'WHERE object.aid="' + req.param('object_id') + '"',
             'DELETE object, v'
         ];
-        if (process.env.testMode === undefined) {
-            Activity.adapter.query(q, {}, function(err, results) {
-                if (err) {
-                    // return res.json(err);
-                    res.json(500, { error: 'INVALID REQUEST' });
-                }
-                res.json(results);
-                Caching.bust(req, []);
-            });
-        } else {
-            if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
-                // Display debug query in console
-                Activity.adapter.query(q, {});
+
+        Activity.adapter.query(q, {}, function(err, results) {
+            if (err) {
+                res.json(500, { error: 'INVALID REQUEST' });
             }
-            res.json(200, {});
-        }
+            res.json(results);
+            Caching.bust(req, []);
+        });
     },
 
 
@@ -126,29 +102,21 @@ module.exports = {
             'WITH type(verb) as verbType, count(actor) as actors, { actor: actor, verb: verb, object: object } as activity',
             'RETURN verbType as verb, count(actors) as totalItems, collect(activity) as items'
         ];
-        if (process.env.testMode === undefined) {
-            Activity.adapter.query(q, {}, function(err, results) {
-                if (err) {
-                    // return res.json(err);
-                    res.json(500, { error: 'INVALID REQUEST' });
-                }
 
-                results.forEach(function(result) {
-                    if (result.hasOwnProperty('items')) {
-                        result.items = Pagination(req.query, result.items);
-                    }
-                });
-
-                res.json(results);
-                Caching.write(req, results, 4);
-            });
-        } else {
-            if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
-                // Display debug query in console
-                Activity.adapter.query(q, {});
+        Activity.adapter.query(q, {}, function(err, results) {
+            if (err) {
+                res.json(500, { error: 'INVALID REQUEST' });
             }
-            res.json(200, {});
-        }
+
+            results.forEach(function(result) {
+                if (result.hasOwnProperty('items')) {
+                    result.items = Pagination(req.query, result.items);
+                }
+            });
+
+            res.json(results);
+            Caching.write(req, results, 4);
+        });
     },
 
 
@@ -164,27 +132,19 @@ module.exports = {
             'WITH count(actor) as actors, { actor: actor, verb: verb, object: object } as activity',
             'RETURN count(actors) as totalItems, collect(activity) as items'
         ];
-        if (process.env.testMode === undefined) {
-            Activity.adapter.query(q, {}, function(err, results) {
-                if (err) {
-                    // return res.json(err);
-                    res.json(500, { error: 'INVALID REQUEST' });
-                }
 
-                if (results.length && results[0].hasOwnProperty('items')) {
-                    results[0].items = Pagination(req.query, results[0].items);
-                }
-
-                res.json(results);
-                Caching.write(req, results, 3);
-            });
-        } else {
-            if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
-                // Display debug query in console
-                Activity.adapter.query(q, {});
+        Activity.adapter.query(q, {}, function(err, results) {
+            if (err) {
+                res.json(500, { error: 'INVALID REQUEST' });
             }
-            res.json(200, {});
-        }
+
+            if (results.length && results[0].hasOwnProperty('items')) {
+                results[0].items = Pagination(req.query, results[0].items);
+            }
+
+            res.json(results);
+            Caching.write(req, results, 3);
+        });
     },
 
 
@@ -200,26 +160,18 @@ module.exports = {
             'WITH count(actor) as actors, { actor: actor, verb: verb, object: object } as activity',
             'RETURN count(actors) as totalItems, collect(activity) as items'
         ];
-        if (process.env.testMode === undefined) {
-            Activity.adapter.query(q, {}, function(err, results) {
-                if (err) {
-                    // return res.json(err);
-                    res.json(500, { error: 'INVALID REQUEST' });
-                }
 
-                if (results.length && results[0].hasOwnProperty('items')) {
-                    results[0].items = Pagination(req.query, results[0].items);
-                }
-
-                res.json(results);
-                Caching.write(req, results, 2);
-            });
-        } else {
-            if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
-                // Display debug query in console
-                Activity.adapter.query(q, {});
+        Activity.adapter.query(q, {}, function(err, results) {
+            if (err) {
+                res.json(500, { error: 'INVALID REQUEST' });
             }
-            res.json(200, {});
-        }
+
+            if (results.length && results[0].hasOwnProperty('items')) {
+                results[0].items = Pagination(req.query, results[0].items);
+            }
+
+            res.json(results);
+            Caching.write(req, results, 2);
+        });
     }
 };

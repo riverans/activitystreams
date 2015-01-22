@@ -16,7 +16,6 @@
     "load-grunt-tasks": "^0.2.1",
     "lodash": "^2.4.1",
     "mocha": "^1.17.1",
-    "nock": "^0.42.3",
     "optimist": "^0.3.4",
     "redis": "^0.12.1",
     "request": "^2.30.0",
@@ -33,15 +32,12 @@
     "load-grunt-tasks": "~0.2.1",
     "mocha": "~1.17.1",
     "request": "~2.30.0",
-    "supertest": "~0.10.0",
-    "nock": "^0.44.3"
+    "supertest": "~0.10.0"
   },
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test" : "npm run testController && npm run testDB",
-    "testController": "mocha ./tests/ --reporter=spec",
-    "testDB": "mocha ./tests/db/ --reporter=spec --timeout 150000"
+    "test" : "mocha ./tests/ --reporter=spec --timeout 150000"
   },
   "main": "app.js",
   "repository": {
