@@ -28,11 +28,11 @@ module.exports = {
             port = sails.config.authPolicy.endpoint.port;
         } catch (err) {
             console.warn("sails.config.authPolicy.endpoint.port not initialized!. Using default port 6969...");
-            port = 6969
-        };
+            port = 6969;
+        }
 
         server.listen(port);
-        server.timeout = 2000;
+        server.timeout = 4000;
         return server;
     },
 
@@ -44,15 +44,40 @@ module.exports = {
 
         return JSON.stringify({
             actor: {
-                type: 'user',
-                aid: 1
+                type: 'test_actor',
+                aid: '1'
             },
             object: {
-                type: 'photo',
-                photo_id: '1'
+                type: 'test_object',
+                aid: '1'
             },
             verb: {
                 type: 'FAVORITED'
+            }
+        });
+    },
+
+    /**
+     * A test WROTE Activity in a Json string format
+     * @return {string} returns A test Activity in a Json string format
+     */
+    createTestTargetJSON: function() {
+
+        return JSON.stringify({
+            actor: {
+                type: 'test_actor',
+                aid: '1'
+            },
+            object: {
+                type: 'test_object',
+                aid: '1'
+            },
+            target: {
+                type: 'test_target',
+                aid: '1'
+            },
+            verb: {
+                type: 'WROTE'
             }
         });
     },
