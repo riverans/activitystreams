@@ -142,7 +142,7 @@ module.exports = {
             'RETURN actor'
         ];
 
-        Activity.adapter.query(q, {}, function(err, results) {
+        Activity.adapter.query.query(q, {}, function(err, results) {
             if (err) {
                 res.json(500, { error: 'INVALID REQUEST' });
             }

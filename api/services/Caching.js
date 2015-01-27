@@ -4,10 +4,10 @@
 var redis = require('redis'),
     sails = require('sails'),
     crc32 = require('buffer-crc32'),
-    Promise = require('es6-promise').Promise;
+    Promise = require('es6-promise').Promise,
+    crypto = require('crypto');
 
-
-var client = redis.createClient(sails.config.adapters.redis.port, sails.config.adapters.redis.host, {});
+var client = redis.createClient(sails.config.connections.redis.port, sails.config.connections.redis.host, {});
 
 var cacheConnected = false;
 
@@ -90,16 +90,12 @@ module.exports = {
             });
         }
 
-        var replacer = sails.express.app.get('json replacer'),
-            spaces = sails.express.app.get('json spaces'),
-            cacheHash = {
+        var cacheHash = {
                 data: data,
                 /**
-                 * Generate a proper ETag for the data. This method is particular
-                 * to the version of Express (used by Sails) used. Modern experss
-                 * versions use crypto.createHash('md5').update(JSON.stringify(data)).digest('base64')
+                 * Generate a proper ETag for the data.
                  */
-                etag: '"' + crc32.signed(JSON.stringify(data, replacer, spaces)) + '"'
+                etag: '"' + crypto.createHash('md5').update(JSON.stringify(data)).digest('base64') + '"'
             },
             /** Normalize the url. */
             url = (req.url.substr(-1) !== '/') ? req.url + '/' : req.url,

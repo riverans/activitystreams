@@ -19,8 +19,8 @@
     "optimist": "^0.3.4",
     "redis": "^0.12.1",
     "request": "^2.30.0",
-    "sails": "^0.9.17",
-    "sails-disk": "^0.9.3",
+    "sails": "^0.10.5",
+    "sails-disk": "^0.10.7",
     "sails-neo4j": "~0.2.4",
     "socket.io": "^0.9.17",
     "supertest": "^0.10.0"

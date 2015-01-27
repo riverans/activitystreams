@@ -27,7 +27,7 @@ module.exports = {
             'WHERE HAS(verb.target_id) AND target.aid = verb.target_id',
             'RETURN actor,verb,object,target'
         ];
-        Activity.adapter.query(q, {}, function(err, results) {
+        Activity.adapter.query.query(q, {}, function(err, results) {
             if (err) {
                 res.json(500, { error: 'INVALID REQUEST' });
             }
@@ -71,7 +71,7 @@ module.exports = {
             .concat(target_query)
             .concat(['RETURN actor, verb, object' + (target_query.length !== 0 ? ', target' : '')]);
 
-        Activity.adapter.query(q, {}, function(err, results) {
+        Activity.adapter.query.query(q, {}, function(err, results) {
             if (err) {
                 res.json(500, { error: err, message: 'INVALID REQUEST'});
             }
@@ -95,7 +95,7 @@ module.exports = {
             'RETURN actor, object'
         ];
 
-        Activity.adapter.query(q, {}, function(err, results) {
+        Activity.adapter.query.query(q, {}, function(err, results) {
                 if (err) {
                     // return res.json(err);
                     res.json(500, { error: 'INVALID REQUEST' });
