@@ -40,9 +40,9 @@ RabbitClient.prototype = {
 
             sails.on('lower', self.onExit);
 
-            self.createExchange({ durable: false })
+            self.createExchange({autoDelete: false, durable: false, type: 'direct'})
                 .then(function() {
-                    self.createQueue({ durable: false, confirm: true })
+                    self.createQueue({autoDelete: false, confirm: true, durable: false, exclusive: true})
                         .then(function() {
                             self.subscribe(self.queue);
                             self.running = true;
@@ -58,7 +58,7 @@ RabbitClient.prototype = {
         sails.log.debug("Creating exchange...");
 
         return new Promise(function(resolve, reject) {
-            self.exchange = self.connection.exchange('horizon', options, resolve);
+            self.exchange = self.connection.exchange(sails.config.adapters.rabbit.exchange, options, resolve);
         });
     },
 
@@ -66,7 +66,7 @@ RabbitClient.prototype = {
         var self = this;
 
         return new Promise(function(resolve, reject) {
-            self.queue = self.connection.queue('horizon', options, resolve );
+            self.queue = self.connection.queue(sails.config.adapters.rabbit.queue, options, resolve);
         });
     },
 
@@ -79,29 +79,27 @@ RabbitClient.prototype = {
     flushMessages: function() {
         if (this.messages.length) {
             this.publish(this.messages.pop());
-        };
+        }
     },
 
     subscribe: function(queue) {
         queue.subscribe(function(msg) {
             console.log("Reading msg: ", msg);
         });
-        queue.bind(this.exchange.name, 'horizon');
+        queue.bind(this.exchange.name, sails.config.adapters.rabbit.routingKey);
     },
 
     publish: function(data) {
         if (this.running) {
-            this.exchange.publish('horizon', { data: data });
+            this.exchange.publish(sails.config.adapters.rabbit.routingKey, {data: data});
         } else {
             this.messages.push(data);
             sails.log('Rabbit is not ready. Message was saved.');
         }
     }
-}
+};
 
 
 var rabbitClient = new RabbitClient();
-
-setTimeout(function() { rabbitClient.publish("Hello World YAAY"); }, 3000);
 
 module.exports = rabbitClient;
