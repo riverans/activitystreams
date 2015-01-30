@@ -97,7 +97,10 @@ module.exports = {
 
         Activity.adapter.query(q, {}, function(err, results) {
                 if (err) {
-                    return res.json(500, { error: 'INVALID REQUEST' });
+                    return res.json(500, {error: 'INVALID REQUEST'});
+                }
+                if (!results.length) {
+                    return res.json(404, {error: 'NOT FOUND'});
                 }
                 results[0].verb = verb;
                 /** We need to update to sails 0.10.x to use publishDestroy instead of publishUpdate. */
