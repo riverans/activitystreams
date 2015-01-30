@@ -1,11 +1,10 @@
-/*jslint node: true */
+/* jslint node: true */
 'use strict';
 
 var redis = require('redis'),
     sails = require('sails'),
     crc32 = require('buffer-crc32'),
     Promise = require('es6-promise').Promise;
-
 
 var client = redis.createClient(sails.config.adapters.redis.port, sails.config.adapters.redis.host, {});
 

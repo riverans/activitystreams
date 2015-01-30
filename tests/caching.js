@@ -2,7 +2,6 @@ var assert = require('assert'),
     _ = require('lodash'),
     sails = require('sails'),
     redis = require('redis'),
-    client = redis.createClient(),
     containsMember = function(members, member) {
         if (Object.prototype.toString.call(members) === '[object String]') {
             member = ';' + member + ';';
@@ -27,7 +26,13 @@ var assert = require('assert'),
     };
 
 describe('Caching Service', function() {
-    var data;
+    var data, client;
+
+    before(function(done) {
+        client = redis.createClient(sails.config.adapters.redis.port, sails.config.adapters.redis.host, {});
+        done();
+    });
+
     beforeEach(function(done) {
         data = [{
             actor: {

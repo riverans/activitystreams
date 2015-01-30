@@ -7,6 +7,10 @@ services:
   - redis-server
 jdk:
 - openjdk7
+branches:
+  only:
+    - master
+    - develop
 notifications:
   hipchat:
     rooms:

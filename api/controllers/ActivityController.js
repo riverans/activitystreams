@@ -27,23 +27,15 @@ module.exports = {
             'WHERE HAS(verb.target_id) AND target.aid = verb.target_id',
             'RETURN actor,verb,object,target'
         ];
-        if (process.env.testMode === undefined) {
-            Activity.adapter.query(q, {}, function(err, results) {
-                if (err) {
-                    // return res.json(err);
-                    res.json(500, { error: 'INVALID REQUEST' });
-                }
-                res.json(results);
-                Caching.write(req, results, 1);
-            });
-        } else {
-            if (process.env.testModeDebug !== undefined && process.env.testModeDebug === true) {
-                // Display debug query in console
-                Activity.adapter.query(q, {});
+        Activity.adapter.query(q, {}, function(err, results) {
+            if (err) {
+                return res.json(500, { error: 'INVALID REQUEST' });
             }
-            res.json(200, {});
-        }
+            res.json(results);
+            return Caching.write(req, results, 1);
+        });
     },
+
     postSpecificActivity: function(req, res) {
         var q,
             actor = req.body.actor,
@@ -79,26 +71,15 @@ module.exports = {
             .concat(target_query)
             .concat(['RETURN actor, verb, object' + (target_query.length !== 0 ? ', target' : '')]);
 
-        if (process.env.testMode === undefined) {
-            Activity.adapter.query(q, {}, function(err, results) {
-                if (err) {
-                    res.json(500, { error: err, message: 'INVALID REQUEST'});
-                }
-                Activity.publishCreate({ id: actor_id, data: results[0] });
-
-                // Notify the activity to storm by RabbitMQ messenger
-                RabbitMQ.publish(results);
-
-                res.json(results);
-                Caching.bust(req, results);
-            });
-        } else {
-            if (process.env.testModeDebug === true) {
-                // Display debug query in console
-                Activity.adapter.query(q, {});
+        Activity.adapter.query(q, {}, function(err, results) {
+            if (err) {
+                return res.json(500, { error: err, message: 'INVALID REQUEST'});
             }
-            res.json(200, {});
-        }
+            Activity.publishCreate({ id: actor_id, data: results[0] });
+            RabbitMQ.publish(results);
+            res.json(results);
+            return Caching.bust(req, results);
+        });
     },
 
     deleteSpecificActivity: function(req, res) {
@@ -114,25 +95,17 @@ module.exports = {
             'DELETE verb',
             'RETURN actor, object'
         ];
-        if (process.env.testMode === undefined) {
-            Activity.adapter.query(q, {}, function(err, results) {
-                    if (err) {
-                        // return res.json(err);
-                        res.json(500, { error: 'INVALID REQUEST' });
-                    }
-                    results[0].verb = verb;
-                    /** We need to update to sails 0.10.x to use publishDestroy instead of publishUpdate. */
-                    Activity.publishUpdate(actor_id, {data: results[0]});
-                    res.json(results);
-                    Caching.bust(req);
+
+        Activity.adapter.query(q, {}, function(err, results) {
+                if (err) {
+                    return res.json(500, { error: 'INVALID REQUEST' });
                 }
-            );
-        } else {
-            if (process.env.testModeDebug === true) {
-                // Display debug query in console
-                Activity.adapter.query(q, {});
+                results[0].verb = verb;
+                /** We need to update to sails 0.10.x to use publishDestroy instead of publishUpdate. */
+                Activity.publishUpdate(actor_id, {data: results[0]});
+                res.json(results);
+                return Caching.bust(req);
             }
-            res.json(200, {});
-        }
+        );
     }
 };
