@@ -1,3 +1,4 @@
+/* jslint node: true */
 'use strict';
 
 var
@@ -84,14 +85,14 @@ RabbitClient.prototype = {
 
     subscribe: function(queue) {
         queue.subscribe(function(msg) {
-            console.log("Reading msg: ", msg);
+            sails.log("Reading msg: ", msg);
         });
         queue.bind(this.exchange.name, sails.config.adapters.rabbit.routingKey);
     },
 
     publish: function(data) {
         if (this.running) {
-            this.exchange.publish(sails.config.adapters.rabbit.routingKey, {data: data});
+            this.exchange.publish(sails.config.adapters.rabbit.routingKey, data);
         } else {
             this.messages.push(data);
             sails.log('Rabbit is not ready. Message was saved.');

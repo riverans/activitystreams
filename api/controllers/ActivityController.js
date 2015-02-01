@@ -75,9 +75,9 @@ module.exports = {
             if (err) {
                 return res.json(500, { error: err, message: 'INVALID REQUEST'});
             }
-            Activity.publishCreate({ id: actor_id, data: results[0] });
-            RabbitMQ.publish(results);
             res.json(results);
+            Activity.publishCreate({ id: actor_id, data: results[0] });
+            RabbitMQ.publish({data: results, verb: 'created'});
             return Caching.bust(req, results);
         });
     },
@@ -105,8 +105,9 @@ module.exports = {
                 }
                 results[0].verb = verb;
                 /** We need to update to sails 0.10.x to use publishDestroy instead of publishUpdate. */
-                Activity.publishUpdate(actor_id, {data: results[0]});
                 res.json(results);
+                Activity.publishUpdate(actor_id, {data: results[0]});
+                RabbitMQ.publish({data: results, verb: 'destroyed'});
                 return Caching.bust(req);
             }
         );
