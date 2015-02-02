@@ -16,7 +16,7 @@ before(function (done) {
 
     sails.lift({
         port: 9365,
-        adapters: {
+        connections: {
             default: 'neo4j'
         },
 
