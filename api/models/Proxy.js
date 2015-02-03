@@ -7,6 +7,4 @@
 
 module.exports = {
 
-  adapter: 'sails-neo4j',
-
 };
