@@ -25,7 +25,7 @@ RabbitClient.prototype = {
 
         sails.log.debug("Starting rabbit...");
 
-        this.connection = amqp.createConnection(sails.config.adapters.rabbit, {
+        this.connection = amqp.createConnection(sails.config.connections.rabbit, {
             reconnectBackoffTime: 7000
         });
 
@@ -59,7 +59,7 @@ RabbitClient.prototype = {
         sails.log.debug("Creating exchange...");
 
         return new Promise(function(resolve, reject) {
-            self.exchange = self.connection.exchange(sails.config.adapters.rabbit.exchange, options, resolve);
+            self.exchange = self.connection.exchange(sails.config.connections.rabbit.exchange, options, resolve);
         });
     },
 
@@ -67,7 +67,7 @@ RabbitClient.prototype = {
         var self = this;
 
         return new Promise(function(resolve, reject) {
-            self.queue = self.connection.queue(sails.config.adapters.rabbit.queue, options, resolve);
+            self.queue = self.connection.queue(sails.config.connections.rabbit.queue, options, resolve);
         });
     },
 
@@ -87,12 +87,12 @@ RabbitClient.prototype = {
         queue.subscribe(function(msg) {
             sails.log("Reading msg: ", msg);
         });
-        queue.bind(this.exchange.name, sails.config.adapters.rabbit.routingKey);
+        queue.bind(this.exchange.name, sails.config.connections.rabbit.routingKey);
     },
 
     publish: function(data) {
         if (this.running) {
-            this.exchange.publish(sails.config.adapters.rabbit.routingKey, data);
+            this.exchange.publish(sails.config.connections.rabbit.routingKey, data);
         } else {
             this.messages.push(data);
             sails.log('Rabbit is not ready. Message was saved.');
