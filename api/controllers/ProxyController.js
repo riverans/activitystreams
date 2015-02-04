@@ -18,7 +18,7 @@ module.exports = {
             'RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items'
         ];
 
-        Proxy.adapter.query(q, {}, function(err, results) {
+        Proxy.query(q, {}, function(err, results) {
             if (err) { console.log(err); }
 
             results.forEach(function(result) {

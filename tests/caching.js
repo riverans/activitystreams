@@ -29,7 +29,7 @@ describe('Caching Service', function() {
     var data, client;
 
     before(function(done) {
-        client = redis.createClient(sails.config.adapters.redis.port, sails.config.adapters.redis.host, {});
+        client = redis.createClient(sails.config.connections.redis.port, sails.config.connections.redis.host, {});
         done();
     });
 
@@ -145,15 +145,13 @@ describe('Caching Service', function() {
         });
 
         it('should write the correct etag', function(done) {
-            var crc32 = require('buffer-crc32'),
-                replacer = sails.express.app.get('json replacer'),
-                spaces = sails.express.app.get('json spaces');
+            var crypto = require('crypto');
 
             sails.services.caching.write(req, data);
 
             client.select(1);
             client.get(req.url + '/', function(err, reply) {
-                assert.equal(JSON.parse(reply).etag, '"' + crc32.signed(JSON.stringify(data, replacer, spaces)) + '"');
+                assert.equal(JSON.parse(reply).etag, '"' + crypto.createHash('md5').update(JSON.stringify(data)).digest('base64') + '"');
                 done();
             });
         });

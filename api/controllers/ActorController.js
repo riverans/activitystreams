@@ -80,7 +80,7 @@ module.exports = {
             'RETURN actor'
         ];
 
-        Activity.adapter.query(q, {}, function(err, results) {
+        Activity.query(q, {}, function(err, results) {
             if (err) {
                 res.json(500, { error: 'INVALID REQUEST' });
             }
@@ -142,7 +142,7 @@ module.exports = {
             'RETURN actor'
         ];
 
-        Activity.adapter.query(q, {}, function(err, results) {
+        Activity.query(q, {}, function(err, results) {
             if (err) {
                 return res.json(500, { error: 'INVALID REQUEST' });
             }
@@ -165,7 +165,7 @@ module.exports = {
             'DELETE actor, v'
         ];
 
-        Activity.adapter.query(q, {}, function(err, results) {
+        Activity.query(q, {}, function(err, results) {
             if (err) {
                 return res.json(500, { error: 'INVALID REQUEST' });
             }
@@ -283,7 +283,7 @@ module.exports = {
             'RETURN count(objectCollection) as totalItems, collect(activity) as items'
         ];
 
-        Activity.adapter.query(q, {}, function(err, results) {
+        Activity.query(q, {}, function(err, results) {
             if (err) {
                 res.json(500, { error: 'INVALID REQUEST' });
             }
@@ -308,7 +308,7 @@ module.exports = {
             'RETURN count(objectCollection) as totalItems, collect(activity) as items'
         ];
 
-        Activity.adapter.query(q, {}, function(err, results) {
+        Activity.query(q, {}, function(err, results) {
             if (err) {
                 res.json(500, { error: 'INVALID REQUEST' });
             }
@@ -436,7 +436,7 @@ module.exports = {
             'RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items'
         ];
 
-        Activity.adapter.query(q, {}, function(err, results) {
+        Activity.query(q, {}, function(err, results) {
             if (err) {
                 res.json(500, { error: 'INVALID REQUEST' });
             }
