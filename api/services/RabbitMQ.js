@@ -86,8 +86,10 @@ RabbitClient.prototype = {
     subscribe: function(queue) {
         queue.subscribe(function(msg) {
             sails.log("Reading msg: ", msg);
+            sails.sockets.broadcast(msg.feed, msg);
         });
-        queue.bind(this.exchange.name, sails.config.connections.rabbit.routingKey);
+        //queue.bind(this.exchange.name, sails.config.connections.rabbit.routingKey);
+        queue.bind(this.exchange.name, 'feed');
     },
 
     publish: function(data) {
