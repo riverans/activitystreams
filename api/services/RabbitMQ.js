@@ -74,7 +74,7 @@ RabbitClient.prototype = {
     onExit: function() {
         sails.log('Shutting down rabbit.');
         // Flush data on exit
-        this.connection.close();
+        sails.services.rabbitmq.connection.disconnect();
     },
 
     flushMessages: function() {
