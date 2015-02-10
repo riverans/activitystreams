@@ -52,7 +52,7 @@ module.exports = {
 		}
 	});
 
-	Allows for 
+	Allows for
 
 	+ Response 200 (application/jsonp)
 
@@ -80,8 +80,8 @@ module.exports = {
 	subscribe: function(req, res) {
 		var id = [];
 		id.push(req.param('user'));
-		Activity.subscribe(req.socket);
-		Activity.subscribe(req.socket, id);
+		Activity.watch(req);
+		Activity.subscribe(req.socket, [id]);
 		res.send(200);
 	}
 };
