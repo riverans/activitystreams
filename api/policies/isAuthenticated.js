@@ -53,7 +53,10 @@ module.exports = function(req, res, next) {
 
     // grab the cookie name used to verify a session
     options = {
-        url: host + util.format(sails.config.authPolicy.endpoint.path, req.cookies[sessionCookie])
+        url: host + sails.config.authPolicy.endpoint.path,
+        headers: {
+            'Cookie': sessionCookie + '=' + req.cookies[sessionCookie]
+        }
     };
 
     if (sails.config.authPolicy.endpoint.port === 443) {
@@ -75,7 +78,7 @@ module.exports = function(req, res, next) {
         try {
             var jsonBody = JSON.parse(body);
 
-            if (jsonBody.userId && jsonBody.userId == userId) {
+            if (jsonBody.user.id && jsonBody.user.id == userId) {
                 return next();
             }
 
