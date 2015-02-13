@@ -10,7 +10,7 @@ describe('Test Object Controller  ', function () {
         /** Disable caching. */
         sails.config.cacheEnabled = false;
         /** Create activity for object test */
-        server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+        server = testUtils.fakeServer({code:200, respond:{user: {id : 1}}});
         var postBody = testUtils.createTestJSON();
         var requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', postBody);
 
