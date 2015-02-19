@@ -3,7 +3,6 @@
 
 var redis = require('redis'),
     sails = require('sails'),
-    crc32 = require('buffer-crc32'),
     Promise = require('es6-promise').Promise,
     crypto = require('crypto');
 
@@ -381,7 +380,7 @@ module.exports = {
 
         /**
          * If the data is an empty array, e.g. the activity controller found
-         * no matching activities, then create data rfom the request.
+         * no matching activities, then create data from the request.
          */
         if (!data.length) return this._generateDataFromReq(req);
 

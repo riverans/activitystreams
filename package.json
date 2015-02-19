@@ -3,7 +3,6 @@
   "version": "0.4.1",
   "description": "Activity Streams App",
   "dependencies": {
-    "buffer-crc32": "^0.2.3",
     "ejs": "^0.8.8",
     "es6-promise": "^1.0.0",
     "expect.js": "^0.3.1",
@@ -22,19 +21,9 @@
     "request": "^2.30.0",
     "connect-redis" : "~1.4.5",
     "sails": "^0.10.5",
-    "sails-disk": "^0.10.7",
     "sails-neo4j": "~0.3.0",
     "socket.io": "^0.9.17",
     "supertest": "^0.10.0"
-  },
-  "devDependencies": {
-    "grunt-contrib-connect": "~0.6.0",
-    "grunt-mocha-test": "~0.9.0",
-    "grunt-shell": "~0.6.1",
-    "load-grunt-tasks": "~0.2.1",
-    "mocha": "~1.17.1",
-    "request": "~2.30.0",
-    "supertest": "~0.10.0"
   },
   "scripts": {
     "start": "node app.js",
