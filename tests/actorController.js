@@ -9,7 +9,7 @@ describe('Test Actor Controller  ', function () {
         /** Disable caching. */
         sails.config.cacheEnabled = false;
         /** Create activity for actor test */
-        server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+        server = testUtils.fakeServer({code:200, respond:{user: {id : 1}}});
         var postBody = testUtils.createTestJSON();
         var requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', postBody);
 
@@ -158,7 +158,7 @@ describe('Test Actor Controller  ', function () {
 
     describe('Check Actor DELETE Requests', function () {
         it('DELETE: actor/{appname_model}/{id} (deleteSpecificActor) with a valid session', function (done) {
-            server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+            server = testUtils.fakeServer({code:200, respond:{user: {id : 1}}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/test_actor/1', '');
 
             server.on("listening", function() {
@@ -170,7 +170,7 @@ describe('Test Actor Controller  ', function () {
         });
 
         it('DELETE: actor/{appname_model}/{id} (deleteSpecificActor) when the node doesn\'t exist', function (done) {
-            server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+            server = testUtils.fakeServer({code:200, respond:{user: {id : 1}}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/test_actor/1', '');
 
             server.on("listening", function() {

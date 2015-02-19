@@ -18,7 +18,7 @@ describe('Test Activity Controller  ', function () {
 
     describe('Test POST responses ', function () {
         it('POST: /activity {activity} (postSpecificActivity)', function (done) {
-            server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+            server = testUtils.fakeServer({code:200, respond:{user: {id : 1}}});
             var postBody = testUtils.createTestJSON();
             var requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', postBody);
 
@@ -49,7 +49,7 @@ describe('Test Activity Controller  ', function () {
         });
 
         it('POST with TARGET: /activity {activity} (postSpecificActivity)', function (done) {
-            server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+            server = testUtils.fakeServer({code:200, respond:{user: {id : 1}}});
             var postBody = testUtils.createTestTargetJSON();
             var requestOptions = testUtils.createRequestOptions('POST', '/api/v1/activity', postBody);
 
@@ -120,7 +120,7 @@ describe('Test Activity Controller  ', function () {
 
     describe('Test DELETE Actions', function () {
         it('DELETE: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (deleteSpecificActivity)', function (done) {
-            server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+            server = testUtils.fakeServer({code:200, respond:{user: {id : 1}}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/activity/test_actor/1/FAVORITED/test_object/1', '');
 
             server.on("listening", function() {
@@ -132,7 +132,7 @@ describe('Test Activity Controller  ', function () {
         });
 
         it('DELETE TARGET activity: /activity/{appname_model}/{id}/{verb}/{appname_model}/{id} (deleteSpecificActivity)', function (done) {
-            server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+            server = testUtils.fakeServer({code:200, respond:{user: {id : 1}}});
             var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/activity/test_actor/1/WROTE/test_object/1', '');
 
             server.on("listening", function() {

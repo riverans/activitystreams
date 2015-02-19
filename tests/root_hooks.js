@@ -25,7 +25,7 @@ before(function (done) {
             endpoint: {
                 host: 'http://localhost',
                 port: 6969,
-                path: '/fakeSession=%s',
+                path: '/api/v1/session/',
                 sessionCookie: 'fakeSession'
             }
         }
@@ -44,7 +44,7 @@ beforeEach(function(done) {
 });
 
 after(function (done) {
-    server = testUtils.fakeServer({code:200, respond:{userId: 1}});
+    server = testUtils.fakeServer({code:200, respond:{user: {id : 1}}});
     var requestOptions = testUtils.createRequestOptions('DELETE', '/api/v1/actor/test_actor/1', '');
 
     server.on("listening", function() {
