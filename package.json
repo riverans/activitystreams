@@ -1,6 +1,6 @@
 {
   "name": "activitystreams",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "description": "Activity Streams App",
   "dependencies": {
     "buffer-crc32": "^0.2.3",

@@ -75,7 +75,7 @@ module.exports = function(req, res, next) {
         try {
             var jsonBody = JSON.parse(body);
 
-            if (jsonBody.userId && (String(jsonBody.userId) === userId)) {
+            if (jsonBody.userId == userId) {
                 return next();
             }
 
