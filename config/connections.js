@@ -12,11 +12,11 @@ module.exports.connections = {
         base: "/db/data/"
     },
     rabbit: {
-        host: "localhost",
+        hosts: "localhost",
         port: 5672,
-        login: "guest",
-        password: "guest",
-        authMechanism: "AMQPLAIN",
-        vhost: "/"
-    }
+        exchange: "horizon",
+        queue: "horizon",
+        publisherKey: "activity",
+        subscriberKeys: []
+    },
 };
