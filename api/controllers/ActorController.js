@@ -144,10 +144,10 @@ module.exports = {
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.json(500, { error: 'INVALID REQUEST' });
             }
             res.json(results);
-            Caching.write(req, results, 4);
+            return Caching.write(req, results, 4);
         });
     },
     /**
@@ -167,10 +167,12 @@ module.exports = {
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.json(500, { error: 'INVALID REQUEST' });
             }
+            results = Caching._generateDataFromReq(req);
             res.json(results);
-            Caching.bust(req, []);
+            RabbitMQ.publish({data: results, verb: 'destroyed'});
+            return Caching.bust(req, []);
         });
     },
 

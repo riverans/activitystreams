@@ -10,5 +10,13 @@ module.exports.connections = {
         port: 7474,
         host: "localhost",
         base: "/db/data/"
-    }
+    },
+    rabbit: {
+        hosts: "localhost",
+        port: 5672,
+        exchange: "horizon",
+        queue: "horizon",
+        publisherKey: "activity",
+        subscriberKeys: []
+    },
 };
