@@ -12,7 +12,7 @@ module.exports.connections = {
         base: "/db/data/"
     },
     rabbit: {
-        hosts: "localhost",
+        host: "localhost",
         port: 5672,
         exchange: "horizon",
         queue: "horizon",
