@@ -37,9 +37,9 @@ RabbitMQ.prototype = {
 
             sails.on('lower', self.onExit);
 
-            self.createExchange({autoDelete: false, durable: false, type: 'direct'})
+            self.createExchange({autoDelete: false, durable: true, type: 'direct'})
                 .then(function() {
-                    self.createQueue({autoDelete: false, confirm: true, durable: false, exclusive: true})
+                    self.createQueue({autoDelete: false, confirm: true, durable: true, exclusive: false})
                         .then(function() {
                             self.bind();
                             self.running = true;
@@ -74,7 +74,7 @@ RabbitMQ.prototype = {
     },
 
     flushMessages: function() {
-        if (this.messages.length) {
+        while (this.running && this.messages.length) {
             this.publish(this.messages.pop());
         }
     },
