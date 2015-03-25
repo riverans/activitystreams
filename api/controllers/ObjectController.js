@@ -121,7 +121,10 @@ module.exports = {
             results = Caching._generateDataFromReq(req);
             res.json(results);
             RabbitMQ.publish({data: results, verb: 'destroyed'});
-            return Caching.bust(req, []);
+             /** Delete actor and verb for cache busting. */
+            delete results[0].actor;
+            delete results[0].verb;
+            return Caching.bust(req, results);
         });
     },
 
