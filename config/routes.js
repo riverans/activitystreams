@@ -38,6 +38,7 @@ module.exports.routes = {
 
   // Activity Streams Object DELETE
   'delete /api/v1/object/:object/:object_id': 'ObjectController.deleteSpecificObject', //Bust
+  'delete /api/v1/object/:object/:object_id/:verb/:actor/:actor_id': 'ObjectController.deleteSpecificObjectVerbedByActor',
 
   // Activity Streams Proxy GET
   'get /api/v1/proxy/:actor/:actor_id': 'ProxyController.getProxyActivities' //1

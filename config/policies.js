@@ -16,7 +16,8 @@ module.exports.policies = {
 
   ObjectController: {
       '*': ['isSanitized', 'isCached'],
-      deleteSpecificObject: ['isSanitized', 'isAuthenticated']
+      deleteSpecificObject: ['isSanitized', 'isAuthenticated'],
+      deleteSpecificObjectVerbedByActor: ['isSanitized', 'isAuthenticated']
   },
 
   ProxyController: {
